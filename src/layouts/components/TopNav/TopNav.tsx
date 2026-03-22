@@ -10,10 +10,6 @@ import {
   Badge,
   Divider,
   Button,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
 } from '@mui/material';
 import {
   SearchRounded as Search,
@@ -21,10 +17,6 @@ import {
   SettingsRounded as Settings,
   SwapHorizRounded as SwapHoriz,
   SegmentRounded as Segment,
-  LogoutRounded as Logout,
-  PersonRounded as Person,
-  MailRounded as Mail,
-  SecurityRounded as Security,
 } from '@mui/icons-material';
 import { alpha } from '@mui/material/styles';
 import { useLayoutStore } from '../../../shared/store/useLayoutStore';
@@ -35,6 +27,7 @@ import {
   StyledInputBase,
   switchButtonStyle,
 } from './TopNav.styles';
+import { UserProfileMenu } from '../../../features/auth/components';
 
 const TopNav: React.FC = () => {
   const navigate = useNavigate();
@@ -52,6 +45,13 @@ const TopNav: React.FC = () => {
 
   const handleSettingsClick = () => {
     navigate('/settings');
+    handleClose();
+  };
+
+  const handleLogoutClick = () => {
+    // In a real app, this would call a logout service
+    localStorage.removeItem('auth_token');
+    navigate('/login');
     handleClose();
   };
 
@@ -158,106 +158,14 @@ const TopNav: React.FC = () => {
             </Avatar>
           </IconButton>
 
-          <Menu
+          <UserProfileMenu
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
-            onClick={handleClose}
-            PaperProps={{
-              elevation: 0,
-              sx: {
-                width: 280,
-                overflow: 'visible',
-                filter: 'drop-shadow(0px 8px 24px rgba(0,0,0,0.12))',
-                mt: 1.5,
-                borderRadius: 4,
-                border: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.08)}`,
-                p: 1,
-              },
-            }}
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          >
-            <Box sx={{ px: 2, py: 1.5 }}>
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                <Box>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: 'text.primary', fontSize: '15px' }}>
-                    {user.fullName}
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 2, fontWeight: 500 }}>
-                    @{user.username}
-                  </Typography>
-                </Box>
-                <IconButton 
-                  size="small" 
-                  onClick={handleSettingsClick}
-                  sx={{ 
-                    bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05),
-                    '&:hover': { bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1) }
-                  }}
-                >
-                  <Settings fontSize="small" color="primary" />
-                </IconButton>
-              </Box>
-              
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                  <Box sx={{ color: 'text.secondary', display: 'flex' }}><Mail sx={{ fontSize: 16 }} /></Box>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
-                    {user.email}
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                  <Box sx={{ color: 'primary.main', display: 'flex' }}><Security sx={{ fontSize: 16 }} /></Box>
-                  <Typography variant="caption" sx={{ color: 'primary.main', fontWeight: 800 }}>
-                    {user.role}
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-            
-            <Divider sx={{ my: 1, opacity: 0.6 }} />
-            
-            <MenuItem onClick={handleSettingsClick} sx={{ py: 1.2, borderRadius: 2 }}>
-              <ListItemIcon>
-                <Person fontSize="small" />
-              </ListItemIcon>
-              <ListItemText 
-                primary="My Profile" 
-                primaryTypographyProps={{ variant: 'body2', fontWeight: 600 }} 
-              />
-            </MenuItem>
-            
-            <MenuItem onClick={handleSettingsClick} sx={{ py: 1.2, borderRadius: 2 }}>
-              <ListItemIcon>
-                <Settings fontSize="small" />
-              </ListItemIcon>
-              <ListItemText 
-                primary="Settings" 
-                primaryTypographyProps={{ variant: 'body2', fontWeight: 600 }} 
-              />
-            </MenuItem>
-
-            <Divider sx={{ my: 1, opacity: 0.6 }} />
-
-            <MenuItem 
-              onClick={handleClose} 
-              sx={{ 
-                py: 1.2, 
-                borderRadius: 2,
-                color: 'error.main',
-                '&:hover': { bgcolor: (theme) => alpha(theme.palette.error.main, 0.08) }
-              }}
-            >
-              <ListItemIcon>
-                <Logout fontSize="small" color="error" />
-              </ListItemIcon>
-              <ListItemText 
-                primary="Sign Out" 
-                primaryTypographyProps={{ variant: 'body2', fontWeight: 700 }} 
-              />
-            </MenuItem>
-          </Menu>
+            onSettingsClick={handleSettingsClick}
+            onLogoutClick={handleLogoutClick}
+            user={user}
+          />
         </Box>
       </Toolbar>
     </AppBar>
