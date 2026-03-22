@@ -1,7 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
 import LoginPage from "../../features/auth/pages/LoginPage/LoginPage";
-import DashboardPage from "../../features/dashboard/pages/DashboardPage/DashboardPage";
-import SettingsPage from "../../features/settings/pages/SettingsPage/SettingsPage";
 import ForbiddenPage from "../../features/error/pages/ForbiddenPage/ForbiddenPage";
 import NotFoundPage from "../../features/error/pages/NotFoundPage/NotFoundPage";
 import ProtectedRoute from "../../shared/navigation/ProtectedRoute";
@@ -46,12 +44,12 @@ export const routes: RouteConfig[] = [
       // Common Authenticated Routes
       {
         path: "dashboard",
-        element: <DashboardPage />,
+        element: <div>Dashboard</div>,
         meta: { title: "Dashboard", requiresAuth: true },
       },
       {
         path: "settings",
-        element: <SettingsPage />,
+        element: <div>User Settings</div>,
         meta: { title: "Settings", requiresAuth: true, hideInSidebar: true },
       },
       {
