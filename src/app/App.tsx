@@ -1,11 +1,18 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
+import AppRouter from './router/AppRouter';
+import { theme } from '../shared/theme/theme';
 
 const App: React.FC = () => {
   return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>Howrah Milk Union</h1>
-      <p>Modular Monolith Architecture Ready (pnpm + Vite + TS).</p>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 
