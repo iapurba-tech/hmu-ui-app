@@ -69,10 +69,8 @@ export const listItemButtonStyles = (isSelected: boolean): SxProps<Theme> => ({
   },
 });
 
-export const operationStatusBoxStyles: SxProps<Theme> = {
-  bgcolor: (theme) => alpha(theme.palette.primary.main, 0.04),
+export const systemHealthBoxStyles: SxProps<Theme> = {
+  bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05),
   borderRadius: 3,
   p: 2,
-  mt: 'auto', // Push to bottom but don't need a separate footer anymore
-  border: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.08)}`,
 };

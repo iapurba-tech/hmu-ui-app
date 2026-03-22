@@ -9,7 +9,6 @@ import {
   ListItemText,
   Typography,
   LinearProgress,
-  alpha,
 } from "@mui/material";
 import {
   DashboardRounded as Dashboard,
@@ -26,7 +25,6 @@ import {
   AdminPanelSettingsRounded as AdminPanelSettings,
   LocalShippingRounded as LocalShipping,
   ClassRounded as Class,
-  TrendingUpRounded as TrendingUp,
 } from '@mui/icons-material';
 import { Link, useLocation } from "react-router-dom";
 import { useLayoutStore } from "../../../shared/store/useLayoutStore";
@@ -34,7 +32,7 @@ import {
   drawerStyles,
   sectionTitleStyles,
   listItemButtonStyles,
-  operationStatusBoxStyles,
+  systemHealthBoxStyles,
   unitHeaderStyles,
   unitIconBoxStyles,
 } from "./Sidebar.styles";
@@ -203,73 +201,39 @@ const Sidebar: React.FC = () => {
 
       <Box sx={{ flexGrow: 1 }} />
 
-      <Box sx={operationStatusBoxStyles}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
-          <Typography
-            variant="caption"
-            sx={{
-              fontWeight: 800,
-              color: "text.primary",
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              fontSize: '10px',
-            }}
-          >
-            Procurement Goal
-          </Typography>
-          <Box sx={{ 
-            px: 1, 
-            py: 0.25, 
-            borderRadius: 1, 
-            bgcolor: (theme) => alpha(theme.palette.success.main, 0.1),
-            display: 'flex',
-            alignItems: 'center',
-          }}>
-             <Typography variant="caption" sx={{ fontWeight: 800, fontSize: '10px', color: 'success.main' }}>
-               72%
-             </Typography>
-          </Box>
-        </Box>
-        
-        <LinearProgress 
-          variant="determinate" 
-          value={72} 
-          sx={{ 
-            height: 6, 
+      <Box sx={systemHealthBoxStyles}>
+        <Typography
+          variant="caption"
+          sx={{
+            fontWeight: 800,
+            color: "primary.main",
+            display: "block",
+            mb: 1,
+          }}
+        >
+          System Health
+        </Typography>
+        <LinearProgress
+          variant="determinate"
+          value={80}
+          sx={{
+            height: 6,
             borderRadius: 3,
-            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
-            mb: 2,
-            '& .MuiLinearProgress-bar': {
-              borderRadius: 3,
-            }
+            bgcolor: "rgba(0, 0, 0, 0.05)",
+            "& .MuiLinearProgress-bar": { borderRadius: 3 },
           }}
         />
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <TrendingUp sx={{ fontSize: 14, color: 'primary.main' }} />
-              <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "11px", fontWeight: 600 }}>
-                Daily Target
-              </Typography>
-            </Box>
-            <Typography variant="caption" sx={{ color: "text.primary", fontSize: "11px", fontWeight: 700 }}>
-              12,400 L
-            </Typography>
-          </Box>
-          
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: 'success.main' }} />
-              <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "11px", fontWeight: 600 }}>
-                Unit Status
-              </Typography>
-            </Box>
-            <Typography variant="caption" sx={{ color: "success.main", fontSize: "10px", fontWeight: 800, textTransform: 'uppercase' }}>
-              Operational
-            </Typography>
-          </Box>
-        </Box>
+        <Typography
+          variant="caption"
+          sx={{
+            color: "text.secondary",
+            mt: 1,
+            display: "block",
+            fontSize: "10px",
+          }}
+        >
+          All systems operational. 98% uptime this month.
+        </Typography>
       </Box>
     </Drawer>
   );
