@@ -1,0 +1,67 @@
+import type { SxProps, Theme } from '@mui/material';
+
+export const loginFormContainerStyles: SxProps<Theme> = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: 'background.default',
+  width: '100%',
+  height: '100%',
+};
+
+export const headerBoxStyles: SxProps<Theme> = {
+  mb: 3,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+};
+
+export const loginFormBoxStyles: SxProps<Theme> = {
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  maxWidth: 450,
+  px: 4,
+};
+
+export const formContainerStyles: SxProps<Theme> = {
+  mt: 1,
+  width: '100%',
+};
+
+export const textFieldStyles: SxProps<Theme> = {
+  width: '100%',
+  '& .MuiOutlinedInput-root': {
+    backgroundColor: 'white',
+    borderRadius: 2,
+  },
+};
+
+export const actionRowStyles: SxProps<Theme> = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
+  mb: 3,
+};
+
+export const loginButtonStyles: SxProps<Theme> = {
+  width: '100%',
+  py: 1.5,
+  fontWeight: 700,
+  fontSize: '1rem',
+  backgroundColor: 'primary.main',
+  borderRadius: 2,
+  boxShadow: 'none',
+  textTransform: 'none',
+  '&:hover': {
+    backgroundColor: 'primary.dark',
+    boxShadow: 'none',
+  },
+};
+
+export const footerTextStyles: SxProps<Theme> = {
+  display: 'block',
+  mt: 4,
+  textAlign: 'center',
+};
