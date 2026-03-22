@@ -1,9 +1,8 @@
 import React from 'react';
 import { Box, Toolbar } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import Sidebar from '../components/Sidebar/Sidebar';
-import TopNav from '../components/TopNav/TopNav';
 import { useLayoutStore } from '../../shared/store/useLayoutStore';
+import { Sidebar, TopNav } from '../components';
 import { layoutContainerStyles, mainContentStyles, toolbarStyles } from './MainLayout.styles';
 
 const MainLayout: React.FC = () => {
