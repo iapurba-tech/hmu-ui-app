@@ -28,6 +28,7 @@ import {
 } from '@mui/icons-material';
 import { Link, useLocation } from "react-router-dom";
 import { useLayoutStore } from "../../../shared/store/useLayoutStore";
+import { useAuthStore } from "../../../shared/store/useAuthStore";
 import {
   drawerStyles,
   sectionTitleStyles,
@@ -122,7 +123,8 @@ const managementMenu: MenuSection[] = [
 
 const Sidebar: React.FC = () => {
   const location = useLocation();
-  const { isSidebarOpen, portal } = useLayoutStore();
+  const { isSidebarOpen } = useLayoutStore();
+  const { portal, selectedUnit } = useAuthStore();
 
   const isManagementPortal = portal === "management";
   const sections = isManagementPortal ? managementMenu : adminMenu;
@@ -148,7 +150,7 @@ const Sidebar: React.FC = () => {
             variant="body2"
             sx={{ fontWeight: 800, color: "text.primary", lineHeight: 1.2 }}
           >
-            {isManagementPortal ? "Shyampur Unit" : "HMU Global"}
+            {isManagementPortal ? (selectedUnit?.name || "Select Unit") : "HMU Global"}
           </Typography>
 
           <Typography

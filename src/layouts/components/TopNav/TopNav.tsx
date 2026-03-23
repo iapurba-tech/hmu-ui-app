@@ -20,6 +20,7 @@ import {
 } from '@mui/icons-material';
 import { alpha } from '@mui/material/styles';
 import { useLayoutStore } from '../../../shared/store/useLayoutStore';
+import { useAuthStore } from '../../../shared/store/useAuthStore';
 import {
   appBarStyles,
   SearchBox,
@@ -27,12 +28,15 @@ import {
   StyledInputBase,
   switchButtonStyle,
 } from './TopNav.styles';
-import { UserProfileMenu } from '../../../features/auth/components';
+import { UserProfileMenu, UnitSelectionModal } from '../../../features/auth/components';
 
 const TopNav: React.FC = () => {
   const navigate = useNavigate();
-  const { toggleSidebar, isSidebarOpen, portal, setPortal } = useLayoutStore();
+  const { toggleSidebar, isSidebarOpen } = useLayoutStore();
+  const { user, selectedUnit, portal } = useAuthStore();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isUnitModalOpen, setIsUnitModalOpen] = useState(false);
+  
   const open = Boolean(anchorEl);
 
   const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -55,120 +59,133 @@ const TopNav: React.FC = () => {
     handleClose();
   };
 
-  const handlePortalSwitch = () => {
-    setPortal(portal === 'admin' ? 'management' : 'admin');
+  const handleUnitModalOpen = () => {
+    setIsUnitModalOpen(true);
   };
 
-  // Mock user data - in a real app, this would come from an auth hook/store
-  const user = {
-    fullName: 'Apurba Panja',
-    username: 'apurba.admin',
-    email: 'apurba@hmu.gov.in',
-    role: portal === 'admin' ? 'System Administrator' : 'Unit Manager',
-    avatar: '', // Path to avatar image
+  const handleUnitModalClose = () => {
+    setIsUnitModalOpen(false);
+  };
+
+  const showSwitchButton = user?.role === 'ROLE_SYSTEM_ADMIN' || (user?.units && user.units.length > 1);
+
+  // Map the internal role to a display name for the UserProfileMenu
+  const displayUser = {
+    ...user!,
+    role: user?.role === 'ROLE_SYSTEM_ADMIN' ? 'System Administrator' : 'Unit Manager',
   };
 
   return (
-    <AppBar
-      position="fixed"
-      sx={appBarStyles(isSidebarOpen)}
-    >
-      <Toolbar sx={{ height: 72 }}>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          edge="start"
-          onClick={toggleSidebar}
-          sx={{ 
-            mr: 2,
-            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05),
-            borderRadius: 2,
-            color: 'primary.main',
-            '&:hover': {
-              bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
-            }
-          }}
-        >
-          <Segment />
-        </IconButton>
-
-        <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 1.5 }}>
-          <Box>
-            <Typography variant="subtitle1" sx={{ fontWeight: 800, lineHeight: 1.2, color: 'primary.main' }}>
-              HOWRAH MILK UNION
-            </Typography>
-          </Box>
-        </Box>
-
-        <Box sx={{ flexGrow: 1 }} />
-
-        <SearchBox sx={{ display: { xs: 'none', md: 'block' } }}>
-          <SearchIconWrapper>
-            <Search fontSize="small" />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search data, units or users..."
-            inputProps={{ 'aria-label': 'search' }}
-          />
-        </SearchBox>
-
-        <Box sx={{ display: { xs: 'none', lg: 'block' }, mx: 2 }}>
-          <Button
-            variant="text"
-            startIcon={<SwapHoriz />}
-            sx={switchButtonStyle}
-            onClick={handlePortalSwitch}
-          >
-            Switch to {portal === 'admin' ? 'Management' : 'Admin'}
-          </Button>
-        </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <IconButton sx={{ bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05), borderRadius: 2 }}>
-            <Badge variant="dot" color="error">
-              <Notifications fontSize="small" color="primary" />
-            </Badge>
-          </IconButton>
-          <IconButton 
-            onClick={handleSettingsClick}
-            sx={{ bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05), borderRadius: 2 }}
-          >
-            <Settings fontSize="small" color="primary" />
-          </IconButton>
-          
-          <Divider orientation="vertical" flexItem sx={{ mx: 1, height: 32, my: 'auto' }} />
-
-          <IconButton 
-            onClick={handleProfileClick}
+    <>
+      <AppBar
+        position="fixed"
+        sx={appBarStyles(isSidebarOpen)}
+      >
+        <Toolbar sx={{ height: 72 }}>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={toggleSidebar}
             sx={{ 
-              p: 0.5, 
-              border: (theme) => `2px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-              transition: 'all 0.2s ease',
+              mr: 2,
+              bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05),
+              borderRadius: 2,
+              color: 'primary.main',
               '&:hover': {
-                borderColor: 'primary.main',
-                bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05),
+                bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
               }
             }}
           >
-            <Avatar
-              src={user.avatar}
-              sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: '14px', fontWeight: 700 }}
-            >
-              {user.fullName.split(' ').map(n => n[0]).join('')}
-            </Avatar>
+            <Segment />
           </IconButton>
 
-          <UserProfileMenu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            onSettingsClick={handleSettingsClick}
-            onLogoutClick={handleLogoutClick}
-            user={user}
-          />
-        </Box>
-      </Toolbar>
-    </AppBar>
+          <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 1.5 }}>
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, lineHeight: 1.2, color: 'primary.main' }}>
+                HOWRAH MILK UNION
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box sx={{ flexGrow: 1 }} />
+
+          <SearchBox sx={{ display: { xs: 'none', md: 'block' } }}>
+            <SearchIconWrapper>
+              <Search fontSize="small" />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search data, units or users..."
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </SearchBox>
+
+          {showSwitchButton && (
+            <Box sx={{ display: { xs: 'none', lg: 'block' }, mx: 2 }}>
+              <Button
+                variant="text"
+                startIcon={<SwapHoriz />}
+                sx={switchButtonStyle}
+                onClick={handleUnitModalOpen}
+              >
+                {/* {portal === 'admin' ? 'Global Administration' : (selectedUnit?.name || 'Switch Workspace')} */}
+                {'Switch Workspace'}
+              </Button>
+            </Box>
+          )}
+
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <IconButton sx={{ bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05), borderRadius: 2 }}>
+              <Badge variant="dot" color="error">
+                <Notifications fontSize="small" color="primary" />
+              </Badge>
+            </IconButton>
+            <IconButton 
+              onClick={handleSettingsClick}
+              sx={{ bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05), borderRadius: 2 }}
+            >
+              <Settings fontSize="small" color="primary" />
+            </IconButton>
+            
+            <Divider orientation="vertical" flexItem sx={{ mx: 1, height: 32, my: 'auto' }} />
+
+            <IconButton 
+              onClick={handleProfileClick}
+              sx={{ 
+                p: 0.5, 
+                border: (theme) => `2px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  borderColor: 'primary.main',
+                  bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05),
+                }
+              }}
+            >
+              <Avatar
+                src={user?.avatar}
+                sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: '14px', fontWeight: 700 }}
+              >
+                {user?.fullName.split(' ').map(n => n[0]).join('')}
+              </Avatar>
+            </IconButton>
+
+            <UserProfileMenu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              onSettingsClick={handleSettingsClick}
+              onLogoutClick={handleLogoutClick}
+              user={displayUser}
+            />
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      <UnitSelectionModal 
+        open={isUnitModalOpen} 
+        onClose={handleUnitModalClose} 
+      />
+    </>
   );
 };
 

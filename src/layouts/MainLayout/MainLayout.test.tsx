@@ -18,8 +18,9 @@ describe('RootLayout', () => {
     )
 
     expect(screen.getByRole('navigation')).toBeInTheDocument()
-    // Changed to match current TopNav text
-    expect(screen.getByText(/Unit Management Portal/i)).toBeInTheDocument()
+    // Changed to match current TopNav and Sidebar text
+    expect(screen.getByText(/Management Portal/i)).toBeInTheDocument()
+    expect(screen.getAllByText(/Shyampur Facility/i).length).toBeGreaterThan(0)
     expect(screen.getByPlaceholderText(/Search data, units or users/i)).toBeInTheDocument()
     expect(screen.getByText(/System Health/i)).toBeInTheDocument()
   })
