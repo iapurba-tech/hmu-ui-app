@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-// import { useAuthStore } from '../store/useAuthStore'; // Zustand store
+import { useAuthStore } from '../../shared/store/useAuthStore';
 
 interface RoleGuardProps {
   allowedRoles: string[];
@@ -9,9 +9,7 @@ interface RoleGuardProps {
 }
 
 export const RoleGuard: React.FC<RoleGuardProps> = ({ allowedRoles, children }) => {
-  // Replace this with your actual Zustand auth hook
-  // const { user } = useAuthStore(); 
-  const user = { role: 'ROLE_UNIT_MANAGER' }; // Mock user for now
+  const { user } = useAuthStore(); 
 
   if (!user || !user.role) {
     return <Navigate to="/login" replace />;

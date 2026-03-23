@@ -2,7 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import LoginPage from "../../features/auth/pages/LoginPage/LoginPage";
 import ForbiddenPage from "../../features/error/pages/ForbiddenPage/ForbiddenPage";
 import NotFoundPage from "../../features/error/pages/NotFoundPage/NotFoundPage";
-import ProtectedRoute from "../../shared/navigation/ProtectedRoute";
+import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 
 export interface RouteConfig {
