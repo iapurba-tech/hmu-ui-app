@@ -17,8 +17,8 @@ import {
   PersonRounded as Person,
   MailRounded as Mail,
   SecurityRounded as Security,
-  // ManageAccountsRounded as ManageAccounts,
 } from '@mui/icons-material';
+import type { UserProfile } from '../../types/auth.types';
 import {
   menuPaperStyles,
   menuHeaderStyles,
@@ -29,21 +29,13 @@ import {
   signOutItemStyles,
 } from './UserProfileMenu.styles';
 
-interface UserData {
-  fullName: string;
-  username: string;
-  email: string;
-  role: string;
-  avatar?: string;
-}
-
 interface UserProfileMenuProps {
   anchorEl: HTMLElement | null;
   open: boolean;
   onClose: () => void;
   onSettingsClick: () => void;
   onLogoutClick: () => void;
-  user: UserData;
+  user: UserProfile | null;
 }
 
 const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
@@ -54,6 +46,12 @@ const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
   onLogoutClick,
   user,
 }) => {
+  if (!user) return null;
+
+  const fullName = `${user.firstname} ${user.lastname}`;
+  
+  const displayRole = user.role.replace('ROLE_', '').replace('_', ' ');
+
   return (
     <Menu
       anchorEl={anchorEl}
@@ -68,7 +66,7 @@ const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
         <Box sx={userInfoBoxStyles}>
           <Box>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: 'text.primary', fontSize: '15px' }}>
-              {user.fullName}
+              {fullName}
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 2, fontWeight: 500 }}>
               @{user.username}
@@ -96,7 +94,7 @@ const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
           <Box sx={detailItemStyles}>
             <Box sx={{ color: 'primary.main', display: 'flex' }}><Security sx={{ fontSize: 16 }} /></Box>
             <Typography variant="caption" sx={{ color: 'primary.main', fontWeight: 800 }}>
-              {user.role}
+              {displayRole}
             </Typography>
           </Box>
         </Box>

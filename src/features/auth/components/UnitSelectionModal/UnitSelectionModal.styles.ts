@@ -9,7 +9,7 @@ export const modalOverlayStyles: SxProps<Theme> = {
 export const modalContainerStyles: SxProps<Theme> = {
   width: '100%',
   maxWidth: 580,
-  height: '90vh',
+  height: '70vh',
   maxHeight: '90vh',
   backgroundColor: 'rgba(255, 255, 255, 0.8)',
   backdropFilter: 'blur(12px)',
@@ -145,3 +145,5 @@ export const confirmButtonStyles: SxProps<Theme> = {
   },
   transition: 'all 0.3s ease',
 };
+
+
