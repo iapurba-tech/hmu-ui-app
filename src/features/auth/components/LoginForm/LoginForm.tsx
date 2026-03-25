@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
-  Button,
   TextField,
   Typography,
   InputAdornment,
@@ -9,14 +8,17 @@ import {
   Link,
   Checkbox,
   FormControlLabel,
-} from '@mui/material';
+  Alert,
+} from "@mui/material";
 import {
   PersonRounded as Person,
   LockRounded as Lock,
   VisibilityRounded as Visibility,
   VisibilityOffRounded as VisibilityOff,
-} from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+} from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../../../../shared/api/authHooks";
+import { HmuButton } from "../../../../shared/components";
 import {
   loginFormContainerStyles,
   headerBoxStyles,
@@ -24,35 +26,48 @@ import {
   formContainerStyles,
   textFieldStyles,
   actionRowStyles,
-  loginButtonStyles,
   footerTextStyles,
-} from './LoginForm.styles';
+} from "./LoginForm.styles";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
+  const { mutate: login, isPending, isError, error } = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   });
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     if (formData.username && formData.password) {
-      // Mock login: set a token
-      localStorage.setItem('auth_token', 'mock_token');
-      navigate('/dashboard');
+      login(formData, {
+        onSuccess: () => {
+          navigate("/dashboard");
+        },
+      });
     }
   };
 
   const handleTogglePassword = () => setShowPassword(!showPassword);
 
+  const hmuCopyRights = (
+    <Typography variant="caption" color="text.secondary" sx={footerTextStyles}>
+      &copy; {new Date().getFullYear()} Howrah Milk Union Ltd. All Rights
+      Reserved.
+    </Typography>
+  );
+
   return (
     <Box sx={loginFormContainerStyles}>
       <Box sx={loginFormBoxStyles}>
         <Box sx={headerBoxStyles}>
-          <Typography component="h1" variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{ fontWeight: 700, mb: 1 }}
+          >
             Welcome Back
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -60,19 +75,35 @@ const LoginForm: React.FC = () => {
           </Typography>
         </Box>
 
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={formContainerStyles}>
+        <Box
+          component="form"
+          noValidate
+          onSubmit={handleSubmit}
+          sx={formContainerStyles}
+        >
+          {isError && (
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {error instanceof Error
+                ? error.message
+                : "Login failed. Please try again."}
+            </Alert>
+          )}
+
           <Box sx={{ mb: 3 }}>
             <TextField
               required
               fullWidth
-              id="email"
+              id="username"
               label="Username or Email"
               placeholder="Enter your username or email"
-              name="email"
-              autoComplete="email"
+              name="username"
+              autoComplete="username"
               autoFocus
+              disabled={isPending}
               value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, username: e.target.value })
+              }
               slotProps={{
                 input: {
                   startAdornment: (
@@ -93,11 +124,14 @@ const LoginForm: React.FC = () => {
               name="password"
               label="Password"
               placeholder="Enter your password"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
+              disabled={isPending}
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
               slotProps={{
                 input: {
                   startAdornment: (
@@ -107,10 +141,11 @@ const LoginForm: React.FC = () => {
                   ),
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton 
-                        onClick={handleTogglePassword} 
+                      <IconButton
+                        onClick={handleTogglePassword}
                         edge="end"
                         aria-label="toggle password visibility"
+                        disabled={isPending}
                       >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
@@ -130,6 +165,7 @@ const LoginForm: React.FC = () => {
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
                   color="primary"
+                  disabled={isPending}
                 />
               }
               label={
@@ -143,31 +179,25 @@ const LoginForm: React.FC = () => {
               variant="body2"
               sx={{
                 fontWeight: 600,
-                color: 'primary.main',
-                textDecoration: 'none',
-                '&:hover': { textDecoration: 'underline' },
+                color: "primary.main",
+                textDecoration: "none",
+                "&:hover": { textDecoration: "underline" },
               }}
             >
               Forgot Password?
             </Link>
           </Box>
 
-          <Button
+          <HmuButton
+            label="Log In"
             type="submit"
             fullWidth
-            variant="contained"
-            sx={loginButtonStyles}
-          >
-            Log In
-          </Button>
+            variant="primary"
+            loading={isPending}
+            aria-label="Log In"
+          />
 
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={footerTextStyles}
-          >
-            &copy; {new Date().getFullYear()} Howrah Milk Union Ltd. All Rights Reserved.
-          </Typography>
+          {hmuCopyRights}
         </Box>
       </Box>
     </Box>

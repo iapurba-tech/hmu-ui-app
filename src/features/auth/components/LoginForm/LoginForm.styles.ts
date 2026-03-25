@@ -45,21 +45,6 @@ export const actionRowStyles: SxProps<Theme> = {
   mb: 3,
 };
 
-export const loginButtonStyles: SxProps<Theme> = {
-  width: '100%',
-  py: 1.5,
-  fontWeight: 700,
-  fontSize: '1rem',
-  backgroundColor: 'primary.main',
-  borderRadius: 2,
-  boxShadow: 'none',
-  textTransform: 'none',
-  '&:hover': {
-    backgroundColor: 'primary.dark',
-    boxShadow: 'none',
-  },
-};
-
 export const footerTextStyles: SxProps<Theme> = {
   display: 'block',
   mt: 4,
