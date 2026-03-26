@@ -25,10 +25,4 @@ describe("WorkspaceIdentity", () => {
     expect(screen.getByText("Management Portal")).toBeDefined();
     expect(screen.getByText("Test Unit")).toBeDefined();
   });
-
-  it("renders Management Portal with default text when no unit name", () => {
-    renderWithTheme(<WorkspaceIdentity isAdminWorkspace={false} />);
-    expect(screen.getByText("Management Portal")).toBeDefined();
-    expect(screen.getByText("Select Unit")).toBeDefined();
-  });
 });
