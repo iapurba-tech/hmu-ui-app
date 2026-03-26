@@ -9,8 +9,8 @@ export const modalOverlayStyles: SxProps<Theme> = {
 export const modalContainerStyles: SxProps<Theme> = {
   width: '100%',
   maxWidth: 580,
-  height: '70vh',
-  maxHeight: '90vh',
+  height: '85vh',
+  maxHeight: '85vh',
   backgroundColor: 'rgba(255, 255, 255, 0.8)',
   backdropFilter: 'blur(12px)',
   borderRadius: '32px',
@@ -32,6 +32,39 @@ export const headerStyles: SxProps<Theme> = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'flex-start',
+};
+
+export const headerTitleSectionStyles: SxProps<Theme> = {
+  display: "flex", 
+  alignItems: "center", 
+  gap: 1.5, 
+  mb: 1 
+};
+
+export const headerAccentStyles: SxProps<Theme> = {
+  width: 4,
+  height: 18,
+  bgcolor: "#0077b8",
+  borderRadius: 1,
+};
+
+export const headerTitleStyles: SxProps<Theme> = {
+  color: "#0f172a",
+  fontWeight: 900,
+  letterSpacing: "-0.02em",
+};
+
+export const headerSubtitleStyles: SxProps<Theme> = { 
+  color: "#64748b", 
+  mt: 0.5, 
+  fontWeight: 500 
+};
+
+export const closeButtonStyles: SxProps<Theme> = {
+  color: "#94a3b8",
+  "&:hover": { bgcolor: "#f1f5f9", color: "#0f172a" },
+  borderRadius: "14px",
+  p: 1.5,
 };
 
 export const technicalLabelStyles: SxProps<Theme> = {
@@ -117,6 +150,71 @@ export const iconBoxStyles = (color: string): SxProps<Theme> => ({
   flexShrink: 0,
 });
 
+export const unitCardContentStyles: SxProps<Theme> = { 
+  ml: 2.5, 
+  flex: 1 
+};
+
+export const unitCardHeaderStyles: SxProps<Theme> = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  mb: 0.5,
+};
+
+export const unitNameStyles: SxProps<Theme> = {
+  fontWeight: 800,
+  color: "#0f172a",
+  fontSize: "1rem",
+};
+
+export const unitMetaContainerStyles: SxProps<Theme> = { 
+  display: "flex", 
+  alignItems: "center", 
+  gap: 1.5 
+};
+
+export const unitCodeBadgeStyles = (color: string): SxProps<Theme> => ({
+  fontSize: "9px",
+  fontWeight: 800,
+  color: color,
+  bgcolor: alpha(color, 0.08),
+  px: 1,
+  py: 0.25,
+  borderRadius: "6px",
+  letterSpacing: "0.05em",
+});
+
+export const unitDotSeparatorStyles: SxProps<Theme> = {
+  width: 4,
+  height: 4,
+  borderRadius: "50%",
+  bgcolor: "#cbd5e1",
+};
+
+export const unitStatsContainerStyles: SxProps<Theme> = {
+  mt: 2,
+  display: "flex",
+  gap: 4,
+  pt: 1.5,
+  borderTop: "1px solid rgba(241, 245, 249, 0.8)",
+};
+
+export const statLabelStyles: SxProps<Theme> = {
+  fontSize: "8px",
+  fontWeight: 800,
+  color: "#94a3b8",
+  mb: 0.5,
+  letterSpacing: "0.05em",
+  textTransform: "uppercase",
+};
+
+export const statValueStyles: SxProps<Theme> = {
+  fontWeight: 800,
+  color: "#334155",
+  fontSize: "0.875rem",
+};
+
 export const footerStyles: SxProps<Theme> = {
   p: 4,
   pt: 2,
@@ -127,23 +225,15 @@ export const footerStyles: SxProps<Theme> = {
   borderTop: '1px solid rgba(241, 245, 249, 0.8)',
 };
 
-export const confirmButtonStyles: SxProps<Theme> = {
-  px: 4,
-  py: 1.75,
-  backgroundColor: '#0077b8',
-  color: '#ffffff',
-  fontSize: '15px',
-  fontWeight: 800,
-  borderRadius: '18px',
-  textTransform: 'none',
-  boxShadow: '0 12px 24px -8px rgba(0, 119, 184, 0.4)',
-  gap: 1.5,
-  '&:hover': {
-    backgroundColor: '#004a75',
-    transform: 'translateY(-2px)',
-    boxShadow: '0 16px 32px -12px rgba(0, 119, 184, 0.5)',
-  },
-  transition: 'all 0.3s ease',
+export const secureAccessBadgeStyles: SxProps<Theme> = {
+  width: 42,
+  height: 42,
+  borderRadius: "14px",
+  bgcolor: "#ffffff",
+  border: "1px solid #e2e8f0",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  color: "#0077b8",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
 };
-
-
