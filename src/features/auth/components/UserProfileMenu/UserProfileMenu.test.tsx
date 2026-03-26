@@ -38,7 +38,7 @@ describe("UserProfileMenu", () => {
     expect(screen.getByText("Test User")).toBeInTheDocument();
     expect(screen.getByText(`@${mockUser.username}`)).toBeInTheDocument();
     expect(screen.getByText(mockUser.email)).toBeInTheDocument();
-    expect(screen.getByText("System Administrator")).toBeInTheDocument();
+    expect(screen.getByText("System Admin")).toBeInTheDocument();
   });
 
   it("calls onSettingsClick when settings icon is clicked", () => {

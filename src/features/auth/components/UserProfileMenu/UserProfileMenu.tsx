@@ -39,8 +39,8 @@ interface UserProfileMenuProps {
 }
 
 const ROLE_DISPLAY_NAMES: Record<string, string> = {
-  [UserRole.SYSTEM_ADMIN]: "System Administrator",
-  [UserRole.UNIT_ADMIN]: "Unit Administrator",
+  [UserRole.SYSTEM_ADMIN]: "System Admin",
+  [UserRole.UNIT_ADMIN]: "Unit Admin",
   [UserRole.UNIT_MANAGER]: "Unit Manager",
 };
 
