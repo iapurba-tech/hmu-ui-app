@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import { brandingPanelStyles } from "./BrandingPanel.styles";
-import { BRANDING_CONTENT } from "../../constants/auth-content";
+import { BRANDING_CONTENT } from "../../constants/brand";
 
 const BrandingPanel: React.FC = () => {
   return (

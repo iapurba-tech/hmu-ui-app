@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import BrandingPanel from './BrandingPanel';
-import { BRANDING_CONTENT } from '../../constants/auth-content';
+import { BRANDING_CONTENT } from '../../constants/brand';
 
 describe('BrandingPanel', () => {
   it('should render the branding title, slogan, and description', () => {
