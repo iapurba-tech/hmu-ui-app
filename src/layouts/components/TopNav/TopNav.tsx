@@ -9,7 +9,6 @@ import {
   Avatar,
   Badge,
   Divider,
-  Button,
 } from "@mui/material";
 import {
   SearchRounded as Search,
@@ -21,24 +20,25 @@ import {
 import { alpha } from "@mui/material/styles";
 import { useLayoutStore } from "../../../shared/store/useLayoutStore";
 import { useAuthStore } from "../../../shared/store/useAuthStore";
+import { UserRole } from "../../../features/auth/constants/roles";
 import {
   appBarStyles,
   SearchBox,
   SearchIconWrapper,
   StyledInputBase,
-  switchButtonStyle,
 } from "./TopNav.styles";
 import {
   UserProfileMenu,
-  UnitSelectionModal,
+  WorkspaceModal,
 } from "../../../features/auth/components";
+import { HmuButton } from "../../../shared/components";
 
 const TopNav: React.FC = () => {
   const navigate = useNavigate();
   const { toggleSidebar, isSidebarOpen } = useLayoutStore();
   const { user, logout } = useAuthStore();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [isUnitModalOpen, setIsUnitModalOpen] = useState(false);
+  const [isSwitcherOpen, setIsSwitcherOpen] = useState(false);
 
   const open = Boolean(anchorEl);
 
@@ -61,18 +61,16 @@ const TopNav: React.FC = () => {
     handleClose();
   };
 
-  const handleUnitModalOpen = () => {
-    setIsUnitModalOpen(true);
+  const handleWorkspaceSwitcherOpen = () => {
+    setIsSwitcherOpen(true);
   };
 
-  const handleUnitModalClose = () => {
-    setIsUnitModalOpen(false);
+  const handleWorkspaceSwitcherClose = () => {
+    setIsSwitcherOpen(false);
   };
-
-  console.log("User Profile:", user);
 
   const showSwitchButton =
-    user?.role === "ROLE_SYSTEM_ADMIN" ||
+    user?.role === UserRole.SYSTEM_ADMIN ||
     (user?.units && user.units.length > 1);
 
   const initials = user ? `${user?.firstname[0]}${user?.lastname[0]}` : "";
@@ -111,7 +109,7 @@ const TopNav: React.FC = () => {
                 variant="subtitle1"
                 sx={{ fontWeight: 800, lineHeight: 1.2, color: "primary.main" }}
               >
-                HOWRAH MILK UNION
+                {"HOWRAH MILK UNION"}
               </Typography>
             </Box>
           </Box>
@@ -130,14 +128,12 @@ const TopNav: React.FC = () => {
 
           {showSwitchButton && (
             <Box sx={{ display: { xs: "none", lg: "block" }, mx: 2 }}>
-              <Button
-                variant="text"
+              <HmuButton
+                variant="dark"
+                label="Switch Workspace"
                 startIcon={<SwapHoriz />}
-                sx={switchButtonStyle}
-                onClick={handleUnitModalOpen}
-              >
-                {"Switch Workspace"}
-              </Button>
+                onClick={handleWorkspaceSwitcherOpen}
+              />
             </Box>
           )}
 
@@ -206,9 +202,9 @@ const TopNav: React.FC = () => {
         </Toolbar>
       </AppBar>
 
-      <UnitSelectionModal
-        open={isUnitModalOpen}
-        onClose={handleUnitModalClose}
+      <WorkspaceModal
+        open={isSwitcherOpen}
+        onClose={handleWorkspaceSwitcherClose}
       />
     </>
   );
