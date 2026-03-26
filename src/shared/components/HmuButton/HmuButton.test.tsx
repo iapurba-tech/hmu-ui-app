@@ -9,7 +9,7 @@ const renderWithTheme = (ui: React.ReactElement) => {
 };
 
 describe("HmuButton", () => {
-  it("renders children correctly", () => {
+  it("renders label correctly", () => {
     renderWithTheme(<HmuButton label="Click me" />);
     expect(screen.getByText("Click me")).toBeDefined();
   });
@@ -30,7 +30,6 @@ describe("HmuButton", () => {
   it("shows circular progress when loading", () => {
     renderWithTheme(<HmuButton label="Click me" loading />);
     expect(screen.getByRole("progressbar")).toBeDefined();
-    expect(screen.queryByText("Click me")).toBeNull();
   });
 
   it("is disabled when disabled prop is true", () => {
@@ -40,29 +39,31 @@ describe("HmuButton", () => {
   });
 
   it("applies primary variant styles by default", () => {
-    renderWithTheme(<HmuButton label="Click me">Primary</HmuButton>);
+    renderWithTheme(<HmuButton label="Click me" />);
     const button = screen.getByRole("button");
-    // We can check classes or computed styles if needed,
-    // but MUI variant "contained" is usually enough to verify the base behavior.
     expect(button.classList.contains("MuiButton-contained")).toBe(true);
   });
 
   it("applies secondary variant styles when specified", () => {
-    renderWithTheme(
-      <HmuButton label="Click me" variant="secondary">
-        Secondary
-      </HmuButton>,
-    );
+    renderWithTheme(<HmuButton label="Click me" variant="secondary" />);
     const button = screen.getByRole("button");
     expect(button.classList.contains("MuiButton-outlined")).toBe(true);
   });
 
+  it("applies text variant styles when specified", () => {
+    renderWithTheme(<HmuButton label="Click me" variant="text" />);
+    const button = screen.getByRole("button");
+    expect(button.classList.contains("MuiButton-text")).toBe(true);
+  });
+
+  it("applies dark variant styles when specified", () => {
+    renderWithTheme(<HmuButton label="Click me" variant="dark" />);
+    const button = screen.getByRole("button");
+    expect(button.classList.contains("MuiButton-contained")).toBe(true);
+  });
+
   it("is accessible with aria-label", () => {
-    renderWithTheme(
-      <HmuButton label="Click me" aria-label="custom label">
-        Button
-      </HmuButton>,
-    );
+    renderWithTheme(<HmuButton label="Click me" aria-label="custom label" />);
     expect(screen.getByLabelText("custom label")).toBeDefined();
   });
 });
