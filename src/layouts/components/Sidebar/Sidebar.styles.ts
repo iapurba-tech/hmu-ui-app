@@ -16,31 +16,6 @@ export const drawerStyles: SxProps<Theme> = {
   },
 };
 
-export const unitHeaderStyles: SxProps<Theme> = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 2,
-  mb: 4,
-  p: 1.5,
-  borderRadius: 3,
-  bgcolor: (theme) => alpha(theme.palette.primary.main, 0.03),
-  border: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.08)}`,
-  height: 72, // Match TopNav height to aid visual alignment
-  boxSizing: 'border-box',
-};
-
-export const unitIconBoxStyles: SxProps<Theme> = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 40,
-  height: 40,
-  borderRadius: 2,
-  bgcolor: 'primary.main',
-  color: 'white',
-  boxShadow: (theme) => `0 4px 12px ${alpha(theme.palette.primary.main, 0.2)}`,
-};
-
 export const sectionTitleStyles: SxProps<Theme> = {
   px: 2,
   mb: 1,
