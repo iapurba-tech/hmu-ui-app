@@ -1,3 +1,5 @@
+import { UserRole } from "../constants/roles";
+
 export interface UserUnit {
     id: string,
     name: string,
@@ -13,7 +15,7 @@ export interface UserProfile {
     firstname: string,
     lastname: string,
     email: string,
-    role: "ROLE_SYSTEM_ADMIN" | "ROLE_UNIT_ADMIN" | "ROLE_UNIT_MANAGER",
+    role: UserRole,
     units: UserUnit[],
     address: unknown | null,
     active: boolean,
