@@ -11,12 +11,12 @@ import {
   Divider,
 } from "@mui/material";
 import {
-  SearchRounded as Search,
-  NotificationsRounded as Notifications,
-  SettingsRounded as Settings,
-  SwapHorizRounded as SwapHoriz,
-  SegmentRounded as Segment,
-} from "@mui/icons-material";
+  NotificationsIcon,
+  SearchIcon,
+  SegmentIcon,
+  SettingsIcon,
+  SwapHorizIcon,
+} from "../../../shared/icons";
 import { alpha } from "@mui/material/styles";
 import { useLayoutStore } from "../../../shared/store/useLayoutStore";
 import { useAuthStore } from "../../../shared/store/useAuthStore";
@@ -94,7 +94,7 @@ const TopNav: React.FC = () => {
               },
             }}
           >
-            <Segment />
+            <SegmentIcon />
           </IconButton>
 
           <Box
@@ -118,7 +118,7 @@ const TopNav: React.FC = () => {
 
           <SearchBox sx={{ display: { xs: "none", md: "block" } }}>
             <SearchIconWrapper>
-              <Search fontSize="small" />
+              <SearchIcon fontSize="small" />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search data, units or users..."
@@ -131,7 +131,7 @@ const TopNav: React.FC = () => {
               <HmuButton
                 variant="dark"
                 label="Switch Workspace"
-                startIcon={<SwapHoriz />}
+                startIcon={<SwapHorizIcon />}
                 onClick={handleWorkspaceSwitcherOpen}
               />
             </Box>
@@ -145,7 +145,7 @@ const TopNav: React.FC = () => {
               }}
             >
               <Badge variant="dot" color="error">
-                <Notifications fontSize="small" color="primary" />
+                <NotificationsIcon fontSize="small" color="primary" />
               </Badge>
             </IconButton>
             <IconButton
@@ -155,7 +155,7 @@ const TopNav: React.FC = () => {
                 borderRadius: 2,
               }}
             >
-              <Settings fontSize="small" color="primary" />
+              <SettingsIcon fontSize="small" color="primary" />
             </IconButton>
 
             <Divider

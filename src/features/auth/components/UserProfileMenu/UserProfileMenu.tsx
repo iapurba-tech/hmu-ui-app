@@ -11,12 +11,12 @@ import {
   alpha,
 } from "@mui/material";
 import {
-  SettingsRounded as Settings,
-  LogoutRounded as Logout,
-  PersonRounded as Person,
-  MailRounded as Mail,
-  SecurityRounded as Security,
-} from "@mui/icons-material";
+  LogoutIcon,
+  MailIcon,
+  PersonIcon,
+  SecurityIcon,
+  SettingsIcon,
+} from "../../../../shared/icons";
 import type { UserProfile } from "../../types/auth.types";
 import {
   menuPaperStyles,
@@ -100,14 +100,14 @@ const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
               },
             }}
           >
-            <Settings fontSize="small" color="primary" />
+            <SettingsIcon fontSize="small" color="primary" />
           </IconButton>
         </Box>
 
         <Box sx={userDetailsStackStyles}>
           <Box sx={detailItemStyles}>
             <Box sx={{ color: "text.secondary", display: "flex" }}>
-              <Mail sx={{ fontSize: 16 }} />
+              <MailIcon sx={{ fontSize: 16 }} />
             </Box>
             <Typography
               variant="caption"
@@ -118,7 +118,7 @@ const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
           </Box>
           <Box sx={detailItemStyles}>
             <Box sx={{ color: "primary.main", display: "flex" }}>
-              <Security sx={{ fontSize: 16 }} />
+              <SecurityIcon sx={{ fontSize: 16 }} />
             </Box>
             <Typography
               variant="caption"
@@ -134,7 +134,7 @@ const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
 
       <MenuItem onClick={onSettingsClick} sx={menuItemStyles}>
         <ListItemIcon>
-          <Person fontSize="small" />
+          <PersonIcon fontSize="small" />
         </ListItemIcon>
         <ListItemText
           primary="My Profile"
@@ -144,7 +144,7 @@ const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
 
       <MenuItem onClick={onSettingsClick} sx={menuItemStyles}>
         <ListItemIcon>
-          <Settings fontSize="small" />
+          <SettingsIcon fontSize="small" />
         </ListItemIcon>
         <ListItemText
           primary="Settings"
@@ -156,7 +156,7 @@ const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
 
       <MenuItem onClick={onLogoutClick} sx={signOutItemStyles}>
         <ListItemIcon>
-          <Logout fontSize="small" color="error" />
+          <LogoutIcon fontSize="small" color="error" />
         </ListItemIcon>
         <ListItemText
           primary="Sign Out"

@@ -22,6 +22,14 @@ export {
   VerifiedUserRounded as ShieldIcon,
   ArrowForwardRounded as ArrowForwardIcon,
   LanguageRounded as GlobalIcon,
+  SettingsRounded as SettingsIcon,
+  LogoutRounded as LogoutIcon,
+  PersonRounded as PersonIcon,
+  MailRounded as MailIcon,
+  SecurityRounded as SecurityIcon,
+  NotificationsRounded as NotificationsIcon,
+  SwapHorizRounded as SwapHorizIcon,
+  SegmentRounded as SegmentIcon,
 } from "@mui/icons-material";
 
 export * from "./MilkCanIcon";
