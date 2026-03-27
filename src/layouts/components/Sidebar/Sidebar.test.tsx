@@ -42,7 +42,7 @@ describe("Sidebar", () => {
     expect(screen.getByText("Milk Collections")).toBeInTheDocument();
     expect(screen.getByText("Sales")).toBeInTheDocument();
     expect(screen.getByText("Dispatch")).toBeInTheDocument();
-    expect(screen.getByText("Billing")).toBeInTheDocument();
+    expect(screen.getByText("Invoices")).toBeInTheDocument();
     expect(screen.getByText("Bank Advice")).toBeInTheDocument();
   });
 
@@ -62,7 +62,7 @@ describe("Sidebar", () => {
     // Check for specific items
     expect(screen.getByText("Dashboard")).toBeInTheDocument();
     expect(screen.getByText("Units")).toBeInTheDocument();
-    expect(screen.getByText("User")).toBeInTheDocument();
+    expect(screen.getByText("Users")).toBeInTheDocument();
     expect(screen.getByText("Bank Accounts")).toBeInTheDocument();
     expect(screen.getByText("Pricing")).toBeInTheDocument();
     expect(screen.getByText("Products")).toBeInTheDocument();

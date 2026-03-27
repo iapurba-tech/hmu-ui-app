@@ -15,7 +15,7 @@ vi.mock('react-router-dom', async (importOriginal) => {
 });
 
 // Mock useLoginMutation
-vi.mock('../../../../shared/api/authHooks', () => ({
+vi.mock('../../../../shared/api/auth/auth.hooks', () => ({
   useLoginMutation: vi.fn(),
 }));
 
@@ -86,8 +86,8 @@ describe('LoginForm', () => {
   });
 
   it('should navigate to dashboard on successful login', async () => {
-    mockLogin.mockImplementation((options) => {
-      options.onSuccess();
+    mockLogin.mockImplementation((_data, options) => {
+      options?.onSuccess?.();
     });
 
     render(
