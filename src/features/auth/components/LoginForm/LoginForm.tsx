@@ -16,8 +16,8 @@ import {
   VisibilityRounded as Visibility,
   VisibilityOffRounded as VisibilityOff,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../../../../shared/api/authHooks";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../../../../shared/api/auth/auth.hooks";
 import { HmuButton } from "../../../../shared/components";
 import {
   loginFormContainerStyles,
@@ -28,16 +28,23 @@ import {
   actionRowStyles,
   footerTextStyles,
 } from "./LoginForm.styles";
+import { useAuthStore } from "../../../../shared/store/useAuthStore";
 
 const LoginForm: React.FC = () => {
-  const navigate = useNavigate();
-  const { mutate: login, isPending, isError, error } = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+
+  const navigate = useNavigate();
+  const { token } = useAuthStore();
+  const { mutate: login, isPending, isError, error } = useLoginMutation();
+
+  if (token) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();

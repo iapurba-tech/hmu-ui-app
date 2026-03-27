@@ -1,14 +1,17 @@
-import React from 'react';
-import { Grid, Paper } from '@mui/material';
-import { BrandingPanel, LoginForm } from '../../components';
+import React from "react";
+import { Grid, Paper } from "@mui/material";
+import { BrandingPanel, LoginForm } from "../../components";
+import { useDocumentTitle } from "../../../../shared/hooks/useDocumentTitle";
 
 const LoginPage: React.FC = () => {
+  useDocumentTitle();
+
   return (
-    <Grid container component="main" sx={{ minHeight: '100vh' }}>      
-      <Grid 
+    <Grid container component="main" sx={{ minHeight: "100vh" }}>
+      <Grid
         size={{ xs: 0, sm: 6 }}
-        sx={{ 
-          display: { xs: 'none', sm: 'flex' }
+        sx={{
+          display: { xs: "none", sm: "flex" },
         }}
       >
         <BrandingPanel />
@@ -17,9 +20,9 @@ const LoginPage: React.FC = () => {
         size={{ xs: 12, sm: 6 }}
         component={Paper}
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100vh'
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
         }}
       >
         <LoginForm />

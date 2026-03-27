@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import LoginForm from './LoginForm';
-import { useLoginMutation } from '../../../../shared/api/authHooks';
+import { useLoginMutation } from '../../../../shared/api/auth/auth.hooks';
 
 // Mock useNavigate
 const mockNavigate = vi.fn();
@@ -86,7 +86,7 @@ describe('LoginForm', () => {
   });
 
   it('should navigate to dashboard on successful login', async () => {
-    mockLogin.mockImplementation((variables, options) => {
+    mockLogin.mockImplementation((options) => {
       options.onSuccess();
     });
 
