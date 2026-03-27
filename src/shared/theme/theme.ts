@@ -1,15 +1,15 @@
-import { createTheme } from '@mui/material/styles';
-import { colors } from './colors';
+import { createTheme } from "@mui/material/styles";
+import { colors } from "./colors";
 
 // Extend the Palette interface to include tertiary and neutral
-declare module '@mui/material/styles' {
+declare module "@mui/material/styles" {
   interface Palette {
-    tertiary: Palette['primary'];
-    neutral: Palette['primary'];
+    tertiary: Palette["primary"];
+    neutral: Palette["primary"];
   }
   interface PaletteOptions {
-    tertiary?: PaletteOptions['primary'];
-    neutral?: PaletteOptions['primary'];
+    tertiary?: PaletteOptions["primary"];
+    neutral?: PaletteOptions["primary"];
   }
 }
 
@@ -27,6 +27,12 @@ export const theme = createTheme({
     neutral: {
       main: colors.neutral,
     },
+    error: {
+      main: colors.error,
+    },
+    warning: {
+      main: colors.warning,
+    },
     background: {
       default: colors.background.default,
       paper: colors.background.paper,
@@ -37,7 +43,8 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '"Inter", "Work Sans", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily:
+      '"Inter", "Work Sans", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: { fontWeight: 900 },
     h2: { fontWeight: 800 },
     h3: { fontWeight: 700 },
@@ -45,7 +52,7 @@ export const theme = createTheme({
     subtitle1: { fontWeight: 700 },
     body2: { fontWeight: 500 },
     button: {
-      textTransform: 'none',
+      textTransform: "none",
       fontWeight: 700,
     },
   },
@@ -56,9 +63,9 @@ export const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          boxShadow: 'none',
-          '&:hover': {
-            boxShadow: 'none',
+          boxShadow: "none",
+          "&:hover": {
+            boxShadow: "none",
           },
         },
       },
