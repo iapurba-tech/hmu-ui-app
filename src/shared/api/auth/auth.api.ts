@@ -1,10 +1,10 @@
 import type {
-    LoginCredentials,
+  LoginCredentials,
   LoginResponse,
   UserProfile,
-} from "../../features/auth/types/auth.types";
-import { apiClient } from "./apiClient";
-import { API_ENDPOINTS } from "./endpoints";
+} from "../../../features/auth/types/auth.types";
+import { apiClient } from "../apiClient";
+import { API_ENDPOINTS } from "../endpoints";
 
 export const authService = {
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {

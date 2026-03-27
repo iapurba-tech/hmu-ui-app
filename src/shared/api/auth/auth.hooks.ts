@@ -1,9 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useAuthStore } from "../store/useAuthStore";
-import type { LoginCredentials } from "../../features/auth/types/auth.types";
-import { authService } from "./authService";
+import { useAuthStore } from "../../store/useAuthStore";
+import type { LoginCredentials } from "../../../features/auth/types/auth.types";
+import { authService } from "./auth.api";
 
-// Query Keys (For caching)
 export const authKeys = {
   me: ["auth", "me"] as const,
 };
@@ -38,7 +37,6 @@ export const useProfileQuery = () => {
     queryKey: authKeys.me,
     queryFn: authService.getMe,
     enabled: !!token,
-    staleTime: 1000 * 60 * 30,
     retry: false,
   });
 };
