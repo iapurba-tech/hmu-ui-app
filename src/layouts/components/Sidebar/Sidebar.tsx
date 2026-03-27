@@ -21,6 +21,7 @@ import {
 } from "./Sidebar.styles";
 import { WorkspaceType } from "../../../features/auth/constants/workspace";
 import { adminMenu, managementMenu } from "./Sidebar.config";
+import { getRouteTitle } from "../../../app/router/routeUtils";
 
 const Sidebar: React.FC = () => {
   const location = useLocation();
@@ -49,35 +50,36 @@ const Sidebar: React.FC = () => {
             {section.title}
           </Typography>
           <List disablePadding>
-            {section.items.map((item) => (
-              <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
-                <ListItemButton
-                  component={Link}
-                  to={item.path}
-                  selected={location.pathname === item.path}
-                  sx={listItemButtonStyles(location.pathname === item.path)}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 40,
-                      color:
-                        location.pathname === item.path
-                          ? "white"
-                          : "text.secondary",
-                    }}
+            {section.items.map((item) => {
+              const routeTitle = getRouteTitle(item.path);
+              const isCurrentRoute = location.pathname === item.path;
+              return (
+                <ListItem key={routeTitle} disablePadding sx={{ mb: 0.5 }}>
+                  <ListItemButton
+                    component={Link}
+                    to={item.path}
+                    selected={isCurrentRoute}
+                    sx={listItemButtonStyles(isCurrentRoute)}
                   >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.text}
-                    sx={{
-                      fontSize: "14px",
-                      fontWeight: location.pathname === item.path ? 700 : 500,
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 40,
+                        color: isCurrentRoute ? "white" : "text.secondary",
+                      }}
+                    >
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={routeTitle}
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: 700,
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
           </List>
         </Box>
       ))}
