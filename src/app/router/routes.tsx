@@ -4,6 +4,10 @@ import ForbiddenPage from "../../features/error/pages/ForbiddenPage/ForbiddenPag
 import NotFoundPage from "../../features/error/pages/NotFoundPage/NotFoundPage";
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
+import {
+  SYSTEM_ADMINISTRATOR_ROLES,
+  UNIT_OPERATIONS_ROLES,
+} from "../../features/auth/constants/roles";
 
 export interface RouteConfig {
   path?: string;
@@ -23,7 +27,7 @@ export const routes: RouteConfig[] = [
   {
     path: "/login",
     element: <LoginPage />,
-    meta: { requiresAuth: false, hideInSidebar: true },
+    meta: { requiresAuth: false, hideInSidebar: true, title: "Login" },
   },
 
   // Authenticated Routes (Wrapped in RootLayout)
@@ -55,7 +59,11 @@ export const routes: RouteConfig[] = [
       {
         path: "forbidden",
         element: <ForbiddenPage />,
-        meta: { title: "Access Denied", requiresAuth: true, hideInSidebar: true },
+        meta: {
+          title: "Access Denied",
+          requiresAuth: true,
+          hideInSidebar: true,
+        },
       },
 
       // System Admin Only Routes
@@ -65,7 +73,7 @@ export const routes: RouteConfig[] = [
         meta: {
           title: "Administration",
           requiresAuth: true,
-          roles: ["ROLE_SYSTEM_ADMIN"],
+          roles: SYSTEM_ADMINISTRATOR_ROLES,
         },
         children: [
           {
@@ -99,12 +107,12 @@ export const routes: RouteConfig[] = [
           {
             path: "products",
             element: <div>Global Product Catalog</div>,
-            meta: { title: "Products Master" },
+            meta: { title: "Products" },
           },
           {
             path: "pricing",
             element: <div>Pricing Models</div>,
-            meta: { title: "Pricing Rules" },
+            meta: { title: "Pricing" },
           },
         ],
       },
@@ -115,13 +123,14 @@ export const routes: RouteConfig[] = [
         element: <Outlet />,
         meta: {
           requiresAuth: true,
-          roles: ["ROLE_SYSTEM_ADMIN", "ROLE_UNIT_ADMIN", "ROLE_UNIT_MANAGER"],
+          roles: UNIT_OPERATIONS_ROLES,
+          title: "Unit Operations",
         },
         children: [
           {
             path: "mpcs",
             element: <div>MPCS Master</div>,
-            meta: { title: "MPCS Management" },
+            meta: { title: "MPCS" },
           },
           {
             path: "procurement",
@@ -143,7 +152,7 @@ export const routes: RouteConfig[] = [
               {
                 path: "transactions",
                 element: <div>Feed & Product Sales</div>,
-                meta: { title: "Sales Entry" },
+                meta: { title: "Sales" },
               },
             ],
           },
@@ -155,7 +164,7 @@ export const routes: RouteConfig[] = [
               {
                 path: "tankers",
                 element: <div>Tanker & Vehicle Management</div>,
-                meta: { title: "Tankers" },
+                meta: { title: "Dispatch" },
               },
               {
                 path: "road-challans",
