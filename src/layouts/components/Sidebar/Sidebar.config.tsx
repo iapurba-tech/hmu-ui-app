@@ -1,21 +1,21 @@
 import {
-  DashboardRounded as Dashboard,
-  FactoryRounded as Factory,
-  GroupRounded as Group,
-  AccountBalanceRounded as AccountBalance,
-  PaymentsRounded as Payments,
-  CategoryRounded as Category,
-  StoreRounded as Store,
-  LocalDrinkRounded as LocalDrink,
-  ShoppingCartRounded as ShoppingCart,
-  ReceiptRounded as Receipt,
-  DescriptionRounded as Description,
-  LocalShippingRounded as LocalShipping,
-  ClassRounded as Class,
-} from '@mui/icons-material';
+  BankIcon,
+  CategoryIcon,
+  DashboardIcon,
+  DocumentsIcon,
+  InvoiceIcon,
+  MilkCanIcon,
+  MpcsIcon,
+  OrganizationIcon,
+  PricingIcon,
+  ProductIcon,
+  SalesIcon,
+  TruckIcon,
+  UsersIcon,
+} from "../../../shared/icons";
 
 interface MenuItem {
-  text: string;
+  label: string;
   icon: React.ReactNode;
   path: string;
 }
@@ -28,16 +28,18 @@ interface MenuSection {
 export const adminMenu: MenuSection[] = [
   {
     title: "Main Menu",
-    items: [{ text: "Dashboard", icon: <Dashboard />, path: "/dashboard" }],
+    items: [
+      { label: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
+    ],
   },
   {
     title: "Organization & Finance",
     items: [
-      { text: "Units", icon: <Factory />, path: "/admin/units" },
-      { text: "User", icon: <Group />, path: "/admin/users" },
+      { label: "Units", icon: <OrganizationIcon />, path: "/admin/units" },
+      { label: "User", icon: <UsersIcon />, path: "/admin/users" },
       {
-        text: "Bank Accounts",
-        icon: <AccountBalance />,
+        label: "Bank Accounts",
+        icon: <BankIcon />,
         path: "/admin/bank-accounts",
       },
     ],
@@ -45,11 +47,11 @@ export const adminMenu: MenuSection[] = [
   {
     title: "Catalog & Pricing",
     items: [
-      { text: "Pricing", icon: <Payments />, path: "/admin/pricing" },
-      { text: "Products", icon: <Category />, path: "/admin/products" },
+      { label: "Pricing", icon: <PricingIcon />, path: "/admin/pricing" },
+      { label: "Products", icon: <ProductIcon />, path: "/admin/products" },
       {
-        text: "Head Load",
-        icon: <Class />,
+        label: "Head Load",
+        icon: <CategoryIcon />,
         path: "/admin/head-load-categories",
       },
     ],
@@ -60,26 +62,26 @@ export const managementMenu: MenuSection[] = [
   {
     title: "Main Menu",
     items: [
-      { text: "Dashboard", icon: <Dashboard />, path: "/dashboard" },
-      { text: "MPCS", icon: <Store />, path: "/unit/mpcs" },
+      { label: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
+      { label: "MPCS", icon: <MpcsIcon />, path: "/unit/mpcs" },
     ],
   },
   {
     title: "Daily Operations",
     items: [
       {
-        text: "Milk Collections",
-        icon: <LocalDrink />,
+        label: "Milk Collections",
+        icon: <MilkCanIcon/>,
         path: "/unit/procurement/milk-collections",
       },
       {
-        text: "Sales",
-        icon: <ShoppingCart />,
+        label: "Sales",
+        icon: <SalesIcon />,
         path: "/unit/sales/transactions",
       },
       {
-        text: "Dispatch",
-        icon: <LocalShipping />,
+        label: "Dispatch",
+        icon: <TruckIcon />,
         path: "/unit/dispatch/tankers",
       },
     ],
@@ -87,10 +89,14 @@ export const managementMenu: MenuSection[] = [
   {
     title: "Finance",
     items: [
-      { text: "Billing", icon: <Receipt />, path: "/unit/billing/invoices" },
       {
-        text: "Bank Advice",
-        icon: <Description />,
+        label: "Billing",
+        icon: <InvoiceIcon />,
+        path: "/unit/billing/invoices",
+      },
+      {
+        label: "Bank Advice",
+        icon: <DocumentsIcon />,
         path: "/unit/billing/bank-advice",
       },
     ],

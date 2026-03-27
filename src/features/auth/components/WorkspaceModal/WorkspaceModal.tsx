@@ -8,14 +8,14 @@ import {
   InputAdornment,
 } from "@mui/material";
 import {
-  Close as CloseIcon,
-  Search as SearchIcon,
-  CheckCircle as CheckCircleIcon,
-  VerifiedUserRounded as ShieldIcon,
-  ArrowForwardRounded as ArrowForward,
-  FactoryRounded as Factory,
-  LanguageRounded as GlobalIcon,
-} from "@mui/icons-material";
+  ArrowForwardIcon,
+  CheckCircleIcon,
+  CloseIcon,
+  GlobalIcon,
+  OrganizationIcon,
+  SearchIcon,
+  ShieldIcon,
+} from "../../../../shared/icons";
 import { useAuthStore } from "../../../../shared/store/useAuthStore";
 import { UserRole } from "../../constants/roles";
 import {
@@ -89,7 +89,7 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, isSelected, onClick }) => {
   return (
     <Box sx={unitCardStyles(isSelected, color)} onClick={onClick}>
       <Box sx={iconBoxStyles(color)}>
-        {isGlobal ? <GlobalIcon /> : <Factory />}
+        {isGlobal ? <GlobalIcon /> : <OrganizationIcon />}
       </Box>
 
       <Box sx={unitCardContentStyles}>
@@ -292,7 +292,7 @@ const WorkspaceModal: React.FC<WorkspaceModalProps> = ({ open, onClose }) => {
               label="Switch to Workspace"
               onClick={handleConfirm}
               rounded
-              endIcon={<ArrowForward />}
+              endIcon={<ArrowForwardIcon />}
               sx={{
                 px: 3,
                 py: 1.5,

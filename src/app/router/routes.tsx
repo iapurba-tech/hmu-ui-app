@@ -1,7 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import LoginPage from "../../features/auth/pages/LoginPage/LoginPage";
-import ForbiddenPage from "../../features/error/pages/ForbiddenPage/ForbiddenPage";
-import NotFoundPage from "../../features/error/pages/NotFoundPage/NotFoundPage";
+import { ForbiddenPage, NotFoundPage } from "../../features/error/pages";
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import {
@@ -84,7 +83,7 @@ export const routes: RouteConfig[] = [
           {
             path: "units",
             element: <Outlet />,
-            meta: { title: "Units Master" },
+            meta: { title: "Units" },
             children: [
               { index: true, element: <div>Units List View</div> },
               {
@@ -95,9 +94,9 @@ export const routes: RouteConfig[] = [
             ],
           },
           {
-            path: "hlc",
+            path: "head-load-categories",
             element: <div>Head Load Categories (HLC)</div>,
-            meta: { title: "HLC Categories" },
+            meta: { title: "Head Load" },
           },
           {
             path: "bank-accounts",

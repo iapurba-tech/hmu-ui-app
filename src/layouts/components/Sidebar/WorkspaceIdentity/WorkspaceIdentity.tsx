@@ -1,10 +1,10 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { Factory, AdminPanelSettings } from "@mui/icons-material";
 import {
   wsIconBoxStyles,
   wsIdentityBoxStyles,
 } from "./WorkspaceIdentity.styles";
+import { GlobalIcon, OrganizationIcon } from "../../../../shared/icons";
 
 export interface WorkspaceIdentityProps {
   isAdminWorkspace: boolean;
@@ -19,9 +19,9 @@ const WorkspaceIdentity: React.FC<WorkspaceIdentityProps> = ({
     <Box sx={wsIdentityBoxStyles}>
       <Box sx={wsIconBoxStyles}>
         {isAdminWorkspace ? (
-          <AdminPanelSettings fontSize="small" />
+          <GlobalIcon fontSize="small" />
         ) : (
-          <Factory fontSize="small" />
+          <OrganizationIcon fontSize="small" />
         )}
       </Box>
       <Box>
