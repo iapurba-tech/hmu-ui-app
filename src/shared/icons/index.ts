@@ -17,6 +17,10 @@ export {
   Inventory2Outlined as ProductIcon,
   SellOutlined as PricingIcon,
   AdminPanelSettingsOutlined as AdminPanelIcon,
+  PersonOutlined as UserIcon,
+  LockOutlined as LockIcon,
+  VisibilityOutlined as VisibilityIcon,
+  VisibilityOffOutlined as VisibilityOffIcon,
 
   // Rounded Icons
   VerifiedUserRounded as ShieldIcon,

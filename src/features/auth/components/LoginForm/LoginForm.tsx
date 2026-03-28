@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import {
   Box,
-  TextField,
   Typography,
-  InputAdornment,
   IconButton,
   Link,
   Checkbox,
@@ -11,20 +9,19 @@ import {
   Alert,
 } from "@mui/material";
 import {
-  PersonRounded as Person,
-  LockRounded as Lock,
-  VisibilityRounded as Visibility,
-  VisibilityOffRounded as VisibilityOff,
-} from "@mui/icons-material";
+  LockIcon,
+  UserIcon,
+  VisibilityIcon,
+  VisibilityOffIcon,
+} from "../../../../shared/icons";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../../shared/api/auth/auth.hooks";
-import { HmuButton } from "../../../../shared/components";
+import { HmuButton, HmuTextField } from "../../../../shared/components";
 import {
   loginFormContainerStyles,
   headerBoxStyles,
   loginFormBoxStyles,
   formContainerStyles,
-  textFieldStyles,
   actionRowStyles,
   footerTextStyles,
 } from "./LoginForm.styles";
@@ -97,7 +94,7 @@ const LoginForm: React.FC = () => {
           )}
 
           <Box sx={{ mb: 3 }}>
-            <TextField
+            <HmuTextField
               required
               fullWidth
               id="username"
@@ -111,21 +108,12 @@ const LoginForm: React.FC = () => {
               onChange={(e) =>
                 setFormData({ ...formData, username: e.target.value })
               }
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Person color="action" />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              sx={textFieldStyles}
+              startIcon={<UserIcon />}
             />
           </Box>
 
           <Box sx={{ mb: 1 }}>
-            <TextField
+            <HmuTextField
               required
               fullWidth
               name="password"
@@ -139,28 +127,18 @@ const LoginForm: React.FC = () => {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Lock color="action" />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleTogglePassword}
-                        edge="end"
-                        aria-label="toggle password visibility"
-                        disabled={isPending}
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              sx={textFieldStyles}
+              startIcon={<LockIcon />}
+              endIcon={
+                <IconButton
+                  onClick={handleTogglePassword}
+                  edge="end"
+                  aria-label="toggle password visibility"
+                  disabled={isPending}
+                  size="small"
+                >
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              }
             />
           </Box>
 
