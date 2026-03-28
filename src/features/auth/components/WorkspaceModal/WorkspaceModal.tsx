@@ -233,7 +233,7 @@ const WorkspaceModal: React.FC<WorkspaceModalProps> = ({ open, onClose }) => {
         </Box>
 
         {/* Search - Visible only if more than 4 items */}
-        {units.length > 4 && (
+        {units.length > 3 && (
           <UnitSearch value={searchTerm} onChange={setSearchTerm} />
         )}
 
