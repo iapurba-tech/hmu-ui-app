@@ -49,6 +49,7 @@ import { useGetUnits } from "../../../../shared/api/admin/admin.hooks";
 import { WorkspaceType } from "../../constants/workspace";
 import { HmuButton } from "../../../../shared/components";
 import { theme } from "../../../../shared/theme/theme";
+import { useNavigate } from "react-router-dom";
 
 interface UnitSearchProps {
   value: string;
@@ -166,6 +167,7 @@ const WorkspaceModal: React.FC<WorkspaceModalProps> = ({ open, onClose }) => {
   const [tempSelectedId, setTempSelectedId] = useState<string | "global">(
     activeUnit?.id || "global",
   );
+  const navigate = useNavigate();
 
   const isSystemAdmin = user?.role === UserRole.SYSTEM_ADMIN;
   const { data: unitList } = useGetUnits({ enabled: isSystemAdmin });
@@ -201,6 +203,7 @@ const WorkspaceModal: React.FC<WorkspaceModalProps> = ({ open, onClose }) => {
         setWorkspace(WorkspaceType.UNIT_MANAGEMENT);
       }
     }
+    navigate("/dashboard");
     onClose();
   };
 
