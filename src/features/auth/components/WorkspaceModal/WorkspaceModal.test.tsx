@@ -6,6 +6,7 @@ import { UserRole } from "../../constants/roles";
 import { WorkspaceType } from "../../constants/workspace";
 import { useAuthStore } from "../../../../shared/store/useAuthStore";
 import { useGetUnits } from "../../../../shared/api/admin/admin.hooks";
+import { MemoryRouter } from "react-router-dom";
 
 // Mock the dependencies
 vi.mock("../../../../shared/store/useAuthStore");
@@ -71,7 +72,11 @@ const mockUnits = [
 ];
 
 const renderWithTheme = (ui: React.ReactElement) => {
-  return render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);
+  return render(
+    <MemoryRouter>
+      <ThemeProvider theme={theme}>{ui}</ThemeProvider>
+    </MemoryRouter>
+  );
 };
 
 describe("WorkspaceModal", () => {
