@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import LoginForm from "./LoginForm";
@@ -48,7 +49,8 @@ describe("LoginForm", () => {
     expect(screen.getByRole("button", { name: /Log In/i })).toBeInTheDocument();
   });
 
-  it("should toggle password visibility", () => {
+  it("should toggle password visibility", async () => {
+    const user = userEvent.setup();
     render(
       <MemoryRouter>
         <LoginForm />
@@ -63,14 +65,15 @@ describe("LoginForm", () => {
     const toggleButton = screen.getByRole("button", {
       name: /toggle password visibility/i,
     });
-    fireEvent.click(toggleButton);
+    await user.click(toggleButton);
     expect(passwordInput.type).toBe("text");
 
-    fireEvent.click(toggleButton);
+    await user.click(toggleButton);
     expect(passwordInput.type).toBe("password");
   });
 
   it("should call login mutation on submission", async () => {
+    const user = userEvent.setup();
     render(
       <MemoryRouter>
         <LoginForm />
@@ -83,17 +86,20 @@ describe("LoginForm", () => {
     const passwordInput = screen.getByPlaceholderText(/Enter your password/i);
     const loginButton = screen.getByRole("button", { name: /Log In/i });
 
-    fireEvent.change(usernameInput, { target: { value: "admin" } });
-    fireEvent.change(passwordInput, { target: { value: "password" } });
-    fireEvent.click(loginButton);
+    await user.type(usernameInput, "admin");
+    await user.type(passwordInput, "password");
+    await user.click(loginButton);
 
-    expect(mockLogin).toHaveBeenCalledWith(
-      { username: "admin", password: "password" },
-      expect.any(Object),
-    );
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith(
+        { usernameOrEmail: "admin", password: "password" },
+        expect.any(Object),
+      );
+    });
   });
 
   it("should navigate to dashboard on successful login", async () => {
+    const user = userEvent.setup();
     mockLogin.mockImplementation((_data, options) => {
       options?.onSuccess?.();
     });
@@ -110,11 +116,13 @@ describe("LoginForm", () => {
     const passwordInput = screen.getByPlaceholderText(/Enter your password/i);
     const loginButton = screen.getByRole("button", { name: /Log In/i });
 
-    fireEvent.change(usernameInput, { target: { value: "admin" } });
-    fireEvent.change(passwordInput, { target: { value: "password" } });
-    fireEvent.click(loginButton);
+    await user.type(usernameInput, "admin");
+    await user.type(passwordInput, "password");
+    await user.click(loginButton);
 
-    expect(mockNavigate).toHaveBeenCalledWith("/dashboard");
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/dashboard");
+    });
   });
 
   it("should show loading state when mutation is pending", () => {
@@ -156,14 +164,20 @@ describe("LoginForm", () => {
     expect(screen.getByText(/Invalid credentials/i)).toBeInTheDocument();
   });
 
-  it("should not call login if fields are empty", () => {
+  it("should not call login if fields are empty", async () => {
+    const user = userEvent.setup();
     render(
       <MemoryRouter>
         <LoginForm />
       </MemoryRouter>,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Log In/i }));
+    await user.click(screen.getByRole("button", { name: /Log In/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Username or Email is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/Password is required/i)).toBeInTheDocument();
+    });
 
     expect(mockLogin).not.toHaveBeenCalled();
   });

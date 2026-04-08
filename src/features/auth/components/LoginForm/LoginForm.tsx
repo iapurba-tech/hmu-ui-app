@@ -26,32 +26,52 @@ import {
   footerTextStyles,
 } from "./LoginForm.styles";
 import { useAuthStore } from "../../../../shared/store/useAuthStore";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const loginSchema = z.object({
+  usernameOrEmail: z.string().min(1, "Username or Email is required"),
+  password: z.string().min(1, "Password is required"),
+  rememberMe: z.boolean().optional(),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
-
   const navigate = useNavigate();
   const { token } = useAuthStore();
   const { mutate: login, isPending, isError, error } = useLoginMutation();
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      usernameOrEmail: "",
+      password: "",
+      rememberMe: false,
+    },
+  });
 
   if (token) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  const handleSubmit = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    if (formData.username && formData.password) {
-      login(formData, {
+  const onSubmit = (data: LoginFormData) => {
+    const { usernameOrEmail, password } = data;
+    login(
+      { usernameOrEmail, password },
+      {
         onSuccess: () => {
           navigate("/dashboard");
         },
-      });
-    }
+      },
+    );
   };
 
   const handleTogglePassword = () => setShowPassword(!showPassword);
@@ -82,7 +102,7 @@ const LoginForm: React.FC = () => {
         <Box
           component="form"
           noValidate
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           sx={formContainerStyles}
         >
           {isError && (
@@ -100,15 +120,13 @@ const LoginForm: React.FC = () => {
               id="username"
               label="Username or Email"
               placeholder="Enter your username or email"
-              name="username"
               autoComplete="username"
               autoFocus
               disabled={isPending}
-              value={formData.username}
-              onChange={(e) =>
-                setFormData({ ...formData, username: e.target.value })
-              }
+              error={!!errors.usernameOrEmail}
+              helperText={errors.usernameOrEmail?.message}
               startIcon={<UserIcon />}
+              {...register("usernameOrEmail")}
             />
           </Box>
 
@@ -116,17 +134,14 @@ const LoginForm: React.FC = () => {
             <HmuTextField
               required
               fullWidth
-              name="password"
               label="Password"
               placeholder="Enter your password"
               type={showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
               disabled={isPending}
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
+              error={!!errors.password}
+              helperText={errors.password?.message}
               startIcon={<LockIcon />}
               endIcon={
                 <IconButton
@@ -139,25 +154,33 @@ const LoginForm: React.FC = () => {
                   {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               }
+              {...register("password")}
             />
           </Box>
 
           <Box sx={actionRowStyles}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  color="primary"
-                  disabled={isPending}
+            <Controller
+              name="rememberMe"
+              control={control}
+              render={({ field }) => (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={field.value}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      color="primary"
+                      disabled={isPending}
+                    />
+                  }
+                  label={
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      Remember me
+                    </Typography>
+                  }
                 />
-              }
-              label={
-                <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                  Remember me
-                </Typography>
-              }
+              )}
             />
             <Link
               href="#"
