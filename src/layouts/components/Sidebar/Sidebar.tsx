@@ -71,9 +71,13 @@ const Sidebar: React.FC = () => {
                     </ListItemIcon>
                     <ListItemText
                       primary={routeTitle}
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: 700,
+                      slotProps={{
+                        primary: {
+                          sx: {
+                            fontSize: "14px",
+                            fontWeight: isCurrentRoute ? 600 : 500,
+                          },
+                        },
                       }}
                     />
                   </ListItemButton>
