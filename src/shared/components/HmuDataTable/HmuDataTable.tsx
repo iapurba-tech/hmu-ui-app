@@ -15,16 +15,19 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { ChevronLeftIcon, ChevronRightIcon } from "../../icons";
 import {
   dataTableContainerStyles,
   dataTableStyles,
   dataTableHeadCellStyles,
   dataTableRowStyles,
   dataTableCellStyles,
+  paginationFooterStyles,
+  rowsPerPageLabelStyles,
+  rowsPerPageSelectStyles,
+  paginationIconButtonStyles,
+  paginationItemStyles,
 } from "./HmuDataTable.styles";
-import { colors } from "../../theme/colors";
 import { HmuLoader } from "../index";
 
 export interface Column<T> {
@@ -36,11 +39,13 @@ export interface Column<T> {
 }
 
 export interface PaginationConfig {
-  page: number;
-  rowsPerPage: number;
-  totalRows: number;
-  onPageChange: (page: number) => void;
-  onRowsPerPageChange: (rowsPerPage: number) => void;
+  page?: number;
+  rowsPerPage?: number;
+  totalRows?: number;
+  onPageChange?: (page: number) => void;
+  onRowsPerPageChange?: (rowsPerPage: number) => void;
+  isServerSide?: boolean;
+  rowsPerPageThreshold?: number;
 }
 
 export interface SortingConfig {
@@ -68,31 +73,67 @@ const HmuDataTable = <T extends object>({
   sorting,
   emptyMessage = "No data available",
 }: HmuDataTableProps<T>) => {
+  // Internal state for uncontrolled mode
+  const [internalPage, setInternalPage] = React.useState(0);
+  const [internalRowsPerPage, setInternalRowsPerPage] = React.useState(10);
+
+  // Derive active values (favor controlled props if provided)
+  const isControlled =
+    pagination?.page !== undefined && pagination?.onPageChange !== undefined;
+  const page = isControlled ? (pagination?.page ?? internalPage) : internalPage;
+  const rowsPerPage =
+    pagination?.rowsPerPage !== undefined
+      ? pagination.rowsPerPage
+      : internalRowsPerPage;
+  const totalRows = pagination?.totalRows ?? data.length;
+  const isServerSide = pagination?.isServerSide ?? false;
+  const threshold = pagination?.rowsPerPageThreshold ?? 10;
+
   const handlePageChange = (_: unknown, newPage: number) => {
-    pagination?.onPageChange(newPage - 1);
+    const zeroBasedPage = newPage - 1;
+    if (isControlled) {
+      pagination.onPageChange?.(zeroBasedPage);
+    } else {
+      setInternalPage(zeroBasedPage);
+    }
   };
 
-  const totalPages = pagination
-    ? Math.ceil(pagination.totalRows / pagination.rowsPerPage)
-    : 0;
-  const startRow = pagination
-    ? pagination.page * pagination.rowsPerPage + 1
-    : 0;
-  const endRow = pagination
-    ? Math.min(
-        (pagination.page + 1) * pagination.rowsPerPage,
-        pagination.totalRows,
-      )
-    : 0;
+  const handleRowsPerPageChange = (newRows: number) => {
+    if (pagination?.onRowsPerPageChange) {
+      pagination.onRowsPerPageChange(newRows);
+    } else {
+      setInternalRowsPerPage(newRows);
+      setInternalPage(0);
+    }
+  };
+
+  // Reset internal page if data length changes in uncontrolled mode
+  React.useEffect(() => {
+    if (
+      !isControlled &&
+      internalPage > 0 &&
+      data.length <= internalPage * internalRowsPerPage
+    ) {
+      setInternalPage(0);
+    }
+  }, [data.length, internalPage, internalRowsPerPage, isControlled]);
+
+  const totalPages = Math.ceil(totalRows / rowsPerPage);
+  const startRow = totalRows === 0 ? 0 : page * rowsPerPage + 1;
+  const endRow = Math.min((page + 1) * rowsPerPage, totalRows);
+
+  // Slice data only if it's client-side pagination
+  const displayData = isServerSide
+    ? data
+    : data.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+
+  const showPagination = totalRows > threshold;
 
   return (
     <Box sx={{ width: "100%", position: "relative" }}>
       <TableContainer
         component={Paper}
-        sx={{
-          ...dataTableContainerStyles,
-          borderRadius: pagination ? 0 : "0 0 12px 12px",
-        }}
+        sx={dataTableContainerStyles(showPagination)}
         elevation={0}
       >
         <Table sx={dataTableStyles} aria-label="dynamic data table">
@@ -133,7 +174,7 @@ const HmuDataTable = <T extends object>({
                   </Box>
                 </TableCell>
               </TableRow>
-            ) : data.length === 0 ? (
+            ) : displayData.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={columns.length} sx={{ py: 8 }}>
                   <Typography align="center" color="textSecondary">
@@ -142,7 +183,7 @@ const HmuDataTable = <T extends object>({
                 </TableCell>
               </TableRow>
             ) : (
-              data.map((row) => (
+              displayData.map((row) => (
                 <TableRow key={keyExtractor(row)} sx={dataTableRowStyles}>
                   {columns.map((column) => (
                     <TableCell
@@ -164,53 +205,24 @@ const HmuDataTable = <T extends object>({
         </Table>
       </TableContainer>
 
-      {pagination && (
-        <Box
-          sx={{
-            bgcolor: "#f8fafc", // Lighter background for the footer
-            px: 2,
-            py: 1.5,
-            border: `1px solid ${colors.neutral}20`,
-            borderTop: "none",
-            borderRadius: "0 0 12px 12px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+      {showPagination && (
+        <Box sx={paginationFooterStyles(showPagination)}>
           <Typography variant="body2" color="textSecondary">
-            Showing {startRow}-{endRow} of {pagination.totalRows} records
+            Showing {startRow}-{endRow} of {totalRows} records
           </Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Typography
-                sx={{
-                  fontSize: "0.75rem",
-                  color: colors.text.secondary,
-                  fontWeight: 600,
-                }}
-              >
+              <Typography sx={rowsPerPageLabelStyles}>
                 Rows per page:
               </Typography>
               <Select
-                value={pagination.rowsPerPage}
+                value={rowsPerPage}
                 onChange={(e) =>
-                  pagination.onRowsPerPageChange(Number(e.target.value))
+                  handleRowsPerPageChange(Number(e.target.value))
                 }
                 size="small"
-                sx={{
-                  fontSize: "0.75rem",
-                  height: "32px",
-                  borderRadius: "6px",
-                  bgcolor: "white",
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: `${colors.neutral}30`,
-                  },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: `${colors.neutral}50`,
-                  },
-                }}
+                sx={rowsPerPageSelectStyles}
               >
                 {[5, 10, 25, 50].map((option) => (
                   <MenuItem
@@ -226,26 +238,19 @@ const HmuDataTable = <T extends object>({
 
             <Pagination
               count={totalPages}
-              page={pagination.page + 1}
+              page={page + 1}
               onChange={handlePageChange}
               shape="rounded"
               size="small"
               renderItem={(item) => {
-                const { page, selected, type, color, ...itemProps } = item;
+                const { page: itemPage, selected, type, ...itemProps } = item;
 
                 if (type === "previous" || type === "next") {
                   return (
                     <IconButton
-                      {...itemProps} // Passes onClick, disabled, etc.
+                      {...(itemProps as any)}
                       size="small"
-                      sx={{
-                        borderRadius: "8px",
-                        border: `1px solid ${colors.neutral}20`,
-                        bgcolor: "white",
-                        mr: type === "previous" ? 0.5 : 0,
-                        ml: type === "next" ? 0.5 : 0,
-                        "&:hover": { bgcolor: "#f1f5f9" },
-                      }}
+                      sx={paginationIconButtonStyles(type)}
                     >
                       {type === "previous" ? (
                         <ChevronLeftIcon fontSize="small" />
@@ -257,29 +262,8 @@ const HmuDataTable = <T extends object>({
                 }
                 return (
                   <Box
-                    {...item}
-                    sx={{
-                      minWidth: 32,
-                      height: 32,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: "8px",
-                      cursor: "pointer",
-                      fontSize: "0.75rem",
-                      fontWeight: 700,
-                      mx: 0.25,
-                      bgcolor: item.selected ? colors.primary : "transparent",
-                      color: item.selected ? "white" : colors.text.primary,
-                      border: item.selected ? "none" : `1px solid transparent`,
-                      "&:hover": {
-                        bgcolor: item.selected ? colors.primary : "#f1f5f9",
-                        border: item.selected
-                          ? "none"
-                          : `1px solid ${colors.neutral}20`,
-                      },
-                      transition: "all 0.2s",
-                    }}
+                    {...(item as any)}
+                    sx={paginationItemStyles(!!item.selected)}
                   >
                     {item.page}
                   </Box>

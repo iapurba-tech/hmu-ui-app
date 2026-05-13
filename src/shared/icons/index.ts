@@ -34,6 +34,8 @@ export {
   NotificationsRounded as NotificationsIcon,
   SwapHorizRounded as SwapHorizIcon,
   SegmentRounded as SegmentIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
 } from "@mui/icons-material";
 
 export * from "./MilkCanIcon";

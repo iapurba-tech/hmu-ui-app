@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import HmuDataTable, { Column } from "./HmuDataTable";
+import HmuDataTable, { type Column } from "./HmuDataTable";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../../shared/theme/theme";
 
@@ -31,7 +31,7 @@ describe("HmuDataTable", () => {
         columns={columns}
         data={data}
         keyExtractor={(row) => row.id}
-      />
+      />,
     );
     expect(screen.getByText("Name")).toBeDefined();
     expect(screen.getByText("Age")).toBeDefined();
@@ -43,7 +43,7 @@ describe("HmuDataTable", () => {
         columns={columns}
         data={data}
         keyExtractor={(row) => row.id}
-      />
+      />,
     );
     expect(screen.getByText("John Doe")).toBeDefined();
     expect(screen.getByText("30")).toBeDefined();
@@ -58,7 +58,7 @@ describe("HmuDataTable", () => {
         data={[]}
         keyExtractor={(row) => row.id}
         loading={true}
-      />
+      />,
     );
     expect(screen.getByRole("progressbar")).toBeDefined();
   });
@@ -70,7 +70,7 @@ describe("HmuDataTable", () => {
         data={[]}
         keyExtractor={(row) => row.id}
         emptyMessage="No results found"
-      />
+      />,
     );
     expect(screen.getByText("No results found")).toBeDefined();
   });
@@ -83,7 +83,7 @@ describe("HmuDataTable", () => {
         data={data}
         keyExtractor={(row) => row.id}
         sorting={{ orderBy: "name", order: "asc", onSort }}
-      />
+      />,
     );
 
     const nameHeader = screen.getByText("Name");
@@ -101,22 +101,68 @@ describe("HmuDataTable", () => {
         pagination={{
           page: 0,
           rowsPerPage: 5,
-          totalRows: 10,
+          totalRows: 11,
           onPageChange,
           onRowsPerPageChange: vi.fn(),
         }}
-      />
+      />,
     );
 
     // Using partial match because text is split by spans
     expect(screen.getByText(/Showing/)).toBeDefined();
     expect(screen.getByText(/1-5/)).toBeDefined();
-    // Using getAllByText because '10' might be in the select options too
-    expect(screen.getAllByText(/10/).length).toBeGreaterThan(0);
-    
+    // Using getAllByText because '11' might be in the select options too
+    expect(screen.getAllByText(/11/).length).toBeGreaterThan(0);
+
     // Test for the page 2 button
     const page2Button = screen.getByText("2");
     fireEvent.click(page2Button);
     expect(onPageChange).toHaveBeenCalledWith(1);
+  });
+
+  it("automatically handles internal pagination when more than 10 records (uncontrolled)", () => {
+    const manyData = Array.from({ length: 15 }, (_, i) => ({
+      id: i + 1,
+      name: `Person ${i + 1}`,
+      age: 20 + i,
+    }));
+
+    renderWithTheme(
+      <HmuDataTable
+        columns={columns}
+        data={manyData}
+        keyExtractor={(row) => row.id}
+      />,
+    );
+
+    // Should show pagination footer
+    expect(screen.getByText(/Showing 1-10 of 15 records/)).toBeDefined();
+
+    // Should only show first 10 rows
+    expect(screen.getByText("Person 1")).toBeDefined();
+    expect(screen.getByText("Person 10")).toBeDefined();
+    expect(screen.queryByText("Person 11")).toBeNull();
+
+    // Click next page
+    const page2Button = screen.getByText("2");
+    fireEvent.click(page2Button);
+
+    // Should now show remaining 5 rows
+    expect(screen.getByText(/Showing 11-15 of 15 records/)).toBeDefined();
+    expect(screen.queryByText("Person 1")).toBeNull();
+    expect(screen.getByText("Person 11")).toBeDefined();
+    expect(screen.getByText("Person 15")).toBeDefined();
+  });
+
+  it("hides pagination footer when records are below threshold", () => {
+    renderWithTheme(
+      <HmuDataTable
+        columns={columns}
+        data={data} // only 2 records
+        keyExtractor={(row) => row.id}
+      />,
+    );
+
+    expect(screen.queryByText(/Showing/)).toBeNull();
   });
 });
