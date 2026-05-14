@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import HmuDataTable, { type Column } from "./HmuDataTable";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "../../../shared/theme/theme";
+import { theme } from "../../../shared/theme";
 
 const renderWithTheme = (ui: React.ReactElement) => {
   return render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);

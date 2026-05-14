@@ -48,7 +48,7 @@ import {
 import { useGetUnits } from "../../../../shared/api/admin/admin.hooks";
 import { WorkspaceType } from "../../constants/workspace";
 import { HmuButton } from "../../../../shared/components";
-import { theme } from "../../../../shared/theme/theme";
+import { theme } from "../../../../shared/theme";
 import { useNavigate } from "react-router-dom";
 
 interface UnitSearchProps {

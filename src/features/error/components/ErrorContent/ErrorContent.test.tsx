@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "../../../../shared/theme/theme";
+import { theme } from "../../../../shared/theme";
 import ErrorContent from "./ErrorContent";
 import { LockRounded as Lock } from "@mui/icons-material";
 

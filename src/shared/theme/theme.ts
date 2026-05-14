@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { colors } from "./colors";
+import { palette } from "./palette";
 
 // Extend the Palette interface to include tertiary and neutral
 declare module "@mui/material/styles" {
@@ -14,34 +14,7 @@ declare module "@mui/material/styles" {
 }
 
 export const theme = createTheme({
-  palette: {
-    primary: {
-      main: colors.primary,
-    },
-    secondary: {
-      main: colors.secondary,
-    },
-    tertiary: {
-      main: colors.tertiary,
-    },
-    neutral: {
-      main: colors.neutral,
-    },
-    error: {
-      main: colors.error,
-    },
-    warning: {
-      main: colors.warning,
-    },
-    background: {
-      default: colors.background.default,
-      paper: colors.background.paper,
-    },
-    text: {
-      primary: colors.text.primary,
-      secondary: colors.text.secondary,
-    },
-  },
+  palette,
   typography: {
     fontFamily:
       '"Inter", "Work Sans", "Roboto", "Helvetica", "Arial", sans-serif',

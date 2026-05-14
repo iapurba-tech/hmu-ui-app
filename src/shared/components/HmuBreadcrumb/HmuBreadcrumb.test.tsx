@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import HmuBreadcrumb from "./HmuBreadcrumb";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "../../../shared/theme/theme";
+import { theme } from "../../../shared/theme";
 
 const renderWithThemeAndRouter = (ui: React.ReactElement) => {
   return render(
