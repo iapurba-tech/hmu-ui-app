@@ -3,6 +3,15 @@ import { describe, it, expect, vi } from "vitest";
 import UnitsTable from "./UnitsTable";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../../../../shared/theme";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
 
 describe("UnitsTable", () => {
   const mockUnits = [
@@ -27,11 +36,16 @@ describe("UnitsTable", () => {
     isLoading: false,
     onView: vi.fn(),
     onEdit: vi.fn(),
-    onDelete: vi.fn(),
   };
 
   const renderWithTheme = (ui: React.ReactElement) => {
-    return render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);
+    return render(
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          {ui}
+        </ThemeProvider>
+      </QueryClientProvider>
+    );
   };
 
   it("renders the table with units", () => {
@@ -50,20 +64,10 @@ describe("UnitsTable", () => {
     expect(screen.queryByText("Unit Two")).toBeNull();
   });
 
-  it("filters units by status", () => {
+  it("calls onView when a row is clicked", () => {
     renderWithTheme(<UnitsTable {...mockProps} />);
-    
-    // MUI Select is a bit tricky to test with fireEvent.change
-    // But since we are testing if the logic exists in the component:
-    const statusSelect = screen.getByRole("combobox");
-    // This is a simplified test, usually you'd need to click and then select the menu item
-    // For brevity, let's assume the useMemo logic is what we want to trust if the UI part is standard MUI.
-  });
-
-  it("calls onView when unit name is clicked", () => {
-    renderWithTheme(<UnitsTable {...mockProps} />);
-    const unitName = screen.getByText("Unit One");
-    fireEvent.click(unitName);
+    const row = screen.getByText("Unit One").closest("tr");
+    if (row) fireEvent.click(row);
     expect(mockProps.onView).toHaveBeenCalledWith(mockUnits[0]);
   });
 });

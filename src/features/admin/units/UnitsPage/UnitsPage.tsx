@@ -43,11 +43,6 @@ const UnitsPage: React.FC = () => {
     setModalState((prev) => ({ ...prev, isOpen: false }));
   };
 
-  const handleDelete = (unit: Unit) => {
-    // Placeholder for delete logic
-    console.log("Delete unit:", unit.id);
-  };
-
   return (
     <Box sx={pageContainerStyles}>
       {/* Header */}
@@ -77,7 +72,6 @@ const UnitsPage: React.FC = () => {
         isLoading={isLoading}
         onView={(unit) => handleOpenModal("view", unit)}
         onEdit={(unit) => handleOpenModal("edit", unit)}
-        onDelete={handleDelete}
       />
 
       <UnitModal

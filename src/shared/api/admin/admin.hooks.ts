@@ -44,3 +44,15 @@ export const useUpdateUnit = () => {
     },
   });
 };
+
+export const useToggleUnitStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, active }: { id: string; active: boolean }) => 
+      active ? adminApi.deactivateUnit(id) : adminApi.activateUnit(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: adminKeys.units() });
+    },
+  });
+};

@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AppRouter from "./router/AppRouter";
 import AuthInitializer from "./AuthInitializer";
 import { theme } from "../shared/theme";
+import { HmuNotification } from "../shared/components";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,6 +23,7 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <HmuNotification />
         <BrowserRouter>
           <AuthInitializer>
             <AppRouter />

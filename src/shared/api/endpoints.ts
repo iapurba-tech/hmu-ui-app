@@ -7,6 +7,8 @@ export const API_ENDPOINTS = {
         UNIT: {
             LIST: "/api/v1/admin/units",
             CREATE: "/api/v1/admin/units",
+            ACTIVATE: (id: string) => `/api/v1/admin/units/${id}/activate`,
+            DEACTIVATE: (id: string) => `/api/v1/admin/units/${id}/deactivate`,
         }
     }
 }

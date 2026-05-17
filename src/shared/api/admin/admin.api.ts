@@ -17,4 +17,12 @@ export const adminApi = {
     const response = await apiClient.put<Unit>(`${API_ENDPOINTS.ADMIN.UNIT.LIST}/${id}`, unitData);
     return response.data;
   },
+
+  activateUnit: async (id: string): Promise<void> => {
+    await apiClient.patch(API_ENDPOINTS.ADMIN.UNIT.ACTIVATE(id));
+  },
+
+  deactivateUnit: async (id: string): Promise<void> => {
+    await apiClient.patch(API_ENDPOINTS.ADMIN.UNIT.DEACTIVATE(id));
+  },
 };

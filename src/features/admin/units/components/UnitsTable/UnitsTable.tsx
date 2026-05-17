@@ -1,13 +1,18 @@
-import React from "react";
-import { Box, Typography, IconButton, Tooltip } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-
+import React, { useState } from "react";
 import {
-  HmuDataTable,
-  type Column,
-  type FilterConfig,
+  Box,
+  Typography,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+
+import { 
+  HmuDataTable, 
+  type Column, 
+  type FilterConfig, 
+  HmuConfirmModal,
+  HmuSwitch 
 } from "../../../../../shared/components";
 import type { Unit } from "../../types/unit.types";
 import {
@@ -19,13 +24,14 @@ import {
   statusDotStyles,
   actionButtonStyles,
 } from "./UnitsTable.styles";
+import { useToggleUnitStatus } from "../../../../../shared/api/admin/admin.hooks";
+import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
 
 interface UnitsTableProps {
   units: Unit[];
   isLoading: boolean;
   onView: (unit: Unit) => void;
   onEdit: (unit: Unit) => void;
-  onDelete: (unit: Unit) => void;
 }
 
 const UnitsTable: React.FC<UnitsTableProps> = ({
@@ -33,12 +39,56 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
   isLoading,
   onView,
   onEdit,
-  onDelete,
 }) => {
+  const { mutate: toggleStatus, isPending: isToggling } = useToggleUnitStatus();
+  const { showNotification } = useNotificationStore();
+  
+  // Confirmation Modal State
+  const [confirmState, setConfirmState] = useState<{
+    isOpen: boolean;
+    unit: Unit | null;
+  }>({
+    isOpen: false,
+    unit: null,
+  });
+
+  const handleOpenConfirm = (unit: Unit) => {
+    setConfirmState({ isOpen: true, unit });
+  };
+
+  const handleCloseConfirm = () => {
+    setConfirmState({ isOpen: false, unit: null });
+  };
+
+  const handleStatusToggle = () => {
+    const unit = confirmState.unit;
+    if (!unit) return;
+
+    toggleStatus(
+      { id: unit.id, active: unit.active },
+      {
+        onSuccess: () => {
+          showNotification(
+            `Unit ${unit.active ? "deactivated" : "activated"} successfully`,
+            "success"
+          );
+          handleCloseConfirm();
+        },
+        onError: (error: any) => {
+          showNotification(
+            error?.response?.data?.message || "Failed to update unit status",
+            "error"
+          );
+          handleCloseConfirm();
+        },
+      }
+    );
+  };
+
   const getStatusConfig = (isActive: boolean) => {
     return isActive
       ? { bg: "#dcfce7", color: "#166534", dot: "#22c55e" }
-      : { bg: "#f1f5f9", color: "#475569", dot: "#94a3b8" };
+      : { bg: "#fef2f2", color: "#991b1b", dot: "#ef4444" };
   };
 
   const columns: Column<Unit>[] = [
@@ -53,7 +103,7 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
       label: "Name",
       sortable: true,
       render: (row) => (
-        <Typography onClick={() => onView(row)} sx={unitNameStyles}>
+        <Typography sx={unitNameStyles}>
           {row.name}
         </Typography>
       ),
@@ -95,34 +145,31 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
       label: "Actions",
       align: "right",
       render: (row) => (
-        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 0.5 }}>
-          <Tooltip title="View Details">
-            <IconButton
-              size="small"
-              sx={actionButtonStyles}
-              onClick={() => onView(row)}
-            >
-              <VisibilityIcon fontSize="small" />
-            </IconButton>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1.5, alignItems: "center" }}>
+          <Tooltip title={row.active ? "Deactivate Unit" : "Activate Unit"}>
+            <Box onClick={(e) => e.stopPropagation()}>
+              <HmuSwitch
+                checked={row.active}
+                onChange={() => handleOpenConfirm(row)}
+                disabled={isToggling}
+              />
+            </Box>
           </Tooltip>
-          <Tooltip title="Edit Unit">
-            <IconButton
-              size="small"
-              sx={actionButtonStyles}
-              onClick={() => onEdit(row)}
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Delete Unit">
-            <IconButton
-              size="small"
-              sx={actionButtonStyles}
-              onClick={() => onDelete(row)}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
+          
+          <Box sx={{ display: "flex", gap: 0.5 }}>
+            <Tooltip title="Edit Unit">
+              <IconButton
+                size="small"
+                sx={actionButtonStyles}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(row);
+                }}
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Box>
         </Box>
       ),
     },
@@ -152,12 +199,30 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
         data={units}
         loading={isLoading}
         keyExtractor={(row) => row.id}
+        onRowClick={onView}
+        sorting={{
+          orderBy: "name",
+          order: "asc",
+        }}
         search={{
           enabled: true,
           placeholder: "Search units or codes...",
           fields: ["name", "code"],
         }}
         filters={filters}
+      />
+
+      <HmuConfirmModal
+        open={confirmState.isOpen}
+        title={confirmState.unit?.active ? "Deactivate Unit" : "Activate Unit"}
+        message={`Are you sure you want to ${
+          confirmState.unit?.active ? "deactivate" : "activate"
+        } unit "${confirmState.unit?.name}"?`}
+        confirmLabel={confirmState.unit?.active ? "Deactivate" : "Activate"}
+        confirmVariant={confirmState.unit?.active ? "danger" : "primary"}
+        onConfirm={handleStatusToggle}
+        onCancel={handleCloseConfirm}
+        loading={isToggling}
       />
     </Box>
   );
