@@ -32,7 +32,6 @@ import {
   UserProfileMenu,
   WorkspaceModal,
 } from "../../../features/auth/components";
-import { HmuButton } from "../../../shared/components";
 
 const TopNav: React.FC = () => {
   const navigate = useNavigate();
