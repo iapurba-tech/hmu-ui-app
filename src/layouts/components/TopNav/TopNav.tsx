@@ -26,6 +26,7 @@ import {
   SearchBox,
   SearchIconWrapper,
   StyledInputBase,
+  workspaceButtonStyles,
 } from "./TopNav.styles";
 import {
   UserProfileMenu,
@@ -128,12 +129,20 @@ const TopNav: React.FC = () => {
 
           {showSwitchButton && (
             <Box sx={{ display: { xs: "none", lg: "block" }, mx: 2 }}>
-              <HmuButton
-                variant="dark"
-                label="Switch Workspace"
-                startIcon={<SwapHorizIcon />}
+              <Box
+                role="button"
+                tabIndex={0}
                 onClick={handleWorkspaceSwitcherOpen}
-              />
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    handleWorkspaceSwitcherOpen();
+                  }
+                }}
+                sx={workspaceButtonStyles}
+              >
+                <SwapHorizIcon />
+                {"Switch Workspace"}
+              </Box>
             </Box>
           )}
 
