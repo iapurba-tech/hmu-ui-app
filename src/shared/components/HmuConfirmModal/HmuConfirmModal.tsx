@@ -37,12 +37,14 @@ const HmuConfirmModal: React.FC<HmuConfirmModalProps> = ({
     <Dialog
       open={open}
       onClose={onCancel}
-      PaperProps={{
-        sx: {
-          borderRadius: "16px",
-          width: "100%",
-          maxWidth: "400px",
-          p: 1,
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: "16px",
+            width: "100%",
+            maxWidth: "400px",
+            p: 1,
+          },
         },
       }}
     >

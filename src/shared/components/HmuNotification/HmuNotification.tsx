@@ -18,7 +18,7 @@ const HmuNotification: React.FC = () => {
       open={isOpen}
       autoHideDuration={6000}
       onClose={handleClose}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      anchorOrigin={{ vertical: "top", horizontal: "center" }}
       sx={snackbarStyles}
     >
       <Alert
