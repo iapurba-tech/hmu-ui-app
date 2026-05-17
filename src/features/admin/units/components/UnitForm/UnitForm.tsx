@@ -1,21 +1,19 @@
 import React from "react";
-import { Box, Switch, FormControlLabel, Typography, Grid } from "@mui/material";
-import { useForm, Controller, type SubmitHandler } from "react-hook-form";
+import { Box, Typography, Grid, IconButton, Tooltip } from "@mui/material";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { HmuButton, HmuTextField } from "../../../../../shared/components";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { HmuButton, HmuTextField, HmuDataField } from "../../../../../shared/components";
 import {
   formContainerStyles,
   sectionHeaderStyles,
   sectionLabelStyles,
-  statusBoxStyles,
-  formLabelControlStyles,
-  statusTitleStyles,
-  statusSubtitleStyles,
   actionContainerStyles,
   cancelButtonStyles,
   submitButtonStyles,
 } from "./UnitForm.styles";
+import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
 
 const addressSchema = z.object({
   addressLine1: z.string().min(1, "Address Line 1 is required"),
@@ -30,7 +28,6 @@ const unitSchema = z.object({
   name: z.string().min(1, "Unit Name is required"),
   code: z.string().min(1, "Unit Code is required"),
   address: addressSchema,
-  active: z.boolean(),
 });
 
 export type UnitFormData = z.infer<typeof unitSchema>;
@@ -52,11 +49,11 @@ const UnitForm: React.FC<UnitFormProps> = ({
 }) => {
   const isViewMode = mode === "view";
   const isEditMode = mode === "edit";
+  const { showNotification } = useNotificationStore();
 
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm<UnitFormData>({
     resolver: zodResolver(unitSchema),
@@ -71,12 +68,16 @@ const UnitForm: React.FC<UnitFormProps> = ({
         state: defaultValues?.address?.state || "",
         postalCode: defaultValues?.address?.postalCode || "",
       },
-      active: defaultValues?.active ?? true,
     },
   });
 
   const handleFormSubmit: SubmitHandler<UnitFormData> = (data, event) => {
     onSubmit(data, event);
+  };
+
+  const handleCopyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    showNotification("Unit Code copied to clipboard", "success");
   };
 
   return (
@@ -89,34 +90,56 @@ const UnitForm: React.FC<UnitFormProps> = ({
           </Box>
           <Grid container spacing={2.5}>
             <Grid size={12}>
-              <HmuTextField
-                id="unit-name"
-                label="Unit Name"
-                placeholder="e.g. Central Chilling Plant"
-                required
-                error={!!errors.name}
-                helperText={errors.name?.message}
-                disabled={isLoading || isViewMode}
-                {...register("name")}
-              />
+              {isViewMode ? (
+                <HmuDataField label="Unit Name" value={defaultValues?.name} />
+              ) : (
+                <HmuTextField
+                  id="unit-name"
+                  label="Unit Name"
+                  placeholder="e.g. Central Chilling Plant"
+                  required
+                  error={!!errors.name}
+                  helperText={errors.name?.message}
+                  disabled={isLoading}
+                  {...register("name")}
+                />
+              )}
             </Grid>
 
             <Grid size={12}>
-              <HmuTextField
-                id="unit-code"
-                label="Unit Code"
-                placeholder="e.g. CCP-001"
-                required
-                error={!!errors.code}
-                helperText={
-                  errors.code?.message ||
-                  (mode === "create"
-                    ? "Warning: Unit Code cannot be modified once created."
-                    : "")
-                }
-                disabled={isLoading || isViewMode || isEditMode}
-                {...register("code")}
-              />
+              {isViewMode ? (
+                <HmuDataField 
+                  label="Unit Code" 
+                  value={
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
+                        {defaultValues?.code}
+                      </Typography>
+                      <Tooltip title="Copy Code">
+                        <IconButton size="small" onClick={() => handleCopyCode(defaultValues?.code || '')}>
+                          <ContentCopyIcon fontSize="small" sx={{ opacity: 0.6 }} />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  } 
+                />
+              ) : (
+                <HmuTextField
+                  id="unit-code"
+                  label="Unit Code"
+                  placeholder="e.g. CCP-001"
+                  required
+                  error={!!errors.code}
+                  helperText={
+                    errors.code?.message ||
+                    (mode === "create"
+                      ? "Warning: Unit Code cannot be modified once created."
+                      : "")
+                  }
+                  disabled={isLoading || isEditMode}
+                  {...register("code")}
+                />
+              )}
             </Grid>
           </Grid>
         </Box>
@@ -128,109 +151,102 @@ const UnitForm: React.FC<UnitFormProps> = ({
           </Box>
           <Grid container spacing={2.5}>
             <Grid size={12}>
-              <HmuTextField
-                id="address-line-1"
-                label="Address Line 1"
-                placeholder="Street address, P.O. box, company name"
-                required
-                error={!!errors.address?.addressLine1}
-                helperText={errors.address?.addressLine1?.message}
-                disabled={isLoading || isViewMode}
-                {...register("address.addressLine1")}
-              />
+              {isViewMode ? (
+                <HmuDataField label="Address Line 1" value={defaultValues?.address?.addressLine1} />
+              ) : (
+                <HmuTextField
+                  id="address-line-1"
+                  label="Address Line 1"
+                  placeholder="Street address, P.O. box, company name"
+                  required
+                  error={!!errors.address?.addressLine1}
+                  helperText={errors.address?.addressLine1?.message}
+                  disabled={isLoading}
+                  {...register("address.addressLine1")}
+                />
+              )}
             </Grid>
 
             <Grid size={12}>
-              <HmuTextField
-                id="address-line-2"
-                label="Address Line 2"
-                placeholder="Apartment, suite, unit, building, floor, etc. (Optional)"
-                error={!!errors.address?.addressLine2}
-                helperText={errors.address?.addressLine2?.message}
-                disabled={isLoading || isViewMode}
-                {...register("address.addressLine2")}
-              />
+              {isViewMode ? (
+                <HmuDataField label="Address Line 2" value={defaultValues?.address?.addressLine2} />
+              ) : (
+                <HmuTextField
+                  id="address-line-2"
+                  label="Address Line 2"
+                  placeholder="Apartment, suite, unit, building, floor, etc. (Optional)"
+                  error={!!errors.address?.addressLine2}
+                  helperText={errors.address?.addressLine2?.message}
+                  disabled={isLoading}
+                  {...register("address.addressLine2")}
+                />
+              )}
             </Grid>
 
             <Grid size={6}>
-              <HmuTextField
-                id="city"
-                label="City"
-                placeholder="City (Optional)"
-                error={!!errors.address?.city}
-                helperText={errors.address?.city?.message}
-                disabled={isLoading || isViewMode}
-                {...register("address.city")}
-              />
+              {isViewMode ? (
+                <HmuDataField label="City" value={defaultValues?.address?.city} />
+              ) : (
+                <HmuTextField
+                  id="city"
+                  label="City"
+                  placeholder="City (Optional)"
+                  error={!!errors.address?.city}
+                  helperText={errors.address?.city?.message}
+                  disabled={isLoading}
+                  {...register("address.city")}
+                />
+              )}
             </Grid>
 
             <Grid size={6}>
-              <HmuTextField
-                id="district"
-                label="District"
-                placeholder="District (Optional)"
-                error={!!errors.address?.district}
-                helperText={errors.address?.district?.message}
-                disabled={isLoading || isViewMode}
-                {...register("address.district")}
-              />
+              {isViewMode ? (
+                <HmuDataField label="District" value={defaultValues?.address?.district} />
+              ) : (
+                <HmuTextField
+                  id="district"
+                  label="District"
+                  placeholder="District (Optional)"
+                  error={!!errors.address?.district}
+                  helperText={errors.address?.district?.message}
+                  disabled={isLoading}
+                  {...register("address.district")}
+                />
+              )}
             </Grid>
 
             <Grid size={6}>
-              <HmuTextField
-                id="state"
-                label="State"
-                placeholder="State (Optional)"
-                error={!!errors.address?.state}
-                helperText={errors.address?.state?.message}
-                disabled={isLoading || isViewMode}
-                {...register("address.state")}
-              />
+              {isViewMode ? (
+                <HmuDataField label="State" value={defaultValues?.address?.state} />
+              ) : (
+                <HmuTextField
+                  id="state"
+                  label="State"
+                  placeholder="State (Optional)"
+                  error={!!errors.address?.state}
+                  helperText={errors.address?.state?.message}
+                  disabled={isLoading}
+                  {...register("address.state")}
+                />
+              )}
             </Grid>
 
             <Grid size={6}>
-              <HmuTextField
-                id="postal-code"
-                label="Postal Code"
-                placeholder="Postal Code (Optional)"
-                error={!!errors.address?.postalCode}
-                helperText={errors.address?.postalCode?.message}
-                disabled={isLoading || isViewMode}
-                {...register("address.postalCode")}
-              />
+              {isViewMode ? (
+                <HmuDataField label="Postal Code" value={defaultValues?.address?.postalCode} />
+              ) : (
+                <HmuTextField
+                  id="postal-code"
+                  label="Postal Code"
+                  placeholder="Postal Code (Optional)"
+                  error={!!errors.address?.postalCode}
+                  helperText={errors.address?.postalCode?.message}
+                  disabled={isLoading}
+                  {...register("address.postalCode")}
+                />
+              )}
             </Grid>
           </Grid>
-        </Box>
-
-        {/* Footer Settings */}
-        <Box sx={statusBoxStyles}>
-          <Controller
-            name="active"
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                sx={formLabelControlStyles}
-                control={
-                  <Switch
-                    checked={field.value}
-                    onChange={field.onChange}
-                    color="primary"
-                    disabled={isLoading || isViewMode}
-                  />
-                }
-                label={
-                  <Box>
-                    <Typography sx={statusTitleStyles}>
-                      Active Status
-                    </Typography>
-                    <Typography sx={statusSubtitleStyles}>
-                      Unit will be visible and operational across the system
-                    </Typography>
-                  </Box>
-                }
-              />
-            )}
-          />
         </Box>
       </Box>
 

@@ -57,7 +57,6 @@ describe("UnitForm", () => {
             state: "Test State",
             postalCode: "12345",
           },
-          active: true,
         }),
         expect.anything()
       );

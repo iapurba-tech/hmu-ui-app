@@ -30,31 +30,6 @@ export const sectionLabelStyles: SxProps<Theme> = {
   whiteSpace: "nowrap",
 };
 
-export const statusBoxStyles: SxProps<Theme> = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  bgcolor: "rgba(0, 0, 0, 0.02)",
-  p: 2,
-  borderRadius: "12px",
-  border: "1px solid rgba(0, 0, 0, 0.04)",
-};
-
-export const formLabelControlStyles: SxProps<Theme> = {
-  ml: 0,
-};
-
-export const statusTitleStyles: SxProps<Theme> = {
-  fontSize: "0.875rem",
-  fontWeight: 700,
-  color: palette.text.primary,
-};
-
-export const statusSubtitleStyles: SxProps<Theme> = {
-  fontSize: "0.75rem",
-  color: palette.text.secondary,
-};
-
 export const actionContainerStyles: SxProps<Theme> = {
   display: "flex",
   justifyContent: "flex-end",
