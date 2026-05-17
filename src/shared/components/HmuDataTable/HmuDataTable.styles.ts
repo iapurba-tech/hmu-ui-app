@@ -75,7 +75,7 @@ export const dataTableStyles: SxProps<Theme> = {
 };
 
 export const dataTableHeadCellStyles: SxProps<Theme> = {
-  backgroundColor: "#f1f5f9", // slightly darker than background.default
+  backgroundColor: "#f1f5f9",
   color: palette.text.secondary,
   fontWeight: 700,
   fontSize: "0.75rem",
@@ -83,10 +83,16 @@ export const dataTableHeadCellStyles: SxProps<Theme> = {
   letterSpacing: "0.05em",
   padding: "12px 16px",
   borderBottom: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+  borderRight: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.05)}`,
+  "&:last-child": {
+    borderRight: "none",
+  },
 };
 
 export const dataTableRowStyles: SxProps<Theme> = {
-  "&:last-child td, &:last-child th": { border: 0 },
+  "&:last-child td, &:last-child th": { 
+    borderBottom: 0 
+  },
   "&:hover": {
     backgroundColor: "#f8fafc",
   },
@@ -98,6 +104,10 @@ export const dataTableCellStyles: SxProps<Theme> = {
   color: palette.text.primary,
   fontSize: "0.875rem",
   borderBottom: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.05)}`,
+  borderRight: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.05)}`,
+  "&:last-child": {
+    borderRight: "none",
+  },
 };
 
 export const paginationFooterStyles = (

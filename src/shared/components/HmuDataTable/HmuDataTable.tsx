@@ -59,7 +59,7 @@ export interface PaginationConfig {
 export interface SortingConfig {
   orderBy: string;
   order: "asc" | "desc";
-  onSort: (columnId: string) => void;
+  onSort?: (columnId: string) => void;
 }
 
 export interface SearchConfig<T> {
@@ -91,6 +91,7 @@ export interface HmuDataTableProps<T> {
   search?: SearchConfig<T>;
   filters?: FilterConfig<T>[];
   emptyMessage?: string;
+  onRowClick?: (row: T) => void;
 }
 
 const HmuDataTable = <T extends object>({
@@ -103,14 +104,15 @@ const HmuDataTable = <T extends object>({
   search,
   filters,
   emptyMessage = "No data available",
+  onRowClick,
 }: HmuDataTableProps<T>) => {
   // Internal state for uncontrolled mode
   const [internalPage, setInternalPage] = useState(0);
   const [internalRowsPerPage, setInternalRowsPerPage] = useState(10);
 
-  // Internal state for sorting
-  const [internalOrderBy, setInternalOrderBy] = useState<string>("");
-  const [internalOrder, setInternalOrder] = useState<"asc" | "desc">("asc");
+  // Internal state for sorting (initialized from props if available)
+  const [internalOrderBy, setInternalOrderBy] = useState<string>(sorting?.orderBy || "");
+  const [internalOrder, setInternalOrder] = useState<"asc" | "desc">(sorting?.order || "asc");
 
   // Internal state for search and filters
   const [searchTerm, setSearchTerm] = useState("");
@@ -123,8 +125,9 @@ const HmuDataTable = <T extends object>({
   });
 
   // Derived sorting values
-  const orderBy = sorting?.orderBy ?? internalOrderBy;
-  const order = sorting?.order ?? internalOrder;
+  // Only use internal state if onSort is NOT provided (uncontrolled)
+  const orderBy = sorting?.onSort ? sorting.orderBy : internalOrderBy;
+  const order = sorting?.onSort ? sorting.order : internalOrder;
 
   const handleSort = (columnId: string) => {
     if (sorting?.onSort) {
@@ -182,7 +185,7 @@ const HmuDataTable = <T extends object>({
     }
 
     // 3. Sort
-    if (orderBy && !sorting?.onSort) {
+    if (orderBy) {
       result.sort((a, b) => {
         const aValue = a[orderBy as keyof T];
         const bValue = b[orderBy as keyof T];
@@ -206,7 +209,6 @@ const HmuDataTable = <T extends object>({
     order,
     search,
     filters,
-    sorting?.onSort,
     pagination?.isServerSide,
     columns,
   ]);
@@ -351,7 +353,14 @@ const HmuDataTable = <T extends object>({
               </TableRow>
             ) : (
               displayData.map((row) => (
-                <TableRow key={keyExtractor(row)} sx={dataTableRowStyles}>
+                <TableRow
+                  key={keyExtractor(row)}
+                  sx={{
+                    ...dataTableRowStyles,
+                    cursor: onRowClick ? "pointer" : "default",
+                  }}
+                  onClick={() => onRowClick?.(row)}
+                >
                   {columns.map((column) => (
                     <TableCell
                       key={column.id as string}
