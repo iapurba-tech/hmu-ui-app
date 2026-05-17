@@ -1,5 +1,5 @@
-import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
-import type { Unit } from "../../../features/admin/types/unit.types";
+import { useQuery, useMutation, useQueryClient, type UseQueryOptions } from "@tanstack/react-query";
+import type { Unit } from "../../../features/admin/units/types/unit.types";
 import { adminApi } from "./admin.api";
 
 
@@ -9,17 +9,38 @@ export const adminKeys = {
   units: () => [...adminKeys.all, 'units'] as const,
 };
 
-// 2. The Custom Hook
-// We allow passing standard React Query options (like `enabled`) 
-// so the UI has full control over *when* this fires.
+// 2. The Custom Hooks
 export const useGetUnits = (
   options?: Omit<UseQueryOptions<Unit[], Error, Unit[], readonly string[]>, 'queryKey' | 'queryFn'>
 ) => {
   return useQuery({
     queryKey: adminKeys.units(),
     queryFn: adminApi.getAllUnits,
-    // Units rarely change during a single session, so we cache them for 30 minutes
     staleTime: 1000 * 60 * 30, 
-    ...options, // Spread any custom options (like enabled: isSystemAdmin)
+    ...options,
+  });
+};
+
+export const useCreateUnit = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: adminApi.createUnit,
+    onSuccess: () => {
+      // Invalidate and refetch units after a successful creation
+      queryClient.invalidateQueries({ queryKey: adminKeys.units() });
+    },
+  });
+};
+
+export const useUpdateUnit = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: adminApi.updateUnit,
+    onSuccess: () => {
+      // Invalidate and refetch units after a successful update
+      queryClient.invalidateQueries({ queryKey: adminKeys.units() });
+    },
   });
 };

@@ -5,7 +5,7 @@ import { DRAWER_WIDTH } from "../../MainLayout/MainLayout.styles";
 export const appBarStyles = (isSidebarOpen: boolean): SxProps<Theme> => ({
   width: { lg: isSidebarOpen ? `calc(100% - ${DRAWER_WIDTH}px)` : "100%" },
   ml: { lg: isSidebarOpen ? `${DRAWER_WIDTH}px` : 0 },
-  bgcolor: "rgba(255, 255, 255, 0.8)",
+  bgcolor: "background.paper",
   color: "text.primary",
   boxShadow: "none",
   borderBottom: "1px solid",

@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
     ADMIN: {
         UNIT: {
             LIST: "/api/v1/admin/units",
+            CREATE: "/api/v1/admin/units",
         }
     }
 }
