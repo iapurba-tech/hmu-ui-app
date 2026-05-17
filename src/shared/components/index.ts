@@ -7,4 +7,4 @@ export type { HmuTextFieldProps } from './HmuTextField/HmuTextField';
 export { default as HmuBreadcrumb } from './HmuBreadcrumb/HmuBreadcrumb';
 export type { HmuBreadcrumbProps, BreadcrumbItem } from './HmuBreadcrumb/HmuBreadcrumb';
 export { default as HmuDataTable } from './HmuDataTable/HmuDataTable';
-export type { HmuDataTableProps, Column } from './HmuDataTable/HmuDataTable';
+export type { HmuDataTableProps, Column, FilterConfig } from './HmuDataTable/HmuDataTable';

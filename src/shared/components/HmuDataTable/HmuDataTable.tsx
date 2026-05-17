@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import {
   Table,
   TableBody,
@@ -14,7 +14,11 @@ import {
   Pagination,
   Select,
   MenuItem,
+  TextField,
+  InputAdornment,
+  FormControl,
 } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import { ChevronLeftIcon, ChevronRightIcon } from "../../icons";
 import {
   dataTableContainerStyles,
@@ -27,6 +31,10 @@ import {
   rowsPerPageSelectStyles,
   paginationIconButtonStyles,
   paginationItemStyles,
+  filterBarStyles,
+  searchFieldStyles,
+  filterSelectStyles,
+  searchIconStyles,
 } from "./HmuDataTable.styles";
 import { HmuLoader } from "../index";
 
@@ -54,6 +62,25 @@ export interface SortingConfig {
   onSort: (columnId: string) => void;
 }
 
+export interface SearchConfig<T> {
+  enabled?: boolean;
+  placeholder?: string;
+  fields?: (keyof T)[];
+}
+
+export interface FilterOption {
+  label: string;
+  value: any;
+}
+
+export interface FilterConfig<T> {
+  id: string;
+  label: string;
+  options: FilterOption[];
+  field?: keyof T;
+  onFilter?: (item: T, value: any) => boolean;
+}
+
 export interface HmuDataTableProps<T> {
   columns: Column<T>[];
   data: T[];
@@ -61,6 +88,8 @@ export interface HmuDataTableProps<T> {
   loading?: boolean;
   pagination?: PaginationConfig;
   sorting?: SortingConfig;
+  search?: SearchConfig<T>;
+  filters?: FilterConfig<T>[];
   emptyMessage?: string;
 }
 
@@ -71,27 +100,132 @@ const HmuDataTable = <T extends object>({
   loading = false,
   pagination,
   sorting,
+  search,
+  filters,
   emptyMessage = "No data available",
 }: HmuDataTableProps<T>) => {
   // Internal state for uncontrolled mode
-  const [internalPage, setInternalPage] = React.useState(0);
-  const [internalRowsPerPage, setInternalRowsPerPage] = React.useState(10);
+  const [internalPage, setInternalPage] = useState(0);
+  const [internalRowsPerPage, setInternalRowsPerPage] = useState(10);
+
+  // Internal state for sorting
+  const [internalOrderBy, setInternalOrderBy] = useState<string>("");
+  const [internalOrder, setInternalOrder] = useState<"asc" | "desc">("asc");
+
+  // Internal state for search and filters
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterValues, setFilterValues] = useState<Record<string, any>>(() => {
+    const defaults: Record<string, any> = {};
+    filters?.forEach((f) => {
+      defaults[f.id] = f.options[0]?.value ?? "";
+    });
+    return defaults;
+  });
+
+  // Derived sorting values
+  const orderBy = sorting?.orderBy ?? internalOrderBy;
+  const order = sorting?.order ?? internalOrder;
+
+  const handleSort = (columnId: string) => {
+    if (sorting?.onSort) {
+      sorting.onSort(columnId);
+    } else {
+      const isAsc = internalOrderBy === columnId && internalOrder === "asc";
+      const newOrder = isAsc ? "desc" : "asc";
+      setInternalOrder(newOrder);
+      setInternalOrderBy(columnId);
+    }
+  };
+
+  // Logic for filtering and sorting
+  const processedData = useMemo(() => {
+    // If it's server-side, we assume data is already processed
+    if (pagination?.isServerSide) return data;
+
+    let result = [...data];
+
+    // 1. Search
+    if (search?.enabled && searchTerm) {
+      const lowerSearch = searchTerm.toLowerCase();
+      const searchFields =
+        search.fields ||
+        (columns
+          .filter((c) => typeof c.id === "string" && c.id !== "actions")
+          .map((c) => c.id) as (keyof T)[]);
+
+      result = result.filter((item) =>
+        searchFields.some((field) => {
+          const value = item[field];
+          return String(value || "")
+            .toLowerCase()
+            .includes(lowerSearch);
+        }),
+      );
+    }
+
+    // 2. Filters
+    if (filters && filters.length > 0) {
+      filters.forEach((filter) => {
+        const selectedValue = filterValues[filter.id];
+        // Skip if 'all' or default first option is selected (assuming first is 'All')
+        if (selectedValue === "all" || selectedValue === "" || selectedValue === "all-statuses") {
+          return;
+        }
+
+        if (filter.onFilter) {
+          result = result.filter((item) => filter.onFilter!(item, selectedValue));
+        } else if (filter.field) {
+          const field = filter.field;
+          result = result.filter((item) => item[field] === selectedValue);
+        }
+      });
+    }
+
+    // 3. Sort
+    if (orderBy && !sorting?.onSort) {
+      result.sort((a, b) => {
+        const aValue = a[orderBy as keyof T];
+        const bValue = b[orderBy as keyof T];
+
+        if (aValue === bValue) return 0;
+        if (aValue === null || aValue === undefined) return 1;
+        if (bValue === null || bValue === undefined) return -1;
+
+        if (aValue < bValue) return order === "asc" ? -1 : 1;
+        if (aValue > bValue) return order === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return result;
+  }, [
+    data,
+    searchTerm,
+    filterValues,
+    orderBy,
+    order,
+    search,
+    filters,
+    sorting?.onSort,
+    pagination?.isServerSide,
+    columns,
+  ]);
 
   // Derive active values (favor controlled props if provided)
-  const isControlled =
+  const isControlledPage =
     pagination?.page !== undefined && pagination?.onPageChange !== undefined;
-  const page = isControlled ? (pagination?.page ?? internalPage) : internalPage;
+  const page = isControlledPage ? (pagination?.page ?? internalPage) : internalPage;
   const rowsPerPage =
     pagination?.rowsPerPage !== undefined
       ? pagination.rowsPerPage
       : internalRowsPerPage;
-  const totalRows = pagination?.totalRows ?? data.length;
+  const totalRows = pagination?.totalRows ?? processedData.length;
   const isServerSide = pagination?.isServerSide ?? false;
   const threshold = pagination?.rowsPerPageThreshold ?? 10;
 
   const handlePageChange = (_: unknown, newPage: number) => {
     const zeroBasedPage = newPage - 1;
-    if (isControlled) {
+    if (isControlledPage) {
       pagination.onPageChange?.(zeroBasedPage);
     } else {
       setInternalPage(zeroBasedPage);
@@ -107,33 +241,70 @@ const HmuDataTable = <T extends object>({
     }
   };
 
-  // Reset internal page if data length changes in uncontrolled mode
-  React.useEffect(() => {
-    if (
-      !isControlled &&
-      internalPage > 0 &&
-      data.length <= internalPage * internalRowsPerPage
-    ) {
-      setInternalPage(0);
-    }
-  }, [data.length, internalPage, internalRowsPerPage, isControlled]);
-
   const totalPages = Math.ceil(totalRows / rowsPerPage);
   const startRow = totalRows === 0 ? 0 : page * rowsPerPage + 1;
   const endRow = Math.min((page + 1) * rowsPerPage, totalRows);
 
   // Slice data only if it's client-side pagination
   const displayData = isServerSide
-    ? data
-    : data.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+    ? processedData
+    : processedData.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
   const showPagination = totalRows > threshold;
+  const hasFilters = !!(search?.enabled || (filters && filters.length > 0));
 
   return (
     <Box sx={{ width: "100%", position: "relative" }}>
+      {hasFilters && (
+        <Box sx={filterBarStyles}>
+          {search?.enabled && (
+            <TextField
+              placeholder={search.placeholder || "Search..."}
+              size="small"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setInternalPage(0);
+              }}
+              sx={searchFieldStyles}
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon fontSize="small" sx={searchIconStyles} />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
+          )}
+
+          {filters?.map((filter) => (
+            <FormControl key={filter.id} size="small" sx={filterSelectStyles}>
+              <Select
+                value={filterValues[filter.id]}
+                onChange={(e) => {
+                  setFilterValues((prev) => ({
+                    ...prev,
+                    [filter.id]: e.target.value,
+                  }));
+                  setInternalPage(0);
+                }}
+              >
+                {filter.options.map((option) => (
+                  <MenuItem key={String(option.value)} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          ))}
+        </Box>
+      )}
+
       <TableContainer
         component={Paper}
-        sx={dataTableContainerStyles(showPagination)}
+        sx={dataTableContainerStyles(showPagination, hasFilters)}
         elevation={0}
       >
         <Table sx={dataTableStyles} aria-label="dynamic data table">
@@ -144,17 +315,13 @@ const HmuDataTable = <T extends object>({
                   key={column.id as string}
                   align={column.align || "left"}
                   sx={dataTableHeadCellStyles}
-                  sortDirection={
-                    sorting?.orderBy === column.id ? sorting.order : false
-                  }
+                  sortDirection={orderBy === column.id ? order : false}
                 >
-                  {column.sortable && sorting ? (
+                  {column.sortable ? (
                     <TableSortLabel
-                      active={sorting.orderBy === column.id}
-                      direction={
-                        sorting.orderBy === column.id ? sorting.order : "asc"
-                      }
-                      onClick={() => sorting.onSort(column.id as string)}
+                      active={orderBy === column.id}
+                      direction={orderBy === column.id ? order : "asc"}
+                      onClick={() => handleSort(column.id as string)}
                     >
                       {column.label}
                     </TableSortLabel>
