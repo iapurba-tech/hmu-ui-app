@@ -110,7 +110,7 @@ describe("WorkspaceModal", () => {
     renderWithTheme(<WorkspaceModal open={true} onClose={mockOnClose} />);
 
     expect(screen.getByText("Global Administration")).toBeInTheDocument();
-    expect(screen.getByText("SYSTEM-ROOT")).toBeInTheDocument();
+    expect(screen.getByText("SYSTEM")).toBeInTheDocument();
   });
 
   it("shows unit list for System Admin", () => {

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import UnitsPage from "./UnitsPage";
@@ -15,6 +15,10 @@ vi.mock("../../../../shared/api/admin/admin.hooks", () => ({
     isPending: false,
   })),
   useUpdateUnit: vi.fn(() => ({
+    mutate: vi.fn(),
+    isPending: false,
+  })),
+  useToggleUnitStatus: vi.fn(() => ({
     mutate: vi.fn(),
     isPending: false,
   })),
@@ -103,5 +107,22 @@ describe("UnitsPage", () => {
     renderWithThemeAndRouter(<UnitsPage />);
     expect(screen.getByPlaceholderText("Search units or codes...")).toBeDefined();
     expect(screen.getByText("All Statuses")).toBeDefined();
+  });
+
+  it("opens create modal when clicking Add New Unit button", () => {
+    (adminHooks.useGetUnits as any).mockReturnValue({ data: [], isLoading: false });
+    renderWithThemeAndRouter(<UnitsPage />);
+    
+    // Find the button and click it
+    const addButton = screen.getByRole("button", { name: /add new unit/i });
+    fireEvent.click(addButton);
+    
+    // Check if modal title is present (it should be in a heading or similar)
+    // Using getAllByText because "Add New Unit" is also on the button which might still be in DOM
+    const titles = screen.getAllByText("Add New Unit");
+    expect(titles.length).toBeGreaterThan(1);
+    
+    // More specifically, check for the dialog
+    expect(screen.getByRole("dialog")).toBeDefined();
   });
 });
