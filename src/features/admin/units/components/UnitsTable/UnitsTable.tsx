@@ -26,6 +26,7 @@ import {
 } from "./UnitsTable.styles";
 import { useToggleUnitStatus } from "../../../../../shared/api/admin/admin.hooks";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
+import { useTheme } from "@mui/material/styles";
 
 interface UnitsTableProps {
   units: Unit[];
@@ -42,6 +43,7 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
 }) => {
   const { mutate: toggleStatus, isPending: isToggling } = useToggleUnitStatus();
   const { showNotification } = useNotificationStore();
+  const theme = useTheme();
   
   // Confirmation Modal State
   const [confirmState, setConfirmState] = useState<{
@@ -86,9 +88,12 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
   };
 
   const getStatusConfig = (isActive: boolean) => {
-    return isActive
-      ? { bg: "#dcfce7", color: "#166534", dot: "#22c55e" }
-      : { bg: "#fef2f2", color: "#991b1b", dot: "#ef4444" };
+    const p = isActive ? theme.palette.success : theme.palette.error;
+    return { 
+      bg: p.bg, 
+      color: p.text, 
+      dot: p.main 
+    };
   };
 
   const columns: Column<Unit>[] = [
@@ -133,7 +138,7 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
       render: (row) => {
         const config = getStatusConfig(row.active);
         return (
-          <Box sx={statusBadgeStyles(config.bg, config.color)}>
+          <Box sx={statusBadgeStyles(config.bg as string, config.color as string)}>
             <Box sx={statusDotStyles(config.dot)} />
             {row?.active ? "Active" : "Inactive"}
           </Box>

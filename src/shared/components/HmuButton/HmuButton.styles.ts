@@ -16,18 +16,15 @@ export const baseButtonStyles: SxProps<Theme> = {
 
 export const primaryStyles: SxProps<Theme> = {
   ...baseButtonStyles,
-  background: (theme) => 
-    `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${alpha(theme.palette.primary.main, 0.85)} 100%)`,
+  backgroundColor: "primary.main",
   color: "white",
   px: 3,
   py: 1.2,
-  border: "1px solid rgba(255, 255, 255, 0.1)",
   "&:hover": {
-    background: (theme) => 
-      `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+    backgroundColor: "primary.dark",
     transform: "translateY(-1.5px)",
     boxShadow: (theme) =>
-      `0 8px 20px -4px ${alpha(theme.palette.primary.main, 0.35)}`,
+      `0 8px 20px -4px ${alpha(theme.palette.primary.main, 0.3)}`,
   },
 };
 

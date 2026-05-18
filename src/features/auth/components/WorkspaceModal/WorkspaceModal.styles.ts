@@ -9,7 +9,6 @@ export const modalOverlayStyles: SxProps<Theme> = {
 export const modalContainerStyles: SxProps<Theme> = {
   width: "100%",
   maxWidth: 580,
-  height: "85vh",
   maxHeight: "85vh",
   backgroundColor: "rgba(255, 255, 255, 0.8)",
   backdropFilter: "blur(12px)",
@@ -120,38 +119,69 @@ export const unitListStyles: SxProps<Theme> = {
   },
 };
 
-export const unitCardStyles = (
-  selected: boolean,
-  color: string,
-): SxProps<Theme> => ({
-  display: "flex",
-  alignItems: "center",
-  p: 2.5,
-  backgroundColor: selected ? alpha(color, 0.03) : "rgba(255, 255, 255, 0.4)",
-  borderRadius: "20px",
-  border: `2px solid ${selected ? color : "rgba(241, 245, 249, 0.5)"}`,
-  cursor: "pointer",
-  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-  position: "relative",
-  "&:hover": {
-    borderColor: selected ? color : alpha(color, 0.3),
-    backgroundColor: selected ? alpha(color, 0.05) : "rgba(255, 255, 255, 0.6)",
-    transform: "translateY(-2px)",
-    boxShadow: `0 8px 20px -8px ${alpha(color, 0.2)}`,
-  },
-});
+export const unitCardStyles =
+  (
+    selected: boolean,
+    isGlobal: boolean,
+    isActive: boolean = true,
+  ): SxProps<Theme> =>
+  (theme) => {
+    let baseColor = isActive
+      ? theme.palette.primary.main
+      : theme.palette.error.main;
+    if (isGlobal) baseColor = "#4F46E5"; // Deep Indigo for Global
 
-export const iconBoxStyles = (color: string): SxProps<Theme> => ({
-  width: 56,
-  height: 56,
-  borderRadius: "16px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: alpha(color, 0.1),
-  color: color,
-  flexShrink: 0,
-});
+    return {
+      display: "flex",
+      alignItems: "flex-start",
+      p: 2.5,
+      backgroundColor: selected
+        ? alpha(baseColor, 0.04)
+        : "rgba(255, 255, 255, 0.4)",
+      borderRadius: "20px",
+      border: `2px solid ${selected ? baseColor : "rgba(241, 245, 249, 0.5)"}`,
+      cursor: "pointer",
+      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+      position: "relative",
+      "&:hover": {
+        borderColor: baseColor,
+        backgroundColor: selected
+          ? alpha(baseColor, 0.05)
+          : alpha(baseColor, 0.02),
+        transform: "translateY(-2px)",
+        boxShadow: `0 8px 20px -8px ${alpha(baseColor, 0.25)}`,
+      },
+      ...(!isActive &&
+        !isGlobal && {
+          backgroundColor: selected
+            ? alpha(baseColor, 0.06)
+            : alpha(baseColor, 0.02),
+          borderColor: selected ? baseColor : alpha(baseColor, 0.2),
+        }),
+    };
+  };
+
+export const iconBoxStyles =
+  (isGlobal: boolean, isActive: boolean = true): SxProps<Theme> =>
+  (theme) => {
+    let color = isActive
+      ? theme.palette.primary.main
+      : theme.palette.error.main;
+    if (isGlobal) color = "#4F46E5";
+
+    return {
+      width: 56,
+      height: 56,
+      borderRadius: "16px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: alpha(color, 0.1),
+      color: color,
+      flexShrink: 0,
+      mt: 0.5,
+    };
+  };
 
 export const unitCardContentStyles: SxProps<Theme> = {
   ml: 2.5,
@@ -177,16 +207,58 @@ export const unitMetaContainerStyles: SxProps<Theme> = {
   gap: 1.5,
 };
 
-export const unitCodeBadgeStyles = (color: string): SxProps<Theme> => ({
-  fontSize: "9px",
-  fontWeight: 800,
-  color: color,
-  bgcolor: alpha(color, 0.08),
-  px: 1,
-  py: 0.25,
-  borderRadius: "6px",
-  letterSpacing: "0.05em",
-});
+export const unitCodeBadgeStyles =
+  (isGlobal: boolean, isActive: boolean): SxProps<Theme> =>
+  (theme) => {
+    let color = isActive
+      ? theme.palette.primary.main
+      : theme.palette.error.main;
+    if (isGlobal) color = "#4F46E5";
+
+    return {
+      fontSize: "9px",
+      fontWeight: 800,
+      color: color,
+      bgcolor: alpha(color, 0.08),
+      px: 1,
+      py: 0.25,
+      borderRadius: "12px",
+      letterSpacing: "0.05em",
+      border: `1px solid ${alpha(color, 0.1)}`,
+    };
+  };
+
+export const unitStatusBadgeStyles =
+  (isActive: boolean): SxProps<Theme> =>
+  (theme) => {
+    const statusPalette = isActive
+      ? theme.palette.success
+      : theme.palette.error;
+    return {
+      fontSize: "9px",
+      fontWeight: 800,
+      color: statusPalette.text,
+      bgcolor: statusPalette.bg,
+      px: 1,
+      py: 0.25,
+      borderRadius: "12px",
+      letterSpacing: "0.05em",
+      textTransform: "uppercase",
+      border: `1px solid ${statusPalette.border}`,
+      display: "flex",
+      alignItems: "center",
+      gap: 0.5,
+    };
+  };
+
+export const statusDotStyles =
+  (isActive: boolean): SxProps<Theme> =>
+  (theme) => ({
+    width: 6,
+    height: 6,
+    borderRadius: "50%",
+    bgcolor: isActive ? theme.palette.success.main : theme.palette.error.main,
+  });
 
 export const unitDotSeparatorStyles: SxProps<Theme> = {
   width: 4,
