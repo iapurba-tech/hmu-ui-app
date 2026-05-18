@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import AppHealthStatus from "./AppHealthStatus";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "../../../../shared/theme/theme";
+import { theme } from "../../../../shared/theme";
 
 const renderWithTheme = (ui: React.ReactElement) => {
   return render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);

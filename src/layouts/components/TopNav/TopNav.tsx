@@ -26,12 +26,12 @@ import {
   SearchBox,
   SearchIconWrapper,
   StyledInputBase,
+  workspaceButtonStyles,
 } from "./TopNav.styles";
 import {
   UserProfileMenu,
   WorkspaceModal,
 } from "../../../features/auth/components";
-import { HmuButton } from "../../../shared/components";
 
 const TopNav: React.FC = () => {
   const navigate = useNavigate();
@@ -128,12 +128,20 @@ const TopNav: React.FC = () => {
 
           {showSwitchButton && (
             <Box sx={{ display: { xs: "none", lg: "block" }, mx: 2 }}>
-              <HmuButton
-                variant="dark"
-                label="Switch Workspace"
-                startIcon={<SwapHorizIcon />}
+              <Box
+                role="button"
+                tabIndex={0}
                 onClick={handleWorkspaceSwitcherOpen}
-              />
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    handleWorkspaceSwitcherOpen();
+                  }
+                }}
+                sx={workspaceButtonStyles}
+              >
+                <SwapHorizIcon />
+                {"Switch Workspace"}
+              </Box>
             </Box>
           )}
 

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import HmuTextField from "./HmuTextField";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "../../theme/theme";
+import { theme } from "../../theme";
 import React from "react";
 
 const renderWithTheme = (ui: React.ReactElement) => {

@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import LoginPage from "../../features/auth/pages/LoginPage/LoginPage";
 import { ForbiddenPage, NotFoundPage } from "../../features/error/pages";
+import { UnitsPage } from "../../features/admin/units";
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import {
@@ -85,7 +86,7 @@ export const routes: RouteConfig[] = [
             element: <Outlet />,
             meta: { title: "Units" },
             children: [
-              { index: true, element: <div>Units List View</div> },
+              { index: true, element: <UnitsPage /> },
               {
                 path: ":unitId",
                 element: <div>Unit Detail View</div>,

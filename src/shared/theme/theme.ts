@@ -1,47 +1,34 @@
 import { createTheme } from "@mui/material/styles";
-import { colors } from "./colors";
+import { palette } from "./palette";
 
-// Extend the Palette interface to include tertiary and neutral
+// Extend the Palette interface to include custom colors and additional fields
 declare module "@mui/material/styles" {
+  interface PaletteColor {
+    bg?: string;
+    border?: string;
+    text?: string;
+  }
+  interface SimplePaletteColorOptions {
+    bg?: string;
+    border?: string;
+    text?: string;
+  }
   interface Palette {
     tertiary: Palette["primary"];
     neutral: Palette["primary"];
+    info: Palette["primary"];
+    success: Palette["primary"];
   }
   interface PaletteOptions {
     tertiary?: PaletteOptions["primary"];
     neutral?: PaletteOptions["primary"];
+    info?: PaletteOptions["primary"];
+    success?: PaletteOptions["primary"];
   }
 }
 
 export const theme = createTheme({
-  palette: {
-    primary: {
-      main: colors.primary,
-    },
-    secondary: {
-      main: colors.secondary,
-    },
-    tertiary: {
-      main: colors.tertiary,
-    },
-    neutral: {
-      main: colors.neutral,
-    },
-    error: {
-      main: colors.error,
-    },
-    warning: {
-      main: colors.warning,
-    },
-    background: {
-      default: colors.background.default,
-      paper: colors.background.paper,
-    },
-    text: {
-      primary: colors.text.primary,
-      secondary: colors.text.secondary,
-    },
-  },
+  palette,
   typography: {
     fontFamily:
       '"Inter", "Work Sans", "Roboto", "Helvetica", "Arial", sans-serif',

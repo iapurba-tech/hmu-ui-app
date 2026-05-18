@@ -6,6 +6,7 @@ import {
   IconButton,
   TextField,
   InputAdornment,
+  alpha,
 } from "@mui/material";
 import {
   ArrowForwardIcon,
@@ -15,6 +16,7 @@ import {
   OrganizationIcon,
   SearchIcon,
   ShieldIcon,
+  LockIcon,
 } from "../../../../shared/icons";
 import { useAuthStore } from "../../../../shared/store/useAuthStore";
 import { UserRole } from "../../constants/roles";
@@ -39,16 +41,17 @@ import {
   unitNameStyles,
   unitMetaContainerStyles,
   unitCodeBadgeStyles,
-  unitDotSeparatorStyles,
   unitStatsContainerStyles,
   statLabelStyles,
   statValueStyles,
   secureAccessBadgeStyles,
+  unitStatusBadgeStyles,
+  statusDotStyles,
 } from "./WorkspaceModal.styles";
 import { useGetUnits } from "../../../../shared/api/admin/admin.hooks";
 import { WorkspaceType } from "../../constants/workspace";
 import { HmuButton } from "../../../../shared/components";
-import { theme } from "../../../../shared/theme/theme";
+import { theme } from "../../../../shared/theme";
 import { useNavigate } from "react-router-dom";
 
 interface UnitSearchProps {
@@ -77,77 +80,101 @@ const UnitSearch: React.FC<UnitSearchProps> = ({ value, onChange }) => (
   </Box>
 );
 
+// Unified type for units in the modal to avoid TS errors
+interface WorkspaceItem {
+  id: string;
+  name: string;
+  code: string;
+  active?: boolean;
+  status?: string;
+  dailyVolume?: string;
+  mpcsUnits?: number;
+  totalUnits?: number;
+  activeUnits?: number;
+  farmerCount?: string;
+  totalFarmers?: string;
+}
+
+const getItemActiveStatus = (item: WorkspaceItem): boolean => {
+  if (item.id === "global") return true;
+  if (typeof item.active === "boolean") return item.active;
+  return item.status === "active";
+};
+
 interface UnitCardProps {
-  unit: any;
+  unit: WorkspaceItem;
   isSelected: boolean;
   onClick: () => void;
 }
 
 const UnitCard: React.FC<UnitCardProps> = ({ unit, isSelected, onClick }) => {
   const isGlobal = unit.id === "global";
-  const color = unit.color || theme.palette.primary.main;
+  const isActive = getItemActiveStatus(unit);
+  
+  // Selection checkmark color logic
+  let accentColor = isActive ? theme.palette.primary.main : theme.palette.error.main;
+  if (isGlobal) accentColor = "#4F46E5";
 
   return (
-    <Box sx={unitCardStyles(isSelected, color)} onClick={onClick}>
-      <Box sx={iconBoxStyles(color)}>
+    <Box sx={unitCardStyles(isSelected, isGlobal, isActive)} onClick={onClick}>
+      <Box sx={iconBoxStyles(isGlobal, isActive)}>
         {isGlobal ? <GlobalIcon /> : <OrganizationIcon />}
       </Box>
 
       <Box sx={unitCardContentStyles}>
         <Box sx={unitCardHeaderStyles}>
-          <Typography sx={unitNameStyles}>{unit.name}</Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography sx={unitNameStyles}>{unit.name}</Typography>
+            {!isActive && (
+              <Box sx={{ 
+                display: "flex", 
+                alignItems: "center", 
+                gap: 0.5, 
+                color: theme.palette.error.main,
+                bgcolor: alpha(theme.palette.error.main, 0.08),
+                px: 1,
+                py: 0.25,
+                borderRadius: "4px",
+                border: `1px solid ${alpha(theme.palette.error.main, 0.1)}`
+              }}>
+                <LockIcon sx={{ fontSize: "10px" }} />
+                <Typography sx={{ fontSize: "9px", fontWeight: 700, textTransform: "uppercase" }}>
+                  Restricted
+                </Typography>
+              </Box>
+            )}
+          </Box>
           {isSelected && (
-            <CheckCircleIcon sx={{ color: color }} fontSize="small" />
+            <CheckCircleIcon sx={{ color: accentColor }} fontSize="small" />
           )}
         </Box>
 
         <Box sx={unitMetaContainerStyles}>
-          <Typography sx={unitCodeBadgeStyles(color)}>{unit.code}</Typography>
-          <Box sx={unitDotSeparatorStyles} />
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-            <Box
-              sx={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                bgcolor: unit.status === "active" ? "#22c55e" : "#94a3b8",
-              }}
-            />
-            <Typography
-              sx={{
-                fontSize: "10px",
-                fontWeight: 700,
-                color: unit.status === "active" ? "#16a34a" : "#64748b",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-              }}
-            >
-              {unit.status ?? "active"}
-            </Typography>
+          <Typography sx={unitCodeBadgeStyles(isGlobal, isActive)}>{unit.code}</Typography>
+          {/* <Box sx={unitDotSeparatorStyles} /> */}
+          <Box sx={unitStatusBadgeStyles(isActive)}>
+            <Box sx={statusDotStyles(isActive)} />
+            {isActive ? "Active" : "Inactive"}
           </Box>
         </Box>
 
         <Box sx={unitStatsContainerStyles}>
           <Box>
-            <Typography sx={statLabelStyles}>Workspace Type</Typography>
+            <Typography sx={statLabelStyles}>Avg Daily Volume</Typography>
             <Typography sx={statValueStyles}>
-              {isGlobal ? "System" : "Unit"}
+              {isGlobal ? unit.dailyVolume : (unit.dailyVolume ?? "0.0 L")}
             </Typography>
           </Box>
           <Box>
-            <Typography sx={statLabelStyles}>
-              {isGlobal ? "Total Units" : "Total MPCS"}
-            </Typography>
+            <Typography sx={statLabelStyles}>Total MPCS</Typography>
             <Typography sx={statValueStyles}>
               {isGlobal ? unit.totalUnits : (unit.mpcsUnits ?? 0)}
             </Typography>
           </Box>
           <Box>
-            <Typography sx={statLabelStyles}>
-              {isGlobal ? "Active Units" : "Daily Volume"}
-            </Typography>
+            <Typography sx={statLabelStyles}>Member Farmers</Typography>
             <Typography sx={statValueStyles}>
-              {isGlobal ? unit.activeUnits : (unit.dailyVolume ?? "0.0 L")}
+              {isGlobal ? unit.totalFarmers : (unit.farmerCount ?? "0")}
             </Typography>
           </Box>
         </Box>
@@ -172,25 +199,42 @@ const WorkspaceModal: React.FC<WorkspaceModalProps> = ({ open, onClose }) => {
   const isSystemAdmin = user?.role === UserRole.SYSTEM_ADMIN;
   const { data: unitList } = useGetUnits({ enabled: isSystemAdmin });
 
-  const globalAdmin = {
+  const globalAdmin: WorkspaceItem = {
     id: "global",
     name: "Global Administration",
-    code: "SYSTEM-ROOT",
-    status: "active" as const,
+    code: "SYSTEM",
+    status: "active",
     totalUnits: unitList?.length || 0,
     activeUnits: unitList?.length || 0,
-    color: "#BC4800",
+    totalFarmers: "12,450",
+    dailyVolume: "525.4 KL",
   };
 
-  const units = isSystemAdmin
+  const units: WorkspaceItem[] = isSystemAdmin
     ? [globalAdmin, ...(unitList || [])]
-    : user?.units || [];
+    : (user?.units || []).map(u => ({ ...u } as WorkspaceItem));
 
-  const filteredUnits = units.filter(
-    (unit) =>
-      unit.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      unit.code.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const filteredUnits = units
+    .filter(
+      (unit) =>
+        unit.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        unit.code.toLowerCase().includes(searchTerm.toLowerCase()),
+    )
+    .sort((a, b) => {
+      // 1. Global always first
+      if (a.id === "global") return -1;
+      if (b.id === "global") return 1;
+
+      const aActive = getItemActiveStatus(a);
+      const bActive = getItemActiveStatus(b);
+
+      // 2. Sort by active status (Active first)
+      if (aActive && !bActive) return -1;
+      if (!aActive && bActive) return 1;
+
+      // 3. Alphabetical within same status
+      return a.name.localeCompare(b.name);
+    });
 
   const handleConfirm = () => {
     if (tempSelectedId === "global") {
@@ -199,7 +243,8 @@ const WorkspaceModal: React.FC<WorkspaceModalProps> = ({ open, onClose }) => {
     } else {
       const unit = units.find((u) => u.id === tempSelectedId);
       if (unit && unit.id !== "global") {
-        setActiveUnit(unit);
+        // Safe cast to UserUnit as WorkspaceItem contains all required fields
+        setActiveUnit(unit as any);
         setWorkspace(WorkspaceType.UNIT_MANAGEMENT);
       }
     }

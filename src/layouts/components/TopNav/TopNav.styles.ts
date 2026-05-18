@@ -5,7 +5,7 @@ import { DRAWER_WIDTH } from "../../MainLayout/MainLayout.styles";
 export const appBarStyles = (isSidebarOpen: boolean): SxProps<Theme> => ({
   width: { lg: isSidebarOpen ? `calc(100% - ${DRAWER_WIDTH}px)` : "100%" },
   ml: { lg: isSidebarOpen ? `${DRAWER_WIDTH}px` : 0 },
-  bgcolor: "rgba(255, 255, 255, 0.8)",
+  bgcolor: "background.paper",
   color: "text.primary",
   boxShadow: "none",
   borderBottom: "1px solid",
@@ -56,3 +56,35 @@ export const StyledInputBase = styled(InputBase)(({ theme }) => ({
     fontSize: "0.875rem",
   },
 }));
+
+export const workspaceButtonStyles: SxProps<Theme> = {
+  bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
+  color: "primary.main",
+  borderRadius: "12px",
+  px: 2,
+  py: 1,
+  fontSize: "13px",
+  fontWeight: 700,
+  border: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.15)}`,
+  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+  display: "flex",
+  alignItems: "center",
+  gap: 1,
+  cursor: "pointer",
+  "&:hover": {
+    bgcolor: "primary.main",
+    color: "white",
+    transform: "translateY(-1px)",
+    boxShadow: (theme) => `0 4px 12px ${alpha(theme.palette.primary.main, 0.25)}`,
+    borderColor: "primary.main",
+    "& .MuiSvgIcon-root": {
+      color: "white",
+      transform: "rotate(180deg)",
+    },
+  },
+  "& .MuiSvgIcon-root": {
+    fontSize: "18px",
+    color: "primary.main",
+    transition: "all 0.4s ease",
+  },
+};

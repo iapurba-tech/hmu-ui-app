@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 import { useLayoutStore } from "../../../shared/store/useLayoutStore";
 import { useAuthStore } from "../../../shared/store/useAuthStore";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "../../../shared/theme/theme";
+import { theme } from "../../../shared/theme";
 import { WorkspaceType } from "../../../features/auth/constants/workspace";
 
 const renderWithProviders = (initialEntries = ["/"]) => {

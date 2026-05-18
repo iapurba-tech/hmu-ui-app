@@ -22,9 +22,9 @@ export const primaryStyles: SxProps<Theme> = {
   py: 1.2,
   "&:hover": {
     backgroundColor: "primary.dark",
-    transform: "translateY(-1px)",
+    transform: "translateY(-1.5px)",
     boxShadow: (theme) =>
-      `0 4px 12px ${alpha(theme.palette.primary.main, 0.2)}`,
+      `0 8px 20px -4px ${alpha(theme.palette.primary.main, 0.3)}`,
   },
 };
 
