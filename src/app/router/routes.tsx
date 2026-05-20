@@ -2,6 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import LoginPage from "../../features/auth/pages/LoginPage/LoginPage";
 import { ForbiddenPage, NotFoundPage } from "../../features/error/pages";
 import { UnitsPage } from "../../features/admin/units";
+import { UsersPage } from "../../features/admin/users";
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import {
@@ -78,7 +79,7 @@ export const routes: RouteConfig[] = [
         children: [
           {
             path: "users",
-            element: <div>User Management (IAM)</div>,
+            element: <UsersPage />,
             meta: { title: "Users" },
           },
           {
