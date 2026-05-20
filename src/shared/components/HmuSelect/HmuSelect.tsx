@@ -63,6 +63,8 @@ const HmuSelect = React.forwardRef<HTMLDivElement, HmuSelectProps>(
       return option ? option.label : val;
     };
 
+    const labelId = id ? `${id}-label` : undefined;
+
     return (
       <FormControl
         fullWidth={fullWidth}
@@ -71,12 +73,18 @@ const HmuSelect = React.forwardRef<HTMLDivElement, HmuSelectProps>(
         ref={ref}
       >
         {label && (
-          <FormLabel htmlFor={id} required={required} sx={labelStyles}>
+          <FormLabel
+            id={labelId}
+            htmlFor={id}
+            required={required}
+            sx={labelStyles}
+          >
             {label}
           </FormLabel>
         )}
         <Select
           id={id}
+          labelId={labelId}
           multiple={multiple}
           value={value}
           input={<OutlinedInput notched={false} sx={selectStyles} />}
