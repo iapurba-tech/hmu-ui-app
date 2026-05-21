@@ -23,6 +23,7 @@ export const unitCodeStyles: SxProps<Theme> = {
 export const unitNameStyles: SxProps<Theme> = {
   fontWeight: 600,
   color: palette.text.primary,
+  fontSize: "0.875rem",
   cursor: "pointer",
   "&:hover": {
     color: palette.primary.main,

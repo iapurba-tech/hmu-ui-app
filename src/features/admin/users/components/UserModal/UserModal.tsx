@@ -47,9 +47,11 @@ const UserModal: React.FC<UserModalProps> = ({ open, onClose, mode, user }) => {
 
   const handleSubmit = (data: UserFormData) => {
     setLocalBanner(null);
+    const { skipAddress, ...requestData } = data;
+
     if (mode === "edit" && user) {
       updateUser(
-        { ...data, id: user.id },
+        { ...requestData, id: user.id },
         {
           onSuccess: () => {
             showNotification("User updated successfully", "success");
@@ -63,7 +65,7 @@ const UserModal: React.FC<UserModalProps> = ({ open, onClose, mode, user }) => {
         },
       );
     } else {
-      createUser(data as any, {
+      createUser(requestData, {
         onSuccess: () => {
           showNotification("User created successfully", "success");
           onClose();

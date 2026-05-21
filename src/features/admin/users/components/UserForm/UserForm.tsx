@@ -7,6 +7,8 @@ import {
   Tooltip,
   Chip,
   alpha,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import {
   useForm,
@@ -78,35 +80,56 @@ const UserForm: React.FC<UserFormProps> = ({
     [units],
   );
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<UserFormData>({
-    resolver: zodResolver(userSchema),
-    defaultValues: {
+  const formDefaultValues = useMemo<UserFormData>(
+    () => ({
       firstname: defaultValues?.firstname || "",
       lastname: defaultValues?.lastname || "",
       username: defaultValues?.username || "",
       password: "",
       email: defaultValues?.email || "",
-      role: defaultValues?.role || UserRole.UNIT_ADMIN,
+      role: (defaultValues?.role as any) || "",
       unitIds: defaultValues?.unitIds || [],
       mpcsId: defaultValues?.mpcsId || null,
+      skipAddress:
+        mode === "create"
+          ? false
+          : !(
+              !!defaultValues?.address?.addressLine1 ||
+              !!defaultValues?.address?.city ||
+              !!defaultValues?.address?.postalCode
+            ),
       address: {
-        addressLine1: defaultValues?.address?.addressLine1 || "",
-        addressLine2: defaultValues?.address?.addressLine2 || "",
-        city: defaultValues?.address?.city || "",
-        district: defaultValues?.address?.district || "",
-        state: defaultValues?.address?.state || "",
-        postalCode: defaultValues?.address?.postalCode || "",
+        addressLine1: defaultValues?.address?.addressLine1 || null,
+        addressLine2: defaultValues?.address?.addressLine2 || null,
+        city: defaultValues?.address?.city || null,
+        district: defaultValues?.address?.district || null,
+        state: defaultValues?.address?.state || null,
+        postalCode: defaultValues?.address?.postalCode || null,
       },
-    },
+    }),
+    [defaultValues, mode],
+  );
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    clearErrors,
+    formState: { errors },
+  } = useForm<UserFormData>({
+    resolver: zodResolver(userSchema),
+    defaultValues: formDefaultValues,
   });
 
   const selectedRole = useWatch({ control, name: "role" });
+  const skipAddress = useWatch({ control, name: "skipAddress" });
+  const hasAddress = skipAddress === false;
+
   const isSystemAdmin = selectedRole === UserRole.SYSTEM_ADMIN;
+
+  // Safe way to access nested errors
+  const addressErrors: any = errors.address || {};
 
   const handleFormSubmit: SubmitHandler<UserFormData> = (data, event) => {
     const submissionData = { ...data };
@@ -116,7 +139,27 @@ const UserForm: React.FC<UserFormProps> = ({
     if (mode === "edit" && !submissionData.password) {
       delete submissionData.password;
     }
+
+    // Clean address if not included
+    if (skipAddress) {
+      submissionData.address = {
+        addressLine1: null,
+        addressLine2: null,
+        city: null,
+        district: null,
+        state: null,
+        postalCode: null,
+      };
+    }
+
     onSubmit(submissionData, event);
+  };
+
+  const handleAddressChoice = async (skip: boolean) => {
+    setValue("skipAddress", skip);
+    if (skip) {
+      clearErrors("address");
+    }
   };
 
   const handleCopy = (text: string, label: string) => {
@@ -298,7 +341,7 @@ const UserForm: React.FC<UserFormProps> = ({
                 />
               )}
             </Grid>
-            <Grid size={isSystemAdmin ? 12 : 6}>
+            <Grid size={6}>
               {isViewMode ? (
                 <HmuDataField
                   label="Role"
@@ -310,15 +353,15 @@ const UserForm: React.FC<UserFormProps> = ({
                 <Controller
                   name="role"
                   control={control}
-                  render={({ field }) => (
+                  render={({ field, fieldState: { error } }) => (
                     <HmuSelect
                       {...field}
                       id="role-select"
                       label="Role"
                       required
                       options={roleOptions}
-                      error={!!errors.role}
-                      helperText={errors.role?.message}
+                      error={!!error}
+                      helperText={error?.message}
                       disabled={isLoading}
                     />
                   )}
@@ -372,15 +415,15 @@ const UserForm: React.FC<UserFormProps> = ({
                   <Controller
                     name="unitIds"
                     control={control}
-                    render={({ field }) => (
+                    render={({ field, fieldState: { error } }) => (
                       <HmuSelect
                         {...field}
                         id="units-select"
                         label="Assigned Units"
                         multiple
                         options={unitOptions}
-                        error={!!errors.unitIds}
-                        helperText={errors.unitIds?.message}
+                        error={!!error}
+                        helperText={error?.message}
                         disabled={isLoading}
                         renderChips
                       />
@@ -397,121 +440,161 @@ const UserForm: React.FC<UserFormProps> = ({
           <Box sx={sectionHeaderStyles}>
             <Typography sx={sectionLabelStyles}>Address Details</Typography>
           </Box>
-          <Grid container spacing={2.5}>
-            <Grid size={12}>
-              {isViewMode ? (
-                <HmuDataField
-                  label="Address Line 1"
-                  value={defaultValues?.address?.addressLine1}
-                />
-              ) : (
-                <HmuTextField
-                  id="address-line-1"
-                  label="Address Line 1"
-                  placeholder="Street address, P.O. box"
-                  required
-                  error={!!errors.address?.addressLine1}
-                  helperText={errors.address?.addressLine1?.message}
-                  disabled={isLoading}
-                  {...register("address.addressLine1")}
-                />
-              )}
+
+          <Box
+            sx={{
+              p: 2,
+              mb: 2,
+              border: "1px dashed",
+              borderColor: "divider",
+              borderRadius: "8px",
+              bgcolor: (theme) =>
+                alpha(theme.palette.action.disabledBackground, 0.03),
+            }}
+          >
+            <Typography variant="body2" color="text.secondary">
+              Address information is optional. Select "Skip Address Information"
+              if you don't wish to provide an address.
+            </Typography>
+          </Box>
+
+          {!isViewMode && (
+            <Box sx={{ mb: 2 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    size="small"
+                    checked={!hasAddress}
+                    onChange={(e) => handleAddressChoice(e.target.checked)}
+                  />
+                }
+                label={
+                  <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                    Skip Address Information
+                  </Typography>
+                }
+                disabled={isLoading}
+              />
+            </Box>
+          )}
+
+          {(hasAddress || isViewMode) && (
+            <Grid container spacing={2.5}>
+              <Grid size={12}>
+                {isViewMode ? (
+                  <HmuDataField
+                    label="Address Line 1"
+                    value={defaultValues?.address?.addressLine1}
+                  />
+                ) : (
+                  <HmuTextField
+                    id="address-line-1"
+                    label="Address Line 1"
+                    placeholder="Street address, P.O. box"
+                    required={hasAddress}
+                    error={!!addressErrors.addressLine1}
+                    helperText={addressErrors.addressLine1?.message}
+                    disabled={isLoading}
+                    {...register("address.addressLine1")}
+                  />
+                )}
+              </Grid>
+              <Grid size={12}>
+                {isViewMode ? (
+                  <HmuDataField
+                    label="Address Line 2"
+                    value={defaultValues?.address?.addressLine2}
+                  />
+                ) : (
+                  <HmuTextField
+                    id="address-line-2"
+                    label="Address Line 2"
+                    placeholder="Apartment, suite, unit, etc. (Optional)"
+                    error={!!addressErrors.addressLine2}
+                    helperText={addressErrors.addressLine2?.message}
+                    disabled={isLoading}
+                    {...register("address.addressLine2")}
+                  />
+                )}
+              </Grid>
+              <Grid size={6}>
+                {isViewMode ? (
+                  <HmuDataField
+                    label="City"
+                    value={defaultValues?.address?.city}
+                  />
+                ) : (
+                  <HmuTextField
+                    id="city"
+                    label="City"
+                    placeholder="City"
+                    required={hasAddress}
+                    error={!!addressErrors.city}
+                    helperText={addressErrors.city?.message}
+                    disabled={isLoading}
+                    {...register("address.city")}
+                  />
+                )}
+              </Grid>
+              <Grid size={6}>
+                {isViewMode ? (
+                  <HmuDataField
+                    label="District"
+                    value={defaultValues?.address?.district}
+                  />
+                ) : (
+                  <HmuTextField
+                    id="district"
+                    label="District"
+                    placeholder="District"
+                    required={hasAddress}
+                    error={!!addressErrors.district}
+                    helperText={addressErrors.district?.message}
+                    disabled={isLoading}
+                    {...register("address.district")}
+                  />
+                )}
+              </Grid>
+              <Grid size={6}>
+                {isViewMode ? (
+                  <HmuDataField
+                    label="State"
+                    value={defaultValues?.address?.state}
+                  />
+                ) : (
+                  <HmuTextField
+                    id="state"
+                    label="State"
+                    placeholder="State"
+                    required={hasAddress}
+                    error={!!addressErrors.state}
+                    helperText={addressErrors.state?.message}
+                    disabled={isLoading}
+                    {...register("address.state")}
+                  />
+                )}
+              </Grid>
+              <Grid size={6}>
+                {isViewMode ? (
+                  <HmuDataField
+                    label="Postal Code"
+                    value={defaultValues?.address?.postalCode}
+                  />
+                ) : (
+                  <HmuTextField
+                    id="postal-code"
+                    label="Postal Code"
+                    placeholder="Postal Code"
+                    required={hasAddress}
+                    error={!!addressErrors.postalCode}
+                    helperText={addressErrors.postalCode?.message}
+                    disabled={isLoading}
+                    {...register("address.postalCode")}
+                  />
+                )}
+              </Grid>
             </Grid>
-            <Grid size={12}>
-              {isViewMode ? (
-                <HmuDataField
-                  label="Address Line 2"
-                  value={defaultValues?.address?.addressLine2}
-                />
-              ) : (
-                <HmuTextField
-                  id="address-line-2"
-                  label="Address Line 2"
-                  placeholder="Apartment, suite, unit, etc. (Optional)"
-                  error={!!errors.address?.addressLine2}
-                  helperText={errors.address?.addressLine2?.message}
-                  disabled={isLoading}
-                  {...register("address.addressLine2")}
-                />
-              )}
-            </Grid>
-            <Grid size={6}>
-              {isViewMode ? (
-                <HmuDataField
-                  label="City"
-                  value={defaultValues?.address?.city}
-                />
-              ) : (
-                <HmuTextField
-                  id="city"
-                  label="City"
-                  placeholder="City"
-                  required
-                  error={!!errors.address?.city}
-                  helperText={errors.address?.city?.message}
-                  disabled={isLoading}
-                  {...register("address.city")}
-                />
-              )}
-            </Grid>
-            <Grid size={6}>
-              {isViewMode ? (
-                <HmuDataField
-                  label="District"
-                  value={defaultValues?.address?.district}
-                />
-              ) : (
-                <HmuTextField
-                  id="district"
-                  label="District"
-                  placeholder="District"
-                  required
-                  error={!!errors.address?.district}
-                  helperText={errors.address?.district?.message}
-                  disabled={isLoading}
-                  {...register("address.district")}
-                />
-              )}
-            </Grid>
-            <Grid size={6}>
-              {isViewMode ? (
-                <HmuDataField
-                  label="State"
-                  value={defaultValues?.address?.state}
-                />
-              ) : (
-                <HmuTextField
-                  id="state"
-                  label="State"
-                  placeholder="State"
-                  required
-                  error={!!errors.address?.state}
-                  helperText={errors.address?.state?.message}
-                  disabled={isLoading}
-                  {...register("address.state")}
-                />
-              )}
-            </Grid>
-            <Grid size={6}>
-              {isViewMode ? (
-                <HmuDataField
-                  label="Postal Code"
-                  value={defaultValues?.address?.postalCode}
-                />
-              ) : (
-                <HmuTextField
-                  id="postal-code"
-                  label="Postal Code"
-                  placeholder="Postal Code"
-                  required
-                  error={!!errors.address?.postalCode}
-                  helperText={errors.address?.postalCode?.message}
-                  disabled={isLoading}
-                  {...register("address.postalCode")}
-                />
-              )}
-            </Grid>
-          </Grid>
+          )}
         </Box>
       </Box>
 

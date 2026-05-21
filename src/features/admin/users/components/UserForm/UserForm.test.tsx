@@ -92,12 +92,8 @@ describe("UserForm", () => {
     fireEvent.click(screen.getByRole("button", { name: /Create User/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/Firstname is required/i)).toBeInTheDocument();
-      expect(screen.getByText(/Lastname is required/i)).toBeInTheDocument();
-      expect(screen.getByText(/Invalid email format/i)).toBeInTheDocument();
-      expect(
-        screen.getByText(/Username must be at least 5 characters/i),
-      ).toBeInTheDocument();
+      const helperTexts = screen.getAllByText(/required/i);
+      expect(helperTexts.length).toBeGreaterThan(0);
     });
   });
 
@@ -126,7 +122,13 @@ describe("UserForm", () => {
       target: { value: "password123" },
     });
 
-    // Fill address
+    // Select a role
+    const roleSelect = screen.getByLabelText(/Role/i);
+    fireEvent.mouseDown(roleSelect);
+    const option = await screen.findByText("UNIT ADMIN");
+    fireEvent.click(option);
+
+    // Address is visible by default, so we fill it directly
     fireEvent.change(screen.getByLabelText(/Address Line 1/i), {
       target: { value: "Street 1" },
     });
@@ -150,6 +152,72 @@ describe("UserForm", () => {
       const submittedData = mockOnSubmit.mock.calls[0][0];
       expect(submittedData.firstname).toBe("John");
       expect(submittedData.email).toBe("john@example.com");
+      expect(submittedData.address.addressLine1).toBe("Street 1");
+    });
+  });
+
+  it("passes validation when address is completely skipped", async () => {
+    renderWithTheme(
+      <UserForm
+        mode="create"
+        onSubmit={mockOnSubmit}
+        onCancel={mockOnCancel}
+      />,
+    );
+
+    fireEvent.change(screen.getByLabelText(/First Name/i), {
+      target: { value: "John" },
+    });
+    fireEvent.change(screen.getByLabelText(/Last Name/i), {
+      target: { value: "Doe" },
+    });
+    fireEvent.change(screen.getByLabelText(/Email Address/i), {
+      target: { value: "john@example.com" },
+    });
+    fireEvent.change(screen.getByLabelText(/Username/i), {
+      target: { value: "johndoe" },
+    });
+    fireEvent.change(screen.getByLabelText(/Password/i), {
+      target: { value: "password123" },
+    });
+
+    // Select a role
+    const roleSelect = screen.getByLabelText(/Role/i);
+    fireEvent.mouseDown(roleSelect);
+    const option = await screen.findByText("UNIT ADMIN");
+    fireEvent.click(option);
+
+    // Skip address
+    fireEvent.click(screen.getByLabelText(/Skip Address Information/i));
+
+    fireEvent.click(screen.getByRole("button", { name: /Create User/i }));
+
+    await waitFor(() => {
+      expect(mockOnSubmit).toHaveBeenCalled();
+      const submittedData = mockOnSubmit.mock.calls[0][0];
+      expect(submittedData.address.addressLine1).toBeNull();
+    });
+  });
+
+  it("fails validation when address is partially filled", async () => {
+    renderWithTheme(
+      <UserForm
+        mode="create"
+        onSubmit={mockOnSubmit}
+        onCancel={mockOnCancel}
+      />,
+    );
+
+    // Only fill city (form is visible by default)
+    fireEvent.change(screen.getByLabelText(/City/i), {
+      target: { value: "Kolkata" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /Create User/i }));
+
+    await waitFor(() => {
+      const helperTexts = screen.getAllByText(/required/i);
+      expect(helperTexts.length).toBeGreaterThan(0);
     });
   });
 

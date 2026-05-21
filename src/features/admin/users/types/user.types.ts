@@ -1,12 +1,12 @@
 import { UserRole } from "../../../auth/constants/roles";
 
 export interface UserAddress {
-  addressLine1: string;
+  addressLine1?: string | null;
   addressLine2?: string | null;
-  city: string;
-  district: string;
-  state: string;
-  postalCode: string;
+  city?: string | null;
+  district?: string | null;
+  state?: string | null;
+  postalCode?: string | null;
 }
 
 export interface UserUnit {
@@ -24,7 +24,7 @@ export interface User {
   role: UserRole;
   mpcsId: string | null;
   units: UserUnit[];
-  address: UserAddress;
+  address?: UserAddress | null;
   active: boolean;
 }
 
@@ -37,5 +37,5 @@ export interface CreateUserRequest {
   role: UserRole;
   unitIds?: string[];
   mpcsId?: string | null;
-  address: UserAddress;
+  address?: UserAddress | null;
 }
