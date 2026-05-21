@@ -244,6 +244,7 @@ const UsersTable: React.FC<UsersTableProps> = ({
                 checked={row.active}
                 onChange={() => handleOpenConfirm(row)}
                 disabled={isToggling}
+                sx={{ transform: "scale(0.90)" }}
               />
             </Box>
           </Tooltip>
