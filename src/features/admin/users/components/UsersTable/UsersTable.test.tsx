@@ -16,6 +16,12 @@ vi.mock("../../../../../shared/api/admin/admin.hooks", () => ({
     }),
     isPending: false,
   })),
+  useDeleteUserPermanent: vi.fn(() => ({
+    mutate: vi.fn((options) => {
+      if (options?.onSuccess) options.onSuccess();
+    }),
+    isPending: false,
+  })),
 }));
 
 const queryClient = new QueryClient({
@@ -152,7 +158,71 @@ describe("UsersTable", () => {
 
     expect(mockToggleStatus).toHaveBeenCalledWith(
       { id: "1", active: true },
-      expect.any(Object)
+      expect.any(Object),
     );
+  });
+
+  it("opens delete confirmation modal and requires username input", async () => {
+    renderWithTheme(
+      <UsersTable
+        users={mockUsers as any}
+        isLoading={false}
+        onView={mockOnView}
+        onEdit={mockOnEdit}
+      />,
+    );
+
+    const deleteButtons = screen.getAllByRole("button", {
+      name: /delete permanently/i,
+    });
+    fireEvent.click(deleteButtons[0]);
+
+    expect(screen.getByText(/Delete User Permanently/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Please type the username below to confirm:/i),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("apurba").length).toBeGreaterThanOrEqual(2);
+
+    const deleteButton = screen.getByRole("button", {
+      name: /Permanently Delete/i,
+    });
+    expect(deleteButton).toBeDisabled();
+
+    const input = screen.getByPlaceholderText(/Type username here/i);
+    fireEvent.change(input, { target: { value: "apurba" } });
+
+    expect(deleteButton).not.toBeDisabled();
+  });
+
+  it("calls deleteUserPermanent API when confirmed with correct username", async () => {
+    const mockDeletePermanent = vi.fn();
+    (adminHooks.useDeleteUserPermanent as any).mockReturnValue({
+      mutate: mockDeletePermanent,
+      isPending: false,
+    });
+
+    renderWithTheme(
+      <UsersTable
+        users={mockUsers as any}
+        isLoading={false}
+        onView={mockOnView}
+        onEdit={mockOnEdit}
+      />,
+    );
+
+    const deleteButtons = screen.getAllByRole("button", {
+      name: /delete permanently/i,
+    });
+    fireEvent.click(deleteButtons[0]);
+
+    const input = screen.getByPlaceholderText(/Type username here/i);
+    fireEvent.change(input, { target: { value: "apurba" } });
+
+    const deleteButton = screen.getByRole("button", {
+      name: /Permanently Delete/i,
+    });
+    fireEvent.click(deleteButton);
+
+    expect(mockDeletePermanent).toHaveBeenCalledWith("1", expect.any(Object));
   });
 });
