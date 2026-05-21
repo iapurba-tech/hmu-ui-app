@@ -24,6 +24,10 @@ vi.mock("../../../../shared/api/admin/admin.hooks", () => ({
     mutate: vi.fn(),
     isPending: false,
   })),
+  useDeleteUserPermanent: vi.fn(() => ({
+    mutate: vi.fn(),
+    isPending: false,
+  })),
 }));
 
 const queryClient = new QueryClient({

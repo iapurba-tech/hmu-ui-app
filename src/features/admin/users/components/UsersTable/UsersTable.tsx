@@ -5,7 +5,6 @@ import {
   IconButton,
   Tooltip,
   alpha,
-  Dialog,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -15,9 +14,8 @@ import {
   type FilterConfig,
   HmuConfirmModal,
   HmuSwitch,
-  HmuTextField,
-  HmuButton,
 } from "../../../../../shared/components";
+import { UserDeleteModal } from "..";
 import type { User } from "../../types/user.types";
 import { UserRole } from "../../../../auth/constants/roles";
 import {
@@ -70,11 +68,9 @@ const UsersTable: React.FC<UsersTableProps> = ({
   const [deleteState, setDeleteState] = useState<{
     isOpen: boolean;
     user: User | null;
-    confirmText: string;
   }>({
     isOpen: false,
     user: null,
-    confirmText: "",
   });
 
   const handleOpenConfirm = (user: User) => {
@@ -86,11 +82,11 @@ const UsersTable: React.FC<UsersTableProps> = ({
   };
 
   const handleOpenDelete = (user: User) => {
-    setDeleteState({ isOpen: true, user, confirmText: "" });
+    setDeleteState({ isOpen: true, user });
   };
 
   const handleCloseDelete = () => {
-    setDeleteState({ isOpen: false, user: null, confirmText: "" });
+    setDeleteState({ isOpen: false, user: null });
   };
 
   const handleStatusToggle = () => {
@@ -118,11 +114,8 @@ const UsersTable: React.FC<UsersTableProps> = ({
     );
   };
 
-  const handleDeletePermanent = () => {
-    const user = deleteState.user;
-    if (!user) return;
-
-    deletePermanent(user.id, {
+  const handleDeletePermanent = (userId: string) => {
+    deletePermanent(userId, {
       onSuccess: () => {
         showNotification("User deleted permanently", "success");
         handleCloseDelete();
@@ -304,9 +297,6 @@ const UsersTable: React.FC<UsersTableProps> = ({
     },
   ];
 
-  const isDeleteConfirmed =
-    deleteState.confirmText === deleteState.user?.username;
-
   return (
     <Box sx={tableWrapperStyles}>
       <HmuDataTable
@@ -341,112 +331,13 @@ const UsersTable: React.FC<UsersTableProps> = ({
       />
 
       {/* Permanent Delete Modal */}
-      <Dialog
+      <UserDeleteModal
         open={deleteState.isOpen}
         onClose={handleCloseDelete}
-        slotProps={{
-          paper: {
-            sx: {
-              borderRadius: "16px",
-              width: "100%",
-              maxWidth: "400px",
-              p: 1,
-            },
-          },
-        }}
-      >
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>
-            Delete User Permanently
-          </Typography>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            sx={{ mb: 3, lineHeight: 1.6 }}
-          >
-            Are you sure you want to delete user{" "}
-            <strong>
-              {deleteState.user?.firstname} {deleteState.user?.lastname}
-            </strong>{" "}
-            ({deleteState.user?.username})? This action cannot be undone.
-          </Typography>
-
-          <Box sx={{ mb: 3 }}>
-            <Typography
-              variant="caption"
-              sx={{
-                display: "block",
-                mb: 1.5,
-                fontWeight: 500,
-                color: "text.secondary",
-              }}
-            >
-              Please type the username below to confirm:
-            </Typography>
-            <Box
-              sx={{
-                mb: 2,
-                p: 1.5,
-                bgcolor: (theme) => alpha(theme.palette.error.main, 0.05),
-                border: "1px dashed",
-                borderColor: (theme) => alpha(theme.palette.error.main, 0.3),
-                borderRadius: "8px",
-                textAlign: "center",
-              }}
-            >
-              <Typography
-                variant="body1"
-                sx={{
-                  fontWeight: 700,
-                  fontFamily: "'JetBrains Mono', monospace",
-                  color: (theme) => theme.palette.error.main,
-                  letterSpacing: "0.5px",
-                }}
-              >
-                {deleteState.user?.username}
-              </Typography>
-            </Box>
-            <HmuTextField
-              fullWidth
-              placeholder="Type username here"
-              value={deleteState.confirmText}
-              onChange={(e) =>
-                setDeleteState((prev) => ({
-                  ...prev,
-                  confirmText: e.target.value,
-                }))
-              }
-              autoFocus
-            />
-          </Box>
-
-          <Box sx={{ display: "flex", gap: 1.5 }}>
-            <HmuButton
-              label="Cancel"
-              variant="secondary"
-              onClick={handleCloseDelete}
-              disabled={isDeleting}
-              sx={{ flex: 1 }}
-            />
-            <HmuButton
-              label="Permanently Delete"
-              variant="primary"
-              onClick={handleDeletePermanent}
-              loading={isDeleting}
-              disabled={!isDeleteConfirmed}
-              sx={{
-                flex: 1.5,
-                bgcolor: "#ef4444",
-                "&:hover": { bgcolor: "#dc2626" },
-                "&.Mui-disabled": {
-                  bgcolor: alpha("#ef4444", 0.3),
-                  color: alpha("#fff", 0.5),
-                },
-              }}
-            />
-          </Box>
-        </Box>
-      </Dialog>
+        onConfirm={handleDeletePermanent}
+        user={deleteState.user}
+        loading={isDeleting}
+      />
     </Box>
   );
 };
