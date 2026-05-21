@@ -195,7 +195,7 @@ describe("UserForm", () => {
     await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalled();
       const submittedData = mockOnSubmit.mock.calls[0][0];
-      expect(submittedData.address.addressLine1).toBeNull();
+      expect(submittedData.address).toBeNull();
     });
   });
 

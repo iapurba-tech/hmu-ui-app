@@ -142,14 +142,7 @@ const UserForm: React.FC<UserFormProps> = ({
 
     // Clean address if not included
     if (skipAddress) {
-      submissionData.address = {
-        addressLine1: null,
-        addressLine2: null,
-        city: null,
-        district: null,
-        state: null,
-        postalCode: null,
-      };
+      submissionData.address = null;
     }
 
     onSubmit(submissionData, event);
