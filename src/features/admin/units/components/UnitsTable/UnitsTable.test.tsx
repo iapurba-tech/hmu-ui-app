@@ -19,14 +19,26 @@ describe("UnitsTable", () => {
       id: "1",
       code: "U001",
       name: "Unit One",
-      address: { addressLine1: "Address 1", city: "City 1", postalCode: "123" },
+      address: {
+        addressLine1: "Address 1",
+        city: "City 1",
+        district: "District 1",
+        state: "State 1",
+        postalCode: "123",
+      },
       active: true,
     },
     {
       id: "2",
       code: "U002",
       name: "Unit Two",
-      address: { addressLine1: "Address 2", city: "City 2", postalCode: "456" },
+      address: {
+        addressLine1: "Address 2",
+        city: "City 2",
+        district: "District 2",
+        state: "State 2",
+        postalCode: "456",
+      },
       active: false,
     },
   ];
