@@ -1,10 +1,10 @@
 export interface UnitAddress {
   addressLine1: string;
   addressLine2?: string;
-  city?: string;
-  district?: string;
-  state?: string;
-  postalCode?: string;
+  city: string;
+  district: string;
+  state: string;
+  postalCode: string;
 }
 
 export interface Unit {
