@@ -157,6 +157,7 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
                 checked={row.active}
                 onChange={() => handleOpenConfirm(row)}
                 disabled={isToggling}
+                sx={{ transform: "scale(0.90)" }}
               />
             </Box>
           </Tooltip>

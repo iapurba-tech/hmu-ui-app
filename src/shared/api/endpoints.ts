@@ -9,6 +9,14 @@ export const API_ENDPOINTS = {
             CREATE: "/api/v1/admin/units",
             ACTIVATE: (id: string) => `/api/v1/admin/units/${id}/activate`,
             DEACTIVATE: (id: string) => `/api/v1/admin/units/${id}/deactivate`,
+        },
+        USER: {
+            LIST: "/api/v1/users",
+            CREATE: "/api/v1/users",
+            UPDATE: (id: string) => `/api/v1/users/${id}`,
+            ACTIVATE: (id: string) => `/api/v1/users/${id}/activate`,
+            DEACTIVATE: (id: string) => `/api/v1/users/${id}/deactivate`,
+            PERMANENT: (id: string) => `/api/v1/users/${id}/permanent`,
         }
     }
 }

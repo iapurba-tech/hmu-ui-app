@@ -14,3 +14,5 @@ export type { HmuBannerProps } from './HmuBanner/HmuBanner';
 export { default as HmuConfirmModal } from './HmuConfirmModal/HmuConfirmModal';
 export { default as HmuSwitch } from './HmuSwitch/HmuSwitch';
 export { default as HmuDataField } from './HmuDataField/HmuDataField';
+export { default as HmuSelect } from './HmuSelect/HmuSelect';
+export type { HmuSelectProps, HmuSelectOption } from './HmuSelect/HmuSelect';

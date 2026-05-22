@@ -36,6 +36,7 @@ export {
   SegmentRounded as SegmentIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
+  DeleteForeverRounded as DeleteIcon,
 } from "@mui/icons-material";
 
 export * from "./MilkCanIcon";

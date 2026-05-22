@@ -17,6 +17,14 @@ vi.mock('../../features/error/pages/ForbiddenPage/ForbiddenPage', () => ({
   default: () => <div>Forbidden Page</div>
 }));
 
+vi.mock('../../features/admin/units', () => ({
+  UnitsPage: () => <div>Units Page</div>
+}));
+
+vi.mock('../../features/admin/users', () => ({
+  UsersPage: () => <div>User Management (IAM)</div>
+}));
+
 vi.mock('../../layouts/MainLayout/MainLayout', () => ({
   default: () => (
     <div>

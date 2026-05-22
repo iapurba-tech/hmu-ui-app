@@ -8,7 +8,7 @@ export const tableWrapperStyles: SxProps<Theme> = {
   gap: 0,
 };
 
-export const unitCodeStyles: SxProps<Theme> = {
+export const usernameStyles: SxProps<Theme> = {
   fontWeight: 700,
   color: palette.primary.main,
   fontFamily: "'JetBrains Mono', monospace",
@@ -20,10 +20,10 @@ export const unitCodeStyles: SxProps<Theme> = {
   display: "inline-block",
 };
 
-export const unitNameStyles: SxProps<Theme> = {
-  fontWeight: 600,
-  color: palette.text.primary,
+export const userNameStyles: SxProps<Theme> = {
+  fontWeight: 500,
   fontSize: "0.875rem",
+  color: palette.text.primary,
   cursor: "pointer",
   "&:hover": {
     color: palette.primary.main,
@@ -31,16 +31,28 @@ export const unitNameStyles: SxProps<Theme> = {
   },
 };
 
-export const unitAddressStyles: SxProps<Theme> = {
+export const userEmailStyles: SxProps<Theme> = {
   color: palette.text.secondary,
   fontSize: "0.8125rem",
-  maxWidth: "250px",
-  whiteSpace: "nowrap",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
 };
 
-export const statusBadgeStyles = (bg: string, color: string): SxProps<Theme> => ({
+export const roleBadgeStyles = (bg: string, color: string): SxProps<Theme> => ({
+  fontSize: "0.7rem",
+  fontWeight: 800,
+  bgcolor: bg,
+  color: color,
+  px: 1,
+  py: 0.25,
+  borderRadius: "4px",
+  display: "inline-block",
+  textTransform: "uppercase",
+  letterSpacing: "0.03em",
+});
+
+export const statusBadgeStyles = (
+  bg: string,
+  color: string,
+): SxProps<Theme> => ({
   display: "inline-flex",
   alignItems: "center",
   gap: 1,
