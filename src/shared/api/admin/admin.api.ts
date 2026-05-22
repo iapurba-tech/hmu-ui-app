@@ -70,7 +70,7 @@ export const adminApi = {
   },
 
   deactivateUser: async (id: string): Promise<void> => {
-    await apiClient.delete(API_ENDPOINTS.ADMIN.USER.DEACTIVATE(id));
+    await apiClient.patch(API_ENDPOINTS.ADMIN.USER.DEACTIVATE(id));
   },
 
   deleteUserPermanent: async (id: string): Promise<void> => {
