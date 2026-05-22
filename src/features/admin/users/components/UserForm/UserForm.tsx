@@ -434,22 +434,24 @@ const UserForm: React.FC<UserFormProps> = ({
             <Typography sx={sectionLabelStyles}>Address Details</Typography>
           </Box>
 
-          <Box
-            sx={{
-              p: 2,
-              mb: 2,
-              border: "1px dashed",
-              borderColor: "divider",
-              borderRadius: "8px",
-              bgcolor: (theme) =>
-                alpha(theme.palette.action.disabledBackground, 0.03),
-            }}
-          >
-            <Typography variant="body2" color="text.secondary">
-              Address information is optional. Select "Skip Address Information"
-              if you don't wish to provide an address.
-            </Typography>
-          </Box>
+          {!isViewMode && (
+            <Box
+              sx={{
+                p: 2,
+                mb: 2,
+                border: "1px dashed",
+                borderColor: "divider",
+                borderRadius: "8px",
+                bgcolor: (theme) =>
+                  alpha(theme.palette.action.disabledBackground, 0.03),
+              }}
+            >
+              <Typography variant="body2" color="text.secondary">
+                Address information is optional. Select "Skip Address
+                Information" if you don't wish to provide an address.
+              </Typography>
+            </Box>
+          )}
 
           {!isViewMode && (
             <Box sx={{ mb: 2 }}>

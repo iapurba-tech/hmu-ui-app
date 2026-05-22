@@ -35,7 +35,7 @@ describe("UnitForm", () => {
     renderWithTheme(<UnitForm mode="create" onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     fireEvent.change(screen.getByLabelText(/Unit Name/i), { target: { value: "Test Unit" } });
-    fireEvent.change(screen.getByLabelText(/Unit Code/i), { target: { value: "TU-001" } });
+    fireEvent.change(screen.getByLabelText(/Unit Code/i), { target: { value: "TUT" } });
     fireEvent.change(screen.getByLabelText(/Address Line 1/i), { target: { value: "123 Street" } });
     fireEvent.change(screen.getByLabelText(/City/i), { target: { value: "Test City" } });
     fireEvent.change(screen.getByLabelText(/District/i), { target: { value: "Test District" } });
@@ -48,7 +48,7 @@ describe("UnitForm", () => {
       expect(mockOnSubmit).toHaveBeenCalledWith(
         expect.objectContaining({
           name: "Test Unit",
-          code: "TU-001",
+          code: "TUT",
           address: {
             addressLine1: "123 Street",
             addressLine2: "",
@@ -69,16 +69,41 @@ describe("UnitForm", () => {
     fireEvent.click(screen.getByRole("button", { name: /Create Unit/i }));
     
     await waitFor(() => {
-      expect(screen.getByText(/Unit Name is required/i)).toBeDefined();
-      expect(screen.getByText(/Unit Code is required/i)).toBeDefined();
-      expect(screen.getByText(/Address Line 1 is required/i)).toBeDefined();
+      expect(screen.getByText(/Unit Name is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/Unit Code is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/Address Line 1 is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/City is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/District is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/State is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/Postal Code is required/i)).toBeInTheDocument();
+    });
+  });
+
+  it("auto-formats unit code and validates length", async () => {
+    renderWithTheme(<UnitForm mode="create" onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
+    
+    const nameInput = screen.getByLabelText(/Unit Name/i);
+    const codeInput = screen.getByLabelText(/Unit Code/i) as HTMLInputElement;
+    const addressInput = screen.getByLabelText(/Address Line 1/i);
+    const submitButton = screen.getByRole("button", { name: /Create Unit/i });
+
+    // Fill other required fields
+    fireEvent.change(nameInput, { target: { value: "Test Unit" } });
+    fireEvent.change(addressInput, { target: { value: "123 Street" } });
+    
+    // Test auto-uppercase and stripping non-letters
+    fireEvent.change(codeInput, { target: { value: "tu1" } });
+    expect(codeInput.value).toBe("TU");
+
+    // Test validation
+    fireEvent.click(submitButton);
+    await waitFor(() => {
+      expect(screen.getByText(/Unit Code must be exactly 3 uppercase letters/i)).toBeInTheDocument();
     });
 
-    // Optional fields should NOT show error messages
-    expect(screen.queryByText(/City is required/i)).toBeNull();
-    expect(screen.queryByText(/District is required/i)).toBeNull();
-    expect(screen.queryByText(/State is required/i)).toBeNull();
-    expect(screen.queryByText(/Postal Code is required/i)).toBeNull();
+    // Valid 3 chars
+    fireEvent.change(codeInput, { target: { value: "tut" } });
+    expect(codeInput.value).toBe("TUT");
   });
 
   it("disables unit code field in edit mode", () => {
@@ -87,7 +112,7 @@ describe("UnitForm", () => {
         mode="edit"
         onSubmit={mockOnSubmit}
         onCancel={mockOnCancel}
-        defaultValues={{ code: "EXISTING-CODE" }}
+        defaultValues={{ code: "TUT" }}
       />
     );
     

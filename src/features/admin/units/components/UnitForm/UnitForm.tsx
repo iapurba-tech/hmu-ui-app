@@ -4,7 +4,11 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { HmuButton, HmuTextField, HmuDataField } from "../../../../../shared/components";
+import {
+  HmuButton,
+  HmuTextField,
+  HmuDataField,
+} from "../../../../../shared/components";
 import {
   formContainerStyles,
   sectionHeaderStyles,
@@ -18,15 +22,20 @@ import { useNotificationStore } from "../../../../../shared/store/useNotificatio
 const addressSchema = z.object({
   addressLine1: z.string().min(1, "Address Line 1 is required"),
   addressLine2: z.string().optional(),
-  city: z.string().optional(),
-  district: z.string().optional(),
-  state: z.string().optional(),
-  postalCode: z.string().optional(),
+  city: z.string().min(1, "City is required"),
+  district: z.string().min(1, "District is required"),
+  state: z.string().min(1, "State is required"),
+  postalCode: z.string().min(1, "Postal Code is required"),
 });
 
 const unitSchema = z.object({
   name: z.string().min(1, "Unit Name is required"),
-  code: z.string().min(1, "Unit Code is required"),
+  code: z
+    .string()
+    .min(1, "Unit Code is required")
+    .refine((val) => /^[A-Z]{3}$/.test(val), {
+      message: "Unit Code must be exactly 3 uppercase letters",
+    }),
   address: addressSchema,
 });
 
@@ -57,6 +66,7 @@ const UnitForm: React.FC<UnitFormProps> = ({
     formState: { errors },
   } = useForm<UnitFormData>({
     resolver: zodResolver(unitSchema),
+    criteriaMode: "all",
     defaultValues: {
       name: defaultValues?.name || "",
       code: defaultValues?.code || "",
@@ -108,36 +118,64 @@ const UnitForm: React.FC<UnitFormProps> = ({
 
             <Grid size={12}>
               {isViewMode ? (
-                <HmuDataField 
-                  label="Unit Code" 
+                <HmuDataField
+                  label="Unit Code"
                   value={
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                      <Typography variant="body2" sx={{ fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: 700,
+                          fontFamily: "'JetBrains Mono', monospace",
+                        }}
+                      >
                         {defaultValues?.code}
                       </Typography>
                       <Tooltip title="Copy Code">
-                        <IconButton size="small" onClick={() => handleCopyCode(defaultValues?.code || '')}>
-                          <ContentCopyIcon fontSize="small" sx={{ opacity: 0.6 }} />
+                        <IconButton
+                          size="small"
+                          onClick={() =>
+                            handleCopyCode(defaultValues?.code || "")
+                          }
+                        >
+                          <ContentCopyIcon
+                            fontSize="small"
+                            sx={{ opacity: 0.6 }}
+                          />
                         </IconButton>
                       </Tooltip>
                     </Box>
-                  } 
+                  }
                 />
               ) : (
                 <HmuTextField
                   id="unit-code"
                   label="Unit Code"
-                  placeholder="e.g. CCP-001"
+                  placeholder="e.g. SHY"
                   required
                   error={!!errors.code}
                   helperText={
                     errors.code?.message ||
                     (mode === "create"
-                      ? "Warning: Unit Code cannot be modified once created."
+                      ? "Must be 3 uppercase letters. Cannot be modified once created."
                       : "")
                   }
                   disabled={isLoading || isEditMode}
-                  {...register("code")}
+                  {...register("code", {
+                    onChange: (e) => {
+                      e.target.value = e.target.value
+                        .toUpperCase()
+                        .replace(/[^A-Z]/g, "")
+                        .slice(0, 3);
+                    },
+                  })}
                 />
               )}
             </Grid>
@@ -152,7 +190,10 @@ const UnitForm: React.FC<UnitFormProps> = ({
           <Grid container spacing={2.5}>
             <Grid size={12}>
               {isViewMode ? (
-                <HmuDataField label="Address Line 1" value={defaultValues?.address?.addressLine1} />
+                <HmuDataField
+                  label="Address Line 1"
+                  value={defaultValues?.address?.addressLine1}
+                />
               ) : (
                 <HmuTextField
                   id="address-line-1"
@@ -169,12 +210,15 @@ const UnitForm: React.FC<UnitFormProps> = ({
 
             <Grid size={12}>
               {isViewMode ? (
-                <HmuDataField label="Address Line 2" value={defaultValues?.address?.addressLine2} />
+                <HmuDataField
+                  label="Address Line 2"
+                  value={defaultValues?.address?.addressLine2}
+                />
               ) : (
                 <HmuTextField
                   id="address-line-2"
                   label="Address Line 2"
-                  placeholder="Apartment, suite, unit, building, floor, etc. (Optional)"
+                  placeholder="Building, floor, landmark etc. (Optional)"
                   error={!!errors.address?.addressLine2}
                   helperText={errors.address?.addressLine2?.message}
                   disabled={isLoading}
@@ -185,12 +229,16 @@ const UnitForm: React.FC<UnitFormProps> = ({
 
             <Grid size={6}>
               {isViewMode ? (
-                <HmuDataField label="City" value={defaultValues?.address?.city} />
+                <HmuDataField
+                  label="City"
+                  value={defaultValues?.address?.city}
+                />
               ) : (
                 <HmuTextField
                   id="city"
                   label="City"
-                  placeholder="City (Optional)"
+                  placeholder="e.g. Uluberia"
+                  required
                   error={!!errors.address?.city}
                   helperText={errors.address?.city?.message}
                   disabled={isLoading}
@@ -201,12 +249,16 @@ const UnitForm: React.FC<UnitFormProps> = ({
 
             <Grid size={6}>
               {isViewMode ? (
-                <HmuDataField label="District" value={defaultValues?.address?.district} />
+                <HmuDataField
+                  label="District"
+                  value={defaultValues?.address?.district}
+                />
               ) : (
                 <HmuTextField
                   id="district"
                   label="District"
-                  placeholder="District (Optional)"
+                  placeholder="e.g. Howrah"
+                  required
                   error={!!errors.address?.district}
                   helperText={errors.address?.district?.message}
                   disabled={isLoading}
@@ -217,12 +269,16 @@ const UnitForm: React.FC<UnitFormProps> = ({
 
             <Grid size={6}>
               {isViewMode ? (
-                <HmuDataField label="State" value={defaultValues?.address?.state} />
+                <HmuDataField
+                  label="State"
+                  value={defaultValues?.address?.state}
+                />
               ) : (
                 <HmuTextField
                   id="state"
                   label="State"
-                  placeholder="State (Optional)"
+                  placeholder="e.g. West Bengal"
+                  required
                   error={!!errors.address?.state}
                   helperText={errors.address?.state?.message}
                   disabled={isLoading}
@@ -233,12 +289,16 @@ const UnitForm: React.FC<UnitFormProps> = ({
 
             <Grid size={6}>
               {isViewMode ? (
-                <HmuDataField label="Postal Code" value={defaultValues?.address?.postalCode} />
+                <HmuDataField
+                  label="Postal Code"
+                  value={defaultValues?.address?.postalCode}
+                />
               ) : (
                 <HmuTextField
                   id="postal-code"
                   label="Postal Code"
-                  placeholder="Postal Code (Optional)"
+                  placeholder="e.g. 734001"
+                  required
                   error={!!errors.address?.postalCode}
                   helperText={errors.address?.postalCode?.message}
                   disabled={isLoading}
