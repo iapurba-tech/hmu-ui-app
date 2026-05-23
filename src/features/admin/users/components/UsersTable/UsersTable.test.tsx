@@ -112,7 +112,7 @@ describe("UsersTable", () => {
       />
     );
 
-    const editButtons = screen.getAllByTestId("EditIcon");
+    const editButtons = screen.getAllByTestId(/Edit.*Icon/);
     fireEvent.click(editButtons[0]);
     expect(mockOnEdit).toHaveBeenCalledWith(mockUsers[0]);
   });

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { LockRounded as Lock } from "@mui/icons-material";
+import { LockIcon as Lock } from "../../../../shared/icons";
 import { ErrorContent } from "../../components";
 
 const ForbiddenPage: React.FC = () => {

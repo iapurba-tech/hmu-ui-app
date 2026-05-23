@@ -1,8 +1,5 @@
 import React, { useState, useMemo } from "react";
 import { Box, Typography, IconButton, Tooltip } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import { HmuDataTable, type Column } from "../../../../../shared/components";
 import { BankDeleteModal } from "..";
@@ -19,7 +16,12 @@ import {
 } from "./BanksTable.styles";
 import { useDeleteBankAccount } from "../../../../../shared/api/admin/admin.hooks";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
-import { DeleteIcon } from "../../../../../shared/icons";
+import { 
+  EditIcon, 
+  DeleteIcon, 
+  VisibilityIcon, 
+  VisibilityOffIcon 
+} from "../../../../../shared/icons";
 
 interface BanksTableProps {
   banks: Bank[];

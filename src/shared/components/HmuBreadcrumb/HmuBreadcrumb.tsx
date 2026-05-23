@@ -1,11 +1,11 @@
 import React from "react";
 import { Breadcrumbs, Link, Typography, Box } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { NavigateNextIcon } from "../../icons";
 import {
-  breadcrumbStyles,
   breadcrumbItemStyles,
   activeBreadcrumbStyles,
+  breadcrumbStyles,
 } from "./HmuBreadcrumb.styles";
 
 export interface BreadcrumbItem {

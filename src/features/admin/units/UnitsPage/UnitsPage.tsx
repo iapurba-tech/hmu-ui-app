@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 
 import { HmuButton } from "../../../../shared/components";
 import { palette } from "../../../../shared/theme";
@@ -12,6 +11,7 @@ import {
 import { useGetUnits } from "../../../../shared/api/admin/admin.hooks";
 import type { Unit } from "../types/unit.types";
 import { UnitModal, UnitsTable } from "../components";
+import { AddIcon } from "../../../../shared/icons";
 
 const UnitsPage: React.FC = () => {
   // API Data

@@ -1,7 +1,5 @@
 import React, { useState, useCallback } from "react";
 import { Box, Typography } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-
 import { HmuButton } from "../../../../shared/components";
 import { palette } from "../../../../shared/theme";
 import {
@@ -12,6 +10,7 @@ import {
 import { useGetBankAccounts } from "../../../../shared/api/admin/admin.hooks";
 import type { Bank } from "../types/bank.types";
 import { BankModal, BanksTable } from "../components";
+import { AddIcon } from "../../../../shared/icons";
 
 const BanksPage: React.FC = () => {
 

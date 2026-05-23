@@ -3,7 +3,6 @@ import { Box, Typography, Grid, IconButton, Tooltip } from "@mui/material";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {
   HmuButton,
   HmuTextField,
@@ -18,6 +17,7 @@ import {
   submitButtonStyles,
 } from "./UnitForm.styles";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
+import { CopyIcon as ContentCopyIcon } from "../../../../../shared/icons";
 
 const addressSchema = z.object({
   addressLine1: z.string().min(1, "Address Line 1 is required"),

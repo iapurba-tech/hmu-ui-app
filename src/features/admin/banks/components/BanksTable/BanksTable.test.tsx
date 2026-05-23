@@ -33,7 +33,7 @@ describe("BanksTable", () => {
         code: "UNT01",
         name: "Unit One",
         active: true,
-      },
+      }
     },
     {
       id: "2",
@@ -52,7 +52,7 @@ describe("BanksTable", () => {
         code: "UNT02",
         name: "Unit Two",
         active: false,
-      },
+      }
     },
   ];
 
@@ -66,8 +66,10 @@ describe("BanksTable", () => {
   const renderWithTheme = (ui: React.ReactElement) => {
     return render(
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>{ui}</ThemeProvider>
-      </QueryClientProvider>,
+        <ThemeProvider theme={theme}>
+          {ui}
+        </ThemeProvider>
+      </QueryClientProvider>
     );
   };
 
@@ -85,20 +87,20 @@ describe("BanksTable", () => {
 
   it("toggles account visibility when eye icon is clicked", async () => {
     renderWithTheme(<BanksTable {...mockProps} />);
-
+    
     // Find the row for John Doe
     const row = screen.getByText("John Doe").closest("tr");
     if (!row) throw new Error("Row not found");
 
-    // Find the toggle button in that row
-    const toggleButton = row.querySelector("button"); // First button in row is visibility toggle
+    // Find the toggle button in that row (variant-agnostic)
+    const toggleButton = row.querySelector('button'); 
     if (!toggleButton) throw new Error("Toggle button not found");
-
+    
     fireEvent.click(toggleButton);
-
+    
     // Check if the number is visible
     expect(screen.getByText("1234567890")).toBeDefined();
-
+    
     // Click again to mask
     fireEvent.click(toggleButton);
     expect(screen.queryByText("1234567890")).toBeNull();

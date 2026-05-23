@@ -47,7 +47,7 @@ describe("HmuBreadcrumb", () => {
     renderWithThemeAndRouter(<HmuBreadcrumb items={items} />);
     // In MUI Breadcrumbs, separators have aria-hidden="true" or are specific elements
     // We can check for the NavigateNextIcon indirectly or just trust MUI if we trust our mapping
-    const separators = screen.getAllByTestId("NavigateNextIcon");
+    const separators = screen.getAllByTestId(/NavigateNext.*Icon/);
     expect(separators.length).toBe(items.length - 1);
   });
 });

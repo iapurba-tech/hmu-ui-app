@@ -132,18 +132,14 @@ describe("BankForm", () => {
       />,
     );
 
-    // Should be masked initially (regex for masked format)
+    // Should be masked initially
     expect(screen.getByText(/\*+ \d{4}/)).toBeDefined();
     expect(screen.queryByText("1234567890")).toBeNull();
 
-    // Toggle visibility - find eye button
+    // Toggle visibility - find eye button (variant-agnostic)
     const eyeButton = screen
       .getAllByRole("button")
-      .find(
-        (b) =>
-          b.querySelector('svg[data-testid="VisibilityIcon"]') ||
-          b.querySelector('svg[data-testid="VisibilityOffIcon"]'),
-      );
+      .find((b) => b.querySelector('svg[data-testid*="Visibility"]'));
 
     if (eyeButton) fireEvent.click(eyeButton);
 

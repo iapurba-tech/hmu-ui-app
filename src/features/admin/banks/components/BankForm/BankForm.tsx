@@ -9,9 +9,6 @@ import {
 } from "@mui/material";
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
   HmuButton,
   HmuTextField,
@@ -30,6 +27,11 @@ import { bankSchema, type BankFormData } from "../../types/bank.schema";
 import { useGetUnits } from "../../../../../shared/api/admin/admin.hooks";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
 import { palette } from "../../../../../shared/theme";
+import { 
+  CopyIcon as ContentCopyIcon, 
+  VisibilityIcon, 
+  VisibilityOffIcon 
+} from "../../../../../shared/icons";
 
 interface BankFormProps {
   mode: "create" | "edit" | "view";

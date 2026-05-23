@@ -11,8 +11,8 @@ import {
 import {
   LockIcon,
   UserIcon,
-  VisibilityIcon,
-  VisibilityOffIcon,
+  VisibilityOutlinedIcon as VisibilityIcon,
+  VisibilityOffOutlinedIcon as VisibilityOffIcon,
 } from "../../../../shared/icons";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../../shared/api/auth/auth.hooks";
