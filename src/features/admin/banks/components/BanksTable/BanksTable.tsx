@@ -1,7 +1,11 @@
 import React, { useState, useMemo } from "react";
 import { Box, Typography, IconButton, Tooltip } from "@mui/material";
 
-import { HmuDataTable, type Column } from "../../../../../shared/components";
+import {
+  HmuDataTable,
+  type Column,
+  type FilterConfig,
+} from "../../../../../shared/components";
 import { BankDeleteModal } from "..";
 import type { Bank } from "../../types/bank.types";
 import {
@@ -15,6 +19,7 @@ import {
   deleteButtonStyles,
 } from "./BanksTable.styles";
 import { useDeleteBankAccount } from "../../../../../shared/api/admin/bank/bank.hooks";
+import { useGetUnits } from "../../../../../shared/api/admin/unit/unit.hooks";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
 import {
   EditIcon,
@@ -37,6 +42,7 @@ const BanksTable: React.FC<BanksTableProps> = ({
   onEdit,
 }) => {
   const { mutate: deleteBank, isPending: isDeleting } = useDeleteBankAccount();
+  const { data: units = [] } = useGetUnits();
   const { showNotification } = useNotificationStore();
 
   const [deleteState, setDeleteState] = useState<{
@@ -203,6 +209,27 @@ const BanksTable: React.FC<BanksTableProps> = ({
     [onEdit, visibleAccounts],
   );
 
+  const filters: FilterConfig<Bank>[] = useMemo(
+    () => [
+      {
+        id: "unit",
+        label: "Filter by Unit",
+        options: [
+          { label: "All Units", value: "all" },
+          ...units.map((unit) => ({
+            label: unit.name,
+            value: unit.id,
+          })),
+        ],
+        onFilter: (bank, value) => {
+          if (value === "all") return true;
+          return bank.unit.id === value;
+        },
+      },
+    ],
+    [units],
+  );
+
   return (
     <Box sx={tableWrapperStyles}>
       <HmuDataTable
@@ -226,6 +253,7 @@ const BanksTable: React.FC<BanksTableProps> = ({
             "branchName",
           ],
         }}
+        filters={filters}
       />
 
       <BankDeleteModal
