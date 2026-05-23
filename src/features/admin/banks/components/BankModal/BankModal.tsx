@@ -10,7 +10,7 @@ import type { Bank } from "../../types/bank.types";
 import { 
   useCreateBankAccount, 
   useUpdateBankAccount 
-} from "../../../../../shared/api/admin/admin.hooks";
+} from "../../../../../shared/api/admin/bank/bank.hooks";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
 import type { BankFormData } from "../../types/bank.schema";
 

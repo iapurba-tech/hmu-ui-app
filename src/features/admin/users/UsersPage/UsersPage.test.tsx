@@ -5,11 +5,11 @@ import UsersPage from "./UsersPage";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../../../shared/theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as adminHooks from "../../../../shared/api/admin/admin.hooks";
+import * as adminHooks from "../../../../shared/api/admin/user/user.hooks";
 import { UserRole } from "../../../auth/constants/roles";
 
 // Mock the hooks
-vi.mock("../../../../shared/api/admin/admin.hooks", () => ({
+vi.mock("../../../../shared/api/admin/user/user.hooks", () => ({
   useGetUsers: vi.fn(),
   useGetUnits: vi.fn(() => ({ data: [], isLoading: false })),
   useCreateUser: vi.fn(() => ({

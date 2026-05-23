@@ -15,7 +15,7 @@ import {
 import {
   useCreateUser,
   useUpdateUser,
-} from "../../../../../shared/api/admin/admin.hooks";
+} from "../../../../../shared/api/admin/user/user.hooks";
 import { CloseIcon } from "../../../../../shared/icons";
 import type { User } from "../../types/user.types";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";

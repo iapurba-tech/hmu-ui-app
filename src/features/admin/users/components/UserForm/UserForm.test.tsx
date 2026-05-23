@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { UserRole } from "../../../../auth/constants/roles";
 
 // Mock the hooks
-vi.mock("../../../../../shared/api/admin/admin.hooks", () => ({
+vi.mock("../../../../../shared/api/admin/user/user.hooks", () => ({
   useGetUnits: vi.fn(() => ({ data: [], isLoading: false })),
 }));
 

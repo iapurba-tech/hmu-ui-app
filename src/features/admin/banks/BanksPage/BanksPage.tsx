@@ -7,7 +7,7 @@ import {
   pageHeaderStyles,
   pageTitleStyles,
 } from "./BanksPage.styles";
-import { useGetBankAccounts } from "../../../../shared/api/admin/admin.hooks";
+import { useGetBankAccounts } from "../../../../shared/api/admin/bank/bank.hooks";
 import type { Bank } from "../types/bank.types";
 import { BankModal, BanksTable } from "../components";
 import { AddIcon } from "../../../../shared/icons";

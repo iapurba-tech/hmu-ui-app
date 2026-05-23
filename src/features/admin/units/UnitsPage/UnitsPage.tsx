@@ -8,7 +8,7 @@ import {
   pageHeaderStyles,
   pageTitleStyles,
 } from "./UnitsPage.styles";
-import { useGetUnits } from "../../../../shared/api/admin/admin.hooks";
+import { useGetUnits } from "../../../../shared/api/admin/unit/unit.hooks";
 import type { Unit } from "../types/unit.types";
 import { UnitModal, UnitsTable } from "../components";
 import { AddIcon } from "../../../../shared/icons";

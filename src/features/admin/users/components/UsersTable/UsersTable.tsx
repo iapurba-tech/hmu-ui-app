@@ -24,7 +24,7 @@ import {
 import {
   useToggleUserStatus,
   useDeleteUserPermanent,
-} from "../../../../../shared/api/admin/admin.hooks";
+} from "../../../../../shared/api/admin/user/user.hooks";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
 import { useTheme } from "@mui/material/styles";
 import { EditIcon, DeleteIcon } from "../../../../../shared/icons";

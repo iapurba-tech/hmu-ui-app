@@ -14,13 +14,13 @@ import {
   actionButtonStyles,
   deleteButtonStyles,
 } from "./BanksTable.styles";
-import { useDeleteBankAccount } from "../../../../../shared/api/admin/admin.hooks";
+import { useDeleteBankAccount } from "../../../../../shared/api/admin/bank/bank.hooks";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
-import { 
-  EditIcon, 
-  DeleteIcon, 
-  VisibilityIcon, 
-  VisibilityOffIcon 
+import {
+  EditIcon,
+  DeleteIcon,
+  VisibilityIcon,
+  VisibilityOffIcon,
 } from "../../../../../shared/icons";
 
 interface BanksTableProps {

@@ -8,7 +8,7 @@ import {
   pageHeaderStyles,
   pageTitleStyles,
 } from "./UsersPage.styles";
-import { useGetUsers } from "../../../../shared/api/admin/admin.hooks";
+import { useGetUsers } from "../../../../shared/api/admin/user/user.hooks";
 import type { User } from "../../users/types/user.types";
 import { UserModal, UsersTable } from "../components";
 import { AddIcon } from "../../../../shared/icons";

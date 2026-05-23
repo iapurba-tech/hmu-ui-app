@@ -4,13 +4,17 @@ import BankModal from "./BankModal";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../../../../shared/theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as adminHooks from "../../../../../shared/api/admin/admin.hooks";
+import * as bankHooks from "../../../../../shared/api/admin/bank/bank.hooks";
+import * as unitHooks from "../../../../../shared/api/admin/unit/unit.hooks";
 
 // Mock the hooks
-vi.mock("../../../../../shared/api/admin/admin.hooks", () => ({
-  useGetUnits: vi.fn(),
+vi.mock("../../../../../shared/api/admin/bank/bank.hooks", () => ({
   useCreateBankAccount: vi.fn(),
   useUpdateBankAccount: vi.fn(),
+}));
+
+vi.mock("../../../../../shared/api/admin/unit/unit.hooks", () => ({
+  useGetUnits: vi.fn(),
 }));
 
 const queryClient = new QueryClient({
@@ -36,15 +40,15 @@ describe("BankModal", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (adminHooks.useGetUnits as any).mockReturnValue({
+    (unitHooks.useGetUnits as any).mockReturnValue({
       data: [],
       isLoading: false,
     });
-    (adminHooks.useCreateBankAccount as any).mockReturnValue({
+    (bankHooks.useCreateBankAccount as any).mockReturnValue({
       mutate: mockCreateMutate,
       isPending: false,
     });
-    (adminHooks.useUpdateBankAccount as any).mockReturnValue({
+    (bankHooks.useUpdateBankAccount as any).mockReturnValue({
       mutate: mockUpdateMutate,
       isPending: false,
     });
@@ -70,7 +74,7 @@ describe("BankModal", () => {
     );
 
     // Mock unit selection
-    (adminHooks.useGetUnits as any).mockReturnValue({
+    (unitHooks.useGetUnits as any).mockReturnValue({
       data: [{ id: "u1", name: "Unit 1", code: "U1" }],
       isLoading: false,
     });

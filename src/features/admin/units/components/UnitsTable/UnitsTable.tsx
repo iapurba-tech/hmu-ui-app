@@ -18,7 +18,7 @@ import {
   statusDotStyles,
   actionButtonStyles,
 } from "./UnitsTable.styles";
-import { useToggleUnitStatus } from "../../../../../shared/api/admin/admin.hooks";
+import { useToggleUnitStatus } from "../../../../../shared/api/admin/unit/unit.hooks";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
 import { EditIcon } from "../../../../../shared/icons";
 import { useTheme } from "@mui/material/styles";

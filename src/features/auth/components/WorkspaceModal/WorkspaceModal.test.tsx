@@ -5,12 +5,12 @@ import { ThemeProvider, createTheme } from "@mui/material";
 import { UserRole } from "../../constants/roles";
 import { WorkspaceType } from "../../constants/workspace";
 import { useAuthStore } from "../../../../shared/store/useAuthStore";
-import { useGetUnits } from "../../../../shared/api/admin/admin.hooks";
+import { useGetUnits } from "../../../../shared/api/admin/unit/unit.hooks";
 import { MemoryRouter } from "react-router-dom";
 
 // Mock the dependencies
 vi.mock("../../../../shared/store/useAuthStore");
-vi.mock("../../../../shared/api/admin/admin.hooks");
+vi.mock("../../../../shared/api/admin/unit/unit.hooks");
 
 const theme = createTheme();
 

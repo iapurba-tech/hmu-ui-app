@@ -24,7 +24,7 @@ import {
   submitButtonStyles,
 } from "./BankForm.styles";
 import { bankSchema, type BankFormData } from "../../types/bank.schema";
-import { useGetUnits } from "../../../../../shared/api/admin/admin.hooks";
+import { useGetUnits } from "../../../../../shared/api/admin/unit/unit.hooks";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
 import { palette } from "../../../../../shared/theme";
 import { 

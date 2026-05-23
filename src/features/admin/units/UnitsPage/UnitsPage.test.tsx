@@ -5,10 +5,10 @@ import UnitsPage from "./UnitsPage";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../../../shared/theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as adminHooks from "../../../../shared/api/admin/admin.hooks";
+import * as adminHooks from "../../../../shared/api/admin/unit/unit.hooks";
 
 // Mock the hook
-vi.mock("../../../../shared/api/admin/admin.hooks", () => ({
+vi.mock("../../../../shared/api/admin/unit/unit.hooks", () => ({
   useGetUnits: vi.fn(),
   useCreateUnit: vi.fn(() => ({
     mutate: vi.fn(),
