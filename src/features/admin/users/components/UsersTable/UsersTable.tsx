@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  IconButton,
-  Tooltip,
-  alpha,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
+import { Box, Typography, IconButton, Tooltip, alpha } from "@mui/material";
 
 import {
   HmuDataTable,
@@ -31,10 +24,10 @@ import {
 import {
   useToggleUserStatus,
   useDeleteUserPermanent,
-} from "../../../../../shared/api/admin/admin.hooks";
+} from "../../../../../shared/api/admin/user/user.hooks";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
 import { useTheme } from "@mui/material/styles";
-import { DeleteIcon } from "../../../../../shared/icons";
+import { EditIcon, DeleteIcon } from "../../../../../shared/icons";
 
 interface UsersTableProps {
   users: User[];
@@ -271,7 +264,7 @@ const UsersTable: React.FC<UsersTableProps> = ({
                   handleOpenDelete(row);
                 }}
               >
-                <DeleteIcon/>
+                <DeleteIcon fontSize="small" />
               </IconButton>
             </Tooltip>
           </Box>

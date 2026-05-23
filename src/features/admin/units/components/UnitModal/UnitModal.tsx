@@ -15,7 +15,7 @@ import {
 import {
   useCreateUnit,
   useUpdateUnit,
-} from "../../../../../shared/api/admin/admin.hooks";
+} from "../../../../../shared/api/admin/unit/unit.hooks";
 import { CloseIcon } from "../../../../../shared/icons";
 import type { Unit } from "../../types/unit.types";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";

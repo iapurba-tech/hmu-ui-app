@@ -17,7 +17,6 @@ import {
   useWatch,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {
   HmuButton,
   HmuTextField,
@@ -34,9 +33,10 @@ import {
   submitButtonStyles,
 } from "./UserForm.styles";
 import { UserRole } from "../../../../auth/constants/roles";
-import { useGetUnits } from "../../../../../shared/api/admin/admin.hooks";
+import { useGetUnits } from "../../../../../shared/api/admin/unit/unit.hooks";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
 import { userSchema, type UserFormData } from "../../types/user.schema";
+import { CopyIcon as ContentCopyIcon } from "../../../../../shared/icons";
 
 export type { UserFormData };
 

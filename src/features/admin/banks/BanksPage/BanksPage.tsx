@@ -1,87 +1,83 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Box, Typography } from "@mui/material";
-
 import { HmuButton } from "../../../../shared/components";
 import { palette } from "../../../../shared/theme";
 import {
   pageContainerStyles,
   pageHeaderStyles,
   pageTitleStyles,
-} from "./UnitsPage.styles";
-import { useGetUnits } from "../../../../shared/api/admin/unit/unit.hooks";
-import type { Unit } from "../types/unit.types";
-import { UnitModal, UnitsTable } from "../components";
+} from "./BanksPage.styles";
+import { useGetBankAccounts } from "../../../../shared/api/admin/bank/bank.hooks";
+import type { Bank } from "../types/bank.types";
+import { BankModal, BanksTable } from "../components";
 import { AddIcon } from "../../../../shared/icons";
 
-const UnitsPage: React.FC = () => {
-  // API Data
-  const { data: units = [], isLoading } = useGetUnits();
+const BanksPage: React.FC = () => {
 
-  // Modal State
+  const { data: banks = [], isLoading } = useGetBankAccounts();
+
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     mode: "create" | "edit" | "view";
-    selectedUnit: Unit | null;
+    selectedBank: Bank | null;
   }>({
     isOpen: false,
     mode: "create",
-    selectedUnit: null,
+    selectedBank: null,
   });
 
-  const handleOpenModal = (
+  const handleOpenModal = useCallback((
     mode: "create" | "edit" | "view",
-    unit: Unit | null = null,
+    bank: Bank | null = null,
   ) => {
     setModalState({
       isOpen: true,
       mode,
-      selectedUnit: unit,
+      selectedBank: bank,
     });
-  };
+  }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setModalState((prev) => ({ ...prev, isOpen: false }));
-  };
+  }, []);
 
   return (
     <Box sx={pageContainerStyles}>
-      {/* Header */}
       <Box sx={pageHeaderStyles}>
         <Box>
           <Typography variant="h5" sx={pageTitleStyles}>
-            Unit Management
+            Bank Management
           </Typography>
           <Typography
             variant="body2"
             sx={{ color: palette.text.secondary, mt: 0.5 }}
           >
-            Manage and monitor all organizational units and chilling plants.
+            Manage bank accounts associated with various units and plants.
           </Typography>
         </Box>
         <HmuButton
-          label="Add New Unit"
+          label="Add Bank Account"
           startIcon={<AddIcon />}
           onClick={() => handleOpenModal("create")}
           sx={{ px: 2, py: 1, borderRadius: "8px", height: "fit-content" }}
         />
       </Box>
 
-      {/* Table Section */}
-      <UnitsTable
-        units={units}
+      <BanksTable
+        banks={banks}
         isLoading={isLoading}
-        onView={(unit) => handleOpenModal("view", unit)}
-        onEdit={(unit) => handleOpenModal("edit", unit)}
+        onView={(bank) => handleOpenModal("view", bank)}
+        onEdit={(bank) => handleOpenModal("edit", bank)}
       />
 
-      <UnitModal
+      <BankModal
         open={modalState.isOpen}
         onClose={handleCloseModal}
         mode={modalState.mode}
-        unit={modalState.selectedUnit}
+        bank={modalState.selectedBank}
       />
     </Box>
   );
 };
 
-export default UnitsPage;
+export default BanksPage;

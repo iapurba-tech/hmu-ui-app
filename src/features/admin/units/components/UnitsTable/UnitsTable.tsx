@@ -1,18 +1,12 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
+import { Box, Typography, IconButton, Tooltip } from "@mui/material";
 
-import { 
-  HmuDataTable, 
-  type Column, 
-  type FilterConfig, 
+import {
+  HmuDataTable,
+  type Column,
+  type FilterConfig,
   HmuConfirmModal,
-  HmuSwitch 
+  HmuSwitch,
 } from "../../../../../shared/components";
 import type { Unit } from "../../types/unit.types";
 import {
@@ -24,8 +18,9 @@ import {
   statusDotStyles,
   actionButtonStyles,
 } from "./UnitsTable.styles";
-import { useToggleUnitStatus } from "../../../../../shared/api/admin/admin.hooks";
+import { useToggleUnitStatus } from "../../../../../shared/api/admin/unit/unit.hooks";
 import { useNotificationStore } from "../../../../../shared/store/useNotificationStore";
+import { EditIcon } from "../../../../../shared/icons";
 import { useTheme } from "@mui/material/styles";
 
 interface UnitsTableProps {
@@ -44,7 +39,7 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
   const { mutate: toggleStatus, isPending: isToggling } = useToggleUnitStatus();
   const { showNotification } = useNotificationStore();
   const theme = useTheme();
-  
+
   // Confirmation Modal State
   const [confirmState, setConfirmState] = useState<{
     isOpen: boolean;
@@ -72,27 +67,27 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
         onSuccess: () => {
           showNotification(
             `Unit ${unit.active ? "deactivated" : "activated"} successfully`,
-            "success"
+            "success",
           );
           handleCloseConfirm();
         },
         onError: (error: any) => {
           showNotification(
             error?.response?.data?.message || "Failed to update unit status",
-            "error"
+            "error",
           );
           handleCloseConfirm();
         },
-      }
+      },
     );
   };
 
   const getStatusConfig = (isActive: boolean) => {
     const p = isActive ? theme.palette.success : theme.palette.error;
-    return { 
-      bg: p.bg, 
-      color: p.text, 
-      dot: p.main 
+    return {
+      bg: p.bg,
+      color: p.text,
+      dot: p.main,
     };
   };
 
@@ -107,11 +102,7 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
       id: "name",
       label: "Name",
       sortable: true,
-      render: (row) => (
-        <Typography sx={unitNameStyles}>
-          {row.name}
-        </Typography>
-      ),
+      render: (row) => <Typography sx={unitNameStyles}>{row.name}</Typography>,
     },
     {
       id: "address",
@@ -138,7 +129,9 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
       render: (row) => {
         const config = getStatusConfig(row.active);
         return (
-          <Box sx={statusBadgeStyles(config.bg as string, config.color as string)}>
+          <Box
+            sx={statusBadgeStyles(config.bg as string, config.color as string)}
+          >
             <Box sx={statusDotStyles(config.dot)} />
             {row?.active ? "Active" : "Inactive"}
           </Box>
@@ -150,7 +143,14 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
       label: "Actions",
       align: "right",
       render: (row) => (
-        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1.5, alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: 1.5,
+            alignItems: "center",
+          }}
+        >
           <Tooltip title={row.active ? "Deactivate Unit" : "Activate Unit"}>
             <Box onClick={(e) => e.stopPropagation()}>
               <HmuSwitch
@@ -161,7 +161,7 @@ const UnitsTable: React.FC<UnitsTableProps> = ({
               />
             </Box>
           </Tooltip>
-          
+
           <Box sx={{ display: "flex", gap: 0.5 }}>
             <Tooltip title="Edit Unit">
               <IconButton

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 
 import { HmuButton } from "../../../../shared/components";
 import { palette } from "../../../../shared/theme";
@@ -9,9 +8,10 @@ import {
   pageHeaderStyles,
   pageTitleStyles,
 } from "./UsersPage.styles";
-import { useGetUsers } from "../../../../shared/api/admin/admin.hooks";
-import type { User } from "../types/user.types";
+import { useGetUsers } from "../../../../shared/api/admin/user/user.hooks";
+import type { User } from "../../users/types/user.types";
 import { UserModal, UsersTable } from "../components";
+import { AddIcon } from "../../../../shared/icons";
 
 const UsersPage: React.FC = () => {
   // API Data

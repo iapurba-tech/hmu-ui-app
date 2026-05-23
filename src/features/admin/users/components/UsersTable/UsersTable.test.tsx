@@ -5,11 +5,11 @@ import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../../../../shared/theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { UserRole } from "../../../../auth/constants/roles";
-import * as adminHooks from "../../../../../shared/api/admin/admin.hooks";
+import * as adminHooks from "../../../../../shared/api/admin/user/user.hooks";
 import React from "react";
 
 // Mock the hooks
-vi.mock("../../../../../shared/api/admin/admin.hooks", () => ({
+vi.mock("../../../../../shared/api/admin/user/user.hooks", () => ({
   useToggleUserStatus: vi.fn(() => ({
     mutate: vi.fn((options) => {
       if (options?.onSuccess) options.onSuccess();
@@ -112,7 +112,7 @@ describe("UsersTable", () => {
       />
     );
 
-    const editButtons = screen.getAllByTestId("EditIcon");
+    const editButtons = screen.getAllByTestId(/Edit.*Icon/);
     fireEvent.click(editButtons[0]);
     expect(mockOnEdit).toHaveBeenCalledWith(mockUsers[0]);
   });

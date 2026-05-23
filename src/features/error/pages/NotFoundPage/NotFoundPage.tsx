@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { SearchOffRounded as SearchOff } from "@mui/icons-material";
+import { SearchOffIcon as SearchOff } from "../../../../shared/icons";
 import { ErrorContent } from "../../components";
 
 const NotFoundPage: React.FC = () => {

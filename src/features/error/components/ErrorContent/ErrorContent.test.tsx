@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../../../shared/theme";
 import ErrorContent from "./ErrorContent";
-import { LockRounded as Lock } from "@mui/icons-material";
+import { LockIcon as Lock } from "../../../../shared/icons";
 
 describe("ErrorContent Component", () => {
   const defaultProps = {

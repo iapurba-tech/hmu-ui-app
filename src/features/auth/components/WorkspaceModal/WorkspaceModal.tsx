@@ -48,7 +48,7 @@ import {
   unitStatusBadgeStyles,
   statusDotStyles,
 } from "./WorkspaceModal.styles";
-import { useGetUnits } from "../../../../shared/api/admin/admin.hooks";
+import { useGetUnits } from "../../../../shared/api/admin/unit/unit.hooks";
 import { WorkspaceType } from "../../constants/workspace";
 import { HmuButton } from "../../../../shared/components";
 import { theme } from "../../../../shared/theme";

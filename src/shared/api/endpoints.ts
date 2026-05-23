@@ -17,6 +17,13 @@ export const API_ENDPOINTS = {
             ACTIVATE: (id: string) => `/api/v1/users/${id}/activate`,
             DEACTIVATE: (id: string) => `/api/v1/users/${id}/deactivate`,
             PERMANENT: (id: string) => `/api/v1/users/${id}/permanent`,
-        }
+        },
+        BANK_ACCOUNT: {
+            LIST: "/api/v1/admin/bank-accounts",
+            CREATE: "/api/v1/admin/bank-accounts",
+            UPDATE: (id: string) => `/api/v1/admin/bank-accounts/${id}`,
+            DETAIL: (id: string) => `/api/v1/admin/bank-accounts/${id}`,
+            DELETE: (id: string) => `/api/v1/admin/bank-accounts/${id}`,
+        },
     }
 }

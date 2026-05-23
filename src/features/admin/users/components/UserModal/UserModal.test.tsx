@@ -4,11 +4,11 @@ import UserModal from "./UserModal";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../../../../shared/theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as adminHooks from "../../../../../shared/api/admin/admin.hooks";
+import * as adminHooks from "../../../../../shared/api/admin/user/user.hooks";
 import React from "react";
 
 // Mock the hooks
-vi.mock("../../../../../shared/api/admin/admin.hooks", () => ({
+vi.mock("../../../../../shared/api/admin/user/user.hooks", () => ({
   useCreateUser: vi.fn(() => ({
     mutate: vi.fn(),
     isPending: false,

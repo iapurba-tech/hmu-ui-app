@@ -19,8 +19,8 @@ export {
   AdminPanelSettingsOutlined as AdminPanelIcon,
   PersonOutlined as UserIcon,
   LockOutlined as LockIcon,
-  VisibilityOutlined as VisibilityIcon,
-  VisibilityOffOutlined as VisibilityOffIcon,
+  VisibilityOutlined as VisibilityOutlinedIcon,
+  VisibilityOffOutlined as VisibilityOffOutlinedIcon,
 
   // Rounded Icons
   VerifiedUserRounded as ShieldIcon,
@@ -37,6 +37,15 @@ export {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
   DeleteForeverRounded as DeleteIcon,
+
+  // Action & Table Icons (Rounded)
+  AddRounded as AddIcon,
+  EditRounded as EditIcon,
+  ContentCopyRounded as CopyIcon,
+  VisibilityRounded as VisibilityIcon,
+  VisibilityOffRounded as VisibilityOffIcon,
+  NavigateNextRounded as NavigateNextIcon,
+  SearchOffRounded as SearchOffIcon,
 } from "@mui/icons-material";
 
 export * from "./MilkCanIcon";

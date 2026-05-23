@@ -18,8 +18,7 @@ import {
   InputAdornment,
   FormControl,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import { ChevronLeftIcon, ChevronRightIcon } from "../../icons";
+import { SearchIcon, ChevronLeftIcon, ChevronRightIcon } from "../../icons";
 import {
   dataTableContainerStyles,
   dataTableStyles,
@@ -111,8 +110,12 @@ const HmuDataTable = <T extends object>({
   const [internalRowsPerPage, setInternalRowsPerPage] = useState(10);
 
   // Internal state for sorting (initialized from props if available)
-  const [internalOrderBy, setInternalOrderBy] = useState<string>(sorting?.orderBy || "");
-  const [internalOrder, setInternalOrder] = useState<"asc" | "desc">(sorting?.order || "asc");
+  const [internalOrderBy, setInternalOrderBy] = useState<string>(
+    sorting?.orderBy || "",
+  );
+  const [internalOrder, setInternalOrder] = useState<"asc" | "desc">(
+    sorting?.order || "asc",
+  );
 
   // Internal state for search and filters
   const [searchTerm, setSearchTerm] = useState("");
@@ -171,12 +174,18 @@ const HmuDataTable = <T extends object>({
       filters.forEach((filter) => {
         const selectedValue = filterValues[filter.id];
         // Skip if 'all' or default first option is selected (assuming first is 'All')
-        if (selectedValue === "all" || selectedValue === "" || selectedValue === "all-statuses") {
+        if (
+          selectedValue === "all" ||
+          selectedValue === "" ||
+          selectedValue === "all-statuses"
+        ) {
           return;
         }
 
         if (filter.onFilter) {
-          result = result.filter((item) => filter.onFilter!(item, selectedValue));
+          result = result.filter((item) =>
+            filter.onFilter!(item, selectedValue),
+          );
         } else if (filter.field) {
           const field = filter.field;
           result = result.filter((item) => item[field] === selectedValue);
@@ -216,7 +225,9 @@ const HmuDataTable = <T extends object>({
   // Derive active values (favor controlled props if provided)
   const isControlledPage =
     pagination?.page !== undefined && pagination?.onPageChange !== undefined;
-  const page = isControlledPage ? (pagination?.page ?? internalPage) : internalPage;
+  const page = isControlledPage
+    ? (pagination?.page ?? internalPage)
+    : internalPage;
   const rowsPerPage =
     pagination?.rowsPerPage !== undefined
       ? pagination.rowsPerPage
