@@ -15,7 +15,7 @@ export interface Bank {
   accountHolderName: string;
   ifsc: string;
   branchName: string;
-  micr: string;
+  micr?: string;
   contactNumber: string;
   contactEmail: string;
 }
@@ -28,7 +28,7 @@ export interface CreateBankRequest {
   accountHolderName: string;
   ifsc: string;
   branchName: string;
-  micr: string;
+  micr?: string;
   contactNumber: string;
   contactEmail: string;
 }
