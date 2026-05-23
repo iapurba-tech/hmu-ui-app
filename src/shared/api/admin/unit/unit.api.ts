@@ -1,4 +1,4 @@
-import type { Unit } from "../../../features/admin/units/types/unit.types";
+import type { Unit } from "../../../../features/admin/units/types/unit.types";
 import { apiClient } from "../../apiClient";
 import { API_ENDPOINTS } from "../../endpoints";
 

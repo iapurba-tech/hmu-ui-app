@@ -2,7 +2,7 @@ import type {
   Bank,
   CreateBankRequest,
   UpdateBankRequest,
-} from "../../../features/admin/banks/types/bank.types";
+} from "../../../../features/admin/banks/types/bank.types";
 import { apiClient } from "../../apiClient";
 import { API_ENDPOINTS } from "../../endpoints";
 

@@ -4,7 +4,7 @@ import {
   useQueryClient,
   type UseQueryOptions,
 } from "@tanstack/react-query";
-import type { Bank } from "../../../features/admin/banks/types/bank.types";
+import type { Bank } from "../../../../features/admin/banks/types/bank.types";
 import { bankApi } from "./bank.api";
 
 export const bankKeys = {

@@ -4,7 +4,7 @@ import {
   useQueryClient,
   type UseQueryOptions,
 } from "@tanstack/react-query";
-import type { Unit } from "../../../features/admin/units/types/unit.types";
+import type { Unit } from "../../../../features/admin/units/types/unit.types";
 import { unitApi } from "./unit.api";
 
 export const unitKeys = {

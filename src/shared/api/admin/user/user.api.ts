@@ -1,7 +1,7 @@
 import type {
   User,
   CreateUserRequest,
-} from "../../../features/admin/users/types/user.types";
+} from "../../../../features/admin/users/types/user.types";
 import { apiClient } from "../../apiClient";
 import { API_ENDPOINTS } from "../../endpoints";
 

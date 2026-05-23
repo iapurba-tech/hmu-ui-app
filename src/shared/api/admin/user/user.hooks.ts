@@ -4,7 +4,7 @@ import {
   useQueryClient,
   type UseQueryOptions,
 } from "@tanstack/react-query";
-import type { User } from "../../../features/admin/users/types/user.types";
+import type { User } from "../../../../features/admin/users/types/user.types";
 import { userApi } from "./user.api";
 
 export const userKeys = {
