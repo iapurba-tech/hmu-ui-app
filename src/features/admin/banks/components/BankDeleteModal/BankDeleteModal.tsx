@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Dialog, Box, Typography, alpha } from "@mui/material";
+import React, { useState } from "react";
+import { Dialog, Box, Typography } from "@mui/material";
 import { HmuButton, HmuTextField } from "../../../../../shared/components";
 import { type Bank } from "../../types/bank.types";
 import * as styles from "./BankDeleteModal.styles";
@@ -20,13 +20,15 @@ const BankDeleteModal: React.FC<BankDeleteModalProps> = ({
   loading = false,
 }) => {
   const [confirmText, setConfirmText] = useState("");
+  const [prevOpen, setPrevOpen] = useState(open);
 
-  // Reset confirm text when modal opens
-  useEffect(() => {
-    if (open) {
-      setConfirmText("");
-    }
-  }, [open]);
+
+  if (open && !prevOpen) {
+    setPrevOpen(true);
+    setConfirmText("");
+  } else if (!open && prevOpen) {
+    setPrevOpen(false);
+  }
 
   const isDeleteConfirmed = confirmText === bank?.code;
 
