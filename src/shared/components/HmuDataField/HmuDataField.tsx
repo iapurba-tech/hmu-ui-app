@@ -36,17 +36,18 @@ const HmuDataField: React.FC<HmuDataFieldProps> = ({ label, value, sx }) => {
           border: `1px solid ${alpha(palette.primary.main, 0.06)}`,
         }}
       >
-        <Typography
+        <Box
           sx={{
             fontSize: "0.875rem",
             color: isEmpty ? palette.text.secondary : palette.text.primary,
             fontWeight: 600,
             fontStyle: isEmpty ? "italic" : "normal",
             opacity: isEmpty ? 0.6 : 1,
+            width: "100%",
           }}
         >
           {isEmpty ? "Not provided" : value}
-        </Typography>
+        </Box>
       </Box>
     </Box>
   );
