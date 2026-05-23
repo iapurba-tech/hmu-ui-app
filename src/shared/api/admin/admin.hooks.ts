@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 import type { Unit } from "../../../features/admin/units/types/unit.types";
 import type { User } from "../../../features/admin/users/types/user.types";
+import type { Bank } from "../../../features/admin/banks/types/bank.types";
 import { adminApi } from "./admin.api";
 
 // 1. Query Keys (For precise cache invalidation later)
@@ -13,6 +14,7 @@ export const adminKeys = {
   all: ["admin"] as const,
   units: () => [...adminKeys.all, "units"] as const,
   users: () => [...adminKeys.all, "users"] as const,
+  bankAccounts: () => [...adminKeys.all, "bankAccounts"] as const,
 };
 
 // 2. The Custom Hooks
@@ -124,6 +126,62 @@ export const useDeleteUserPermanent = () => {
     mutationFn: adminApi.deleteUserPermanent,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adminKeys.users() });
+    },
+  });
+};
+
+// Bank Account Hooks
+export const useGetBankAccounts = (
+  options?: Omit<
+    UseQueryOptions<Bank[], Error, Bank[], readonly string[]>,
+    "queryKey" | "queryFn"
+  >,
+) => {
+  return useQuery({
+    queryKey: adminKeys.bankAccounts(),
+    queryFn: adminApi.getAllBankAccounts,
+    staleTime: 1000 * 60 * 30,
+    ...options,
+  });
+};
+
+export const useGetBankAccount = (id: string) => {
+  return useQuery({
+    queryKey: [...adminKeys.bankAccounts(), id],
+    queryFn: () => adminApi.getBankAccount(id),
+    enabled: !!id,
+  });
+};
+
+export const useCreateBankAccount = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: adminApi.createBankAccount,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: adminKeys.bankAccounts() });
+    },
+  });
+};
+
+export const useUpdateBankAccount = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: adminApi.updateBankAccount,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: adminKeys.bankAccounts() });
+    },
+  });
+};
+
+export const useDeleteBankAccount = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: adminApi.deleteBankAccount,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: adminKeys.bankAccounts() });
     },
   });
 };
