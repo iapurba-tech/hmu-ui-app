@@ -3,6 +3,7 @@ import LoginPage from "../../features/auth/pages/LoginPage/LoginPage";
 import { ForbiddenPage, NotFoundPage } from "../../features/error/pages";
 import { UnitsPage } from "../../features/admin/units";
 import { UsersPage } from "../../features/admin/users";
+import { BanksPage } from "../../features/admin/banks";
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import {
@@ -102,7 +103,7 @@ export const routes: RouteConfig[] = [
           },
           {
             path: "bank-accounts",
-            element: <div>Org Bank Accounts</div>,
+            element: <BanksPage />,
             meta: { title: "Bank Accounts" },
           },
           {
