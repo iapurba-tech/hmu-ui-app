@@ -13,7 +13,7 @@ import IconButton from "@mui/material/IconButton";
 interface HmuConfirmModalProps {
   open: boolean;
   title: string;
-  message: string;
+  message: React.ReactNode;
   onConfirm: () => void;
   onCancel: () => void;
   confirmLabel?: string;
