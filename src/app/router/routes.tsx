@@ -4,6 +4,7 @@ import { ForbiddenPage, NotFoundPage } from "../../features/error/pages";
 import { UnitsPage } from "../../features/admin/units";
 import { UsersPage } from "../../features/admin/users";
 import { BanksPage } from "../../features/admin/banks";
+import { ProductsPage } from "../../features/admin/products";
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import {
@@ -108,7 +109,7 @@ export const routes: RouteConfig[] = [
           },
           {
             path: "products",
-            element: <div>Global Product Catalog</div>,
+            element: <ProductsPage />,
             meta: { title: "Products" },
           },
           {
