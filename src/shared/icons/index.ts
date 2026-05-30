@@ -37,6 +37,8 @@ export {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
   DeleteForeverRounded as DeleteIcon,
+  SaveRounded as SaveIcon,
+  CancelRounded as CancelIcon,
 
   // Action & Table Icons (Rounded)
   AddRounded as AddIcon,
@@ -46,6 +48,10 @@ export {
   VisibilityOffRounded as VisibilityOffIcon,
   NavigateNextRounded as NavigateNextIcon,
   SearchOffRounded as SearchOffIcon,
+  HistoryRounded as HistoryIcon,
+  CalendarTodayRounded as CalendarTodayIcon,
+  ArrowUpward as ArrowUpIcon,
+  ArrowDownward as ArrowDownIcon,
 } from "@mui/icons-material";
 
 export * from "./MilkCanIcon";
