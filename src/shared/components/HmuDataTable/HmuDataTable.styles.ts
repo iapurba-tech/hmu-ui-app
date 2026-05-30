@@ -4,23 +4,31 @@ import { palette } from "../../theme";
 export const dataTableContainerStyles = (
   showPagination: boolean,
   hasFilters: boolean,
+  omitTopRadius: boolean = false,
 ): SxProps<Theme> => ({
   width: "100%",
   overflowX: "auto",
   backgroundColor: palette.background.paper,
-  borderRadius: hasFilters ? 0 : "12px 12px 0 0",
+  borderRadius: hasFilters ? 0 : omitTopRadius ? "0 0 0 0" : "12px 12px 0 0",
   border: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-  borderTop: hasFilters
-    ? "none"
-    : (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+  borderTop:
+    hasFilters || omitTopRadius
+      ? "none"
+      : (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
   ...(!showPagination && {
-    borderRadius: hasFilters ? "0 0 12px 12px" : "12px",
+    borderRadius: hasFilters
+      ? "0 0 12px 12px"
+      : omitTopRadius
+        ? "0 0 12px 12px"
+        : "12px",
     borderBottom: (theme) =>
       `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
   }),
 });
 
-export const filterBarStyles: SxProps<Theme> = {
+export const filterBarStyles = (
+  omitTopRadius: boolean = false,
+): SxProps<Theme> => ({
   p: 2,
   display: "flex",
   flexDirection: { xs: "column", sm: "row" },
@@ -28,8 +36,11 @@ export const filterBarStyles: SxProps<Theme> = {
   alignItems: { xs: "stretch", sm: "center" },
   bgcolor: "white",
   border: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-  borderRadius: "12px 12px 0 0",
-};
+  borderRadius: omitTopRadius ? 0 : "12px 12px 0 0",
+  ...(omitTopRadius && {
+    borderTop: "none",
+  }),
+});
 
 export const searchFieldStyles: SxProps<Theme> = {
   flex: 1,

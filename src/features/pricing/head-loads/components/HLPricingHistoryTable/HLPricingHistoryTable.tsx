@@ -67,6 +67,7 @@ const HLPricingHisotryTable: React.FC<HLPricingHisotryTableProps> = ({
         loading={isLoading}
         keyExtractor={(row) => row.id}
         emptyMessage="No price ranges found for this category."
+        omitTopRadius={true}
       />
     </Box>
   );

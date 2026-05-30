@@ -96,6 +96,7 @@ export interface HmuDataTableProps<T> {
   onRowClick?: (row: T) => void;
   containerSx?: SxProps<Theme>;
   isPinned?: (row: T) => "top" | "bottom" | null;
+  omitTopRadius?: boolean;
 }
 
 const HmuDataTable = <T extends object>({
@@ -111,6 +112,7 @@ const HmuDataTable = <T extends object>({
   onRowClick,
   containerSx,
   isPinned,
+  omitTopRadius = false,
 }: HmuDataTableProps<T>) => {
   // Internal state for uncontrolled mode
   const [internalPage, setInternalPage] = useState(0);
@@ -288,7 +290,7 @@ const HmuDataTable = <T extends object>({
   return (
     <Box sx={{ width: "100%", position: "relative" }}>
       {hasFilters && (
-        <Box sx={filterBarStyles}>
+        <Box sx={filterBarStyles(omitTopRadius)}>
           {search?.enabled && (
             <TextField
               placeholder={search.placeholder || "Search..."}
@@ -338,10 +340,20 @@ const HmuDataTable = <T extends object>({
         component={Paper}
         sx={[
           ...(Array.isArray(
-            dataTableContainerStyles(showPagination, hasFilters),
+            dataTableContainerStyles(showPagination, hasFilters, omitTopRadius),
           )
-            ? (dataTableContainerStyles(showPagination, hasFilters) as any)
-            : [dataTableContainerStyles(showPagination, hasFilters)]),
+            ? (dataTableContainerStyles(
+                showPagination,
+                hasFilters,
+                omitTopRadius,
+              ) as any)
+            : [
+                dataTableContainerStyles(
+                  showPagination,
+                  hasFilters,
+                  omitTopRadius,
+                ),
+              ]),
           ...(Array.isArray(containerSx)
             ? containerSx
             : containerSx

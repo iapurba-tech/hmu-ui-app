@@ -69,6 +69,7 @@ const PricingHistoryTable: React.FC<PricingHistoryTableProps> = ({
         loading={isLoading}
         keyExtractor={(row) => row.id}
         emptyMessage="No previous pricing history found for this category."
+        omitTopRadius={true}
       />
     </Box>
   );

@@ -459,9 +459,9 @@ const HLCategoryTable: React.FC<HLCategoryTableProps> = ({
         ]}
         containerSx={{
           border: "none",
-          borderRadius: 0,
         }}
         isPinned={(row) => (row.id === 0 ? "top" : null)}
+        omitTopRadius={true}
       />
 
       <HmuConfirmModal
