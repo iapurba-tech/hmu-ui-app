@@ -53,8 +53,8 @@ describe("HLPricingRulePage", () => {
     renderWithProviders(<HLPricingRulePage />);
 
     expect(screen.getByText("Category 1 (C1)")).toBeDefined();
-    // Use getAllByText as it appears in title and button
-    expect(screen.getAllByText("Add Price Range")).toHaveLength(2);
+    expect(screen.getByText("Update HLC Pricing")).toBeDefined();
+    expect(screen.getByRole("button", { name: "Update" })).toBeDefined();
     expect(screen.getByText("Pricing History")).toBeDefined();
   });
 
@@ -72,8 +72,8 @@ describe("HLPricingRulePage", () => {
     fireEvent.change(screen.getByLabelText(/Qty From \(Kg\)/i), { target: { value: "5.5" } });
     fireEvent.change(screen.getByLabelText(/Rate \(₹\)/i), { target: { value: "12.5" } });
     
-    // Click Add
-    fireEvent.click(screen.getByRole("button", { name: /Add Price Range/i }));
+    // Click Update
+    fireEvent.click(screen.getByRole("button", { name: /Update/i }));
 
     // Check modal
     expect(screen.getByText(/Confirm Price Range/i)).toBeDefined();

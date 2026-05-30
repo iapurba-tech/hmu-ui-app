@@ -81,7 +81,7 @@ const HeadLoadActivePricesTable: React.FC<HeadLoadActivePricesTableProps> = ({
     <Box sx={tableCardStyles}>
       <Box sx={sectionHeaderStyles}>
         <Typography variant="subtitle2" sx={sectionTitleStyles}>
-          Active Price Ranges
+          Active HLC Pricing
         </Typography>
       </Box>
 

@@ -48,12 +48,12 @@ export const adminMenu: MenuSection[] = [
     title: "Catalog & Pricing",
     items: [
       { label: "Pricing", icon: <PricingIcon />, path: "/admin/pricing" },
-      { label: "Products", icon: <ProductIcon />, path: "/admin/products" },
       {
         label: "Head Load",
         icon: <CategoryIcon />,
         path: "/admin/head-load-categories",
       },
+      { label: "Products", icon: <ProductIcon />, path: "/admin/products" },
     ],
   },
 ];
@@ -71,7 +71,7 @@ export const managementMenu: MenuSection[] = [
     items: [
       {
         label: "Milk Collections",
-        icon: <MilkCanIcon/>,
+        icon: <MilkCanIcon />,
         path: "/unit/procurement/milk-collections",
       },
       {

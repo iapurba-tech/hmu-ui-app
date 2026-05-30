@@ -56,7 +56,7 @@ const HLPricingForm: React.FC<HLPricingFormProps> = ({
 
       <Box sx={formContentStyles}>
         <Box sx={priceRangeContainerStyles}>
-          <Typography sx={sectionLabelStyles}>Add Price Range</Typography>
+          <Typography sx={sectionLabelStyles}>Update HLC Pricing</Typography>
           <Grid container spacing={2}>
             <Grid size={12}>
               <HmuTextField
@@ -112,7 +112,7 @@ const HLPricingForm: React.FC<HLPricingFormProps> = ({
                 disabled={loading || !category}
                 sx={{ mt: 1, borderRadius: "10px", py: 1 }}
               >
-                Add Price Range
+                Update
               </Button>
             </Grid>
           </Grid>

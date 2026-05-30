@@ -89,6 +89,7 @@ describe("HeadLoadActivePricesTable", () => {
     // Check category headers
     expect(screen.getByText("Category 1 (HL-CAT1)")).toBeDefined();
     expect(screen.getByText("Category 2 (HL-CAT2)")).toBeDefined();
+    expect(screen.getByText("Active HLC Pricing")).toBeDefined();
 
     // Check active prices using within to be specific about table rows
     const rows = screen.getAllByRole("row");

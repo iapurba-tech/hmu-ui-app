@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 
 // Mock the hooks
 vi.mock(
-  "../../../../../../shared/api/pricing/head-load-category/head-load-category.hooks",
+  "../../../../../shared/api/pricing/head-load/head-load-category.hooks",
   () => ({
     useDeleteHeadLoadCategory: vi.fn(() => ({
       mutate: vi.fn(),
@@ -24,7 +24,7 @@ vi.mock(
   }),
 );
 
-vi.mock("../../../../../../shared/store/useNotificationStore", () => ({
+vi.mock("../../../../../shared/store/useNotificationStore", () => ({
   useNotificationStore: vi.fn(() => ({ showNotification: vi.fn() })),
 }));
 

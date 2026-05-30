@@ -55,7 +55,7 @@ describe("HeadLoadSummaryPage", () => {
       ),
     ).toBeDefined();
     expect(screen.getByText("Head Load Categories")).toBeDefined();
-    expect(screen.getByText("Active Price Ranges")).toBeDefined();
+    expect(screen.getByText("Active HLC Pricing")).toBeDefined();
   });
 
   it("passes data to sub-components", () => {

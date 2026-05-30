@@ -25,8 +25,8 @@ describe("HLPricingForm", () => {
 
     expect(screen.getByText("Test Category")).toBeDefined();
     expect(screen.getByText("HL-CAT1")).toBeDefined();
-    // Use getAllByText because "Add Price Range" is both a title and a button label
-    expect(screen.getAllByText("Add Price Range")).toHaveLength(2);
+    expect(screen.getByText("Update HLC Pricing")).toBeDefined();
+    expect(screen.getByRole("button", { name: "Update" })).toBeDefined();
     expect(screen.getByLabelText(/Qty From \(Kg\)/i)).toBeDefined();
     expect(screen.getByLabelText(/Rate \(₹\)/i)).toBeDefined();
     // For date picker, we might need to find by text if label association is weak
@@ -61,7 +61,7 @@ describe("HLPricingForm", () => {
     const qtyInput = screen.getByLabelText(/Qty From \(Kg\)/i);
     const rateInput = screen.getByLabelText(/Rate \(₹\)/i);
     const submitButton = screen.getByRole("button", {
-      name: /Add Price Range/i,
+      name: /Update/i,
     });
 
     fireEvent.change(qtyInput, { target: { value: "10.5" } });
@@ -86,7 +86,7 @@ describe("HLPricingForm", () => {
     );
 
     const submitButton = screen.getByRole("button", {
-      name: /Add Price Range/i,
+      name: /Update/i,
     });
     expect(submitButton).toBeDisabled();
   });
@@ -97,7 +97,7 @@ describe("HLPricingForm", () => {
     );
 
     const submitButton = screen.getByRole("button", {
-      name: /Add Price Range/i,
+      name: /Update/i,
     });
     expect(submitButton).toBeDisabled();
     expect(screen.getByText("Select Category")).toBeDefined();
