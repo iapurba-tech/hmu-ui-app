@@ -12,6 +12,7 @@ export interface HmuDatePickerProps extends Omit<
   DatePickerProps,
   "renderInput"
 > {
+  id?: string;
   label?: string;
   helperText?: string;
   required?: boolean;
@@ -20,6 +21,7 @@ export interface HmuDatePickerProps extends Omit<
 }
 
 const HmuDatePicker: React.FC<HmuDatePickerProps> = ({
+  id,
   label,
   helperText,
   required,
