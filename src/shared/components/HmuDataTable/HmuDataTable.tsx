@@ -17,6 +17,8 @@ import {
   TextField,
   InputAdornment,
   FormControl,
+  type SxProps,
+  type Theme,
 } from "@mui/material";
 import { SearchIcon, ChevronLeftIcon, ChevronRightIcon } from "../../icons";
 import {
@@ -43,6 +45,7 @@ export interface Column<T> {
   align?: "left" | "right" | "center";
   sortable?: boolean;
   render?: (row: T) => React.ReactNode;
+  width?: string | number;
 }
 
 export interface PaginationConfig {
@@ -91,6 +94,9 @@ export interface HmuDataTableProps<T> {
   filters?: FilterConfig<T>[];
   emptyMessage?: string;
   onRowClick?: (row: T) => void;
+  containerSx?: SxProps<Theme>;
+  isPinned?: (row: T) => "top" | "bottom" | null;
+  omitTopRadius?: boolean;
 }
 
 const HmuDataTable = <T extends object>({
@@ -104,6 +110,9 @@ const HmuDataTable = <T extends object>({
   filters,
   emptyMessage = "No data available",
   onRowClick,
+  containerSx,
+  isPinned,
+  omitTopRadius = false,
 }: HmuDataTableProps<T>) => {
   // Internal state for uncontrolled mode
   const [internalPage, setInternalPage] = useState(0);
@@ -196,6 +205,17 @@ const HmuDataTable = <T extends object>({
     // 3. Sort
     if (orderBy) {
       result.sort((a, b) => {
+        // 0. Handle pinning
+        if (isPinned) {
+          const aPinned = isPinned(a);
+          const bPinned = isPinned(b);
+
+          if (aPinned === "top" && bPinned !== "top") return -1;
+          if (bPinned === "top" && aPinned !== "top") return 1;
+          if (aPinned === "bottom" && bPinned !== "bottom") return 1;
+          if (bPinned === "bottom" && aPinned !== "bottom") return -1;
+        }
+
         const aValue = a[orderBy as keyof T];
         const bValue = b[orderBy as keyof T];
 
@@ -220,6 +240,7 @@ const HmuDataTable = <T extends object>({
     filters,
     pagination?.isServerSide,
     columns,
+    isPinned,
   ]);
 
   // Derive active values (favor controlled props if provided)
@@ -269,7 +290,7 @@ const HmuDataTable = <T extends object>({
   return (
     <Box sx={{ width: "100%", position: "relative" }}>
       {hasFilters && (
-        <Box sx={filterBarStyles}>
+        <Box sx={filterBarStyles(omitTopRadius)}>
           {search?.enabled && (
             <TextField
               placeholder={search.placeholder || "Search..."}
@@ -317,7 +338,28 @@ const HmuDataTable = <T extends object>({
 
       <TableContainer
         component={Paper}
-        sx={dataTableContainerStyles(showPagination, hasFilters)}
+        sx={[
+          ...(Array.isArray(
+            dataTableContainerStyles(showPagination, hasFilters, omitTopRadius),
+          )
+            ? (dataTableContainerStyles(
+                showPagination,
+                hasFilters,
+                omitTopRadius,
+              ) as any)
+            : [
+                dataTableContainerStyles(
+                  showPagination,
+                  hasFilters,
+                  omitTopRadius,
+                ),
+              ]),
+          ...(Array.isArray(containerSx)
+            ? containerSx
+            : containerSx
+              ? [containerSx]
+              : []),
+        ]}
         elevation={0}
       >
         <Table sx={dataTableStyles} aria-label="dynamic data table">
@@ -327,7 +369,7 @@ const HmuDataTable = <T extends object>({
                 <TableCell
                   key={column.id as string}
                   align={column.align || "left"}
-                  sx={dataTableHeadCellStyles}
+                  sx={{ ...dataTableHeadCellStyles, width: column.width }}
                   sortDirection={orderBy === column.id ? order : false}
                 >
                   {column.sortable ? (
@@ -376,7 +418,7 @@ const HmuDataTable = <T extends object>({
                     <TableCell
                       key={column.id as string}
                       align={column.align || "left"}
-                      sx={dataTableCellStyles}
+                      sx={{ ...dataTableCellStyles, width: column.width }}
                     >
                       {column.render
                         ? column.render(row)

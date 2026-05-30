@@ -11,6 +11,14 @@ import {
   SYSTEM_ADMINISTRATOR_ROLES,
   UNIT_OPERATIONS_ROLES,
 } from "../../features/auth/constants/roles";
+import {
+  HeadLoadCategoriesPage,
+  HeadLoadPricingPage,
+} from "../../features/pricing/head-loads";
+import {
+  PricingRuleDetailsPage,
+  PricingSummary,
+} from "../../features/pricing/rules";
 
 export interface RouteConfig {
   path?: string;
@@ -99,8 +107,16 @@ export const routes: RouteConfig[] = [
           },
           {
             path: "head-load-categories",
-            element: <div>Head Load Categories (HLC)</div>,
+            element: <Outlet />,
             meta: { title: "Head Load" },
+            children: [
+              { index: true, element: <HeadLoadCategoriesPage /> },
+              {
+                path: ":categoryId/pricing",
+                element: <HeadLoadPricingPage />,
+                meta: { hideInSidebar: true },
+              },
+            ],
           },
           {
             path: "bank-accounts",
@@ -114,8 +130,16 @@ export const routes: RouteConfig[] = [
           },
           {
             path: "pricing",
-            element: <div>Pricing Models</div>,
+            element: <Outlet />,
             meta: { title: "Pricing" },
+            children: [
+              { index: true, element: <PricingSummary /> },
+              {
+                path: ":type",
+                element: <PricingRuleDetailsPage />,
+                meta: { hideInSidebar: true },
+              },
+            ],
           },
         ],
       },

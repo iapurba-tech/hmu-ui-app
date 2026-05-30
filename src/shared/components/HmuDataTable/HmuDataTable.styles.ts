@@ -4,20 +4,31 @@ import { palette } from "../../theme";
 export const dataTableContainerStyles = (
   showPagination: boolean,
   hasFilters: boolean,
+  omitTopRadius: boolean = false,
 ): SxProps<Theme> => ({
   width: "100%",
   overflowX: "auto",
   backgroundColor: palette.background.paper,
-  borderRadius: hasFilters ? 0 : "12px 12px 0 0",
+  borderRadius: hasFilters ? 0 : omitTopRadius ? "0 0 0 0" : "12px 12px 0 0",
   border: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-  borderTop: hasFilters ? "none" : (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+  borderTop:
+    hasFilters || omitTopRadius
+      ? "none"
+      : (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
   ...(!showPagination && {
-    borderRadius: hasFilters ? "0 0 12px 12px" : "12px",
-    borderBottom: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+    borderRadius: hasFilters
+      ? "0 0 12px 12px"
+      : omitTopRadius
+        ? "0 0 12px 12px"
+        : "12px",
+    borderBottom: (theme) =>
+      `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
   }),
 });
 
-export const filterBarStyles: SxProps<Theme> = {
+export const filterBarStyles = (
+  omitTopRadius: boolean = false,
+): SxProps<Theme> => ({
   p: 2,
   display: "flex",
   flexDirection: { xs: "column", sm: "row" },
@@ -25,8 +36,11 @@ export const filterBarStyles: SxProps<Theme> = {
   alignItems: { xs: "stretch", sm: "center" },
   bgcolor: "white",
   border: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-  borderRadius: "12px 12px 0 0",
-};
+  borderRadius: omitTopRadius ? 0 : "12px 12px 0 0",
+  ...(omitTopRadius && {
+    borderTop: "none",
+  }),
+});
 
 export const searchFieldStyles: SxProps<Theme> = {
   flex: 1,
@@ -71,7 +85,7 @@ export const searchIconStyles: SxProps<Theme> = {
 };
 
 export const dataTableStyles: SxProps<Theme> = {
-  minWidth: 650,
+  width: "100%",
 };
 
 export const dataTableHeadCellStyles: SxProps<Theme> = {
@@ -82,16 +96,18 @@ export const dataTableHeadCellStyles: SxProps<Theme> = {
   textTransform: "uppercase",
   letterSpacing: "0.05em",
   padding: "12px 16px",
-  borderBottom: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-  borderRight: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.05)}`,
+  borderBottom: (theme) =>
+    `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+  borderRight: (theme) =>
+    `1px solid ${alpha(theme.palette.primary.main, 0.05)}`,
   "&:last-child": {
     borderRight: "none",
   },
 };
 
 export const dataTableRowStyles: SxProps<Theme> = {
-  "&:last-child td, &:last-child th": { 
-    borderBottom: 0 
+  "&:last-child td, &:last-child th": {
+    borderBottom: 0,
   },
   "&:hover": {
     backgroundColor: "#f8fafc",
@@ -103,8 +119,10 @@ export const dataTableCellStyles: SxProps<Theme> = {
   padding: "12px 16px",
   color: palette.text.primary,
   fontSize: "0.875rem",
-  borderBottom: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.05)}`,
-  borderRight: (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.05)}`,
+  borderBottom: (theme) =>
+    `1px solid ${alpha(theme.palette.primary.main, 0.05)}`,
+  borderRight: (theme) =>
+    `1px solid ${alpha(theme.palette.primary.main, 0.05)}`,
   "&:last-child": {
     borderRight: "none",
   },
@@ -170,7 +188,9 @@ export const paginationItemStyles = (selected: boolean): SxProps<Theme> => ({
   border: selected ? "none" : `1px solid transparent`,
   "&:hover": {
     bgcolor: selected ? palette.primary.main : "#f1f5f9",
-    border: selected ? "none" : (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+    border: selected
+      ? "none"
+      : (theme) => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
   },
   transition: "all 0.2s",
 });
