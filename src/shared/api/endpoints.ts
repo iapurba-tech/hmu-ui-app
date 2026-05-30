@@ -33,4 +33,20 @@ export const API_ENDPOINTS = {
       DELETE: (id: string) => `/api/v1/products/${id}`,
     },
   },
+  PRICING: {
+    HEAD_LOAD_CATEGORY: {
+      LIST: "/api/v1/pricing/head-load-categories",
+      CREATE: "/api/v1/pricing/head-load-categories",
+      UPDATE: (id: number) => `/api/v1/pricing/head-load-categories/${id}`,
+      DELETE: (id: number) => `/api/v1/pricing/head-load-categories/${id}`,
+    },
+    HEAD_LOAD: {
+      LIST: "/api/v1/pricing/head-load",
+      BY_CATEGORY: (id: number) => `/api/v1/pricing/head-load/${id}`,
+    },
+    RULE: {
+      LIST: (ruleType: string) => `/api/v1/pricing/${ruleType}`,
+      CREATE: "/api/v1/pricing",
+    },
+  },
 };
