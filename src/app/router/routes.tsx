@@ -19,6 +19,8 @@ import {
   PricingRuleDetailsPage,
   PricingSummary,
 } from "../../features/pricing/rules";
+import { UnitDashboard } from "../../features/dashboard";
+import DashboardRedirect from "./DashboardRedirect";
 
 export interface RouteConfig {
   path?: string;
@@ -59,7 +61,7 @@ export const routes: RouteConfig[] = [
       // Common Authenticated Routes
       {
         path: "dashboard",
-        element: <div>Dashboard</div>,
+        element: <DashboardRedirect />,
         meta: { title: "Dashboard", requiresAuth: true },
       },
       {
@@ -154,6 +156,11 @@ export const routes: RouteConfig[] = [
           title: "Unit Operations",
         },
         children: [
+          {
+            path: "dashboard",
+            element: <UnitDashboard />,
+            meta: { title: "Unit Dashboard" },
+          },
           {
             path: "mpcs",
             element: <div>MPCS Master</div>,

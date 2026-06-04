@@ -62,7 +62,7 @@ export const managementMenu: MenuSection[] = [
   {
     title: "Main Menu",
     items: [
-      { label: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
+      { label: "Dashboard", icon: <DashboardIcon />, path: "/unit/dashboard" },
       { label: "MPCS", icon: <MpcsIcon />, path: "/unit/mpcs" },
     ],
   },
