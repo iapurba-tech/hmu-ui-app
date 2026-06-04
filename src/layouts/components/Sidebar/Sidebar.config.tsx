@@ -36,7 +36,7 @@ export const adminMenu: MenuSection[] = [
     title: "Organization & Finance",
     items: [
       { label: "Units", icon: <OrganizationIcon />, path: "/admin/units" },
-      { label: "User", icon: <UsersIcon />, path: "/admin/users" },
+      { label: "Users", icon: <UsersIcon />, path: "/admin/users" },
       {
         label: "Bank Accounts",
         icon: <BankIcon />,
@@ -90,7 +90,7 @@ export const managementMenu: MenuSection[] = [
     title: "Finance",
     items: [
       {
-        label: "Billing",
+        label: "Invoices",
         icon: <InvoiceIcon />,
         path: "/unit/billing/invoices",
       },
