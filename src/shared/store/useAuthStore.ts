@@ -38,11 +38,50 @@ export const useAuthStore = create<AuthState>()(
       setUser: (user) =>
         set((state) => {
           if (!user) {
-            return { user: null, isAuthenticated: false };
+            return {
+              user: null,
+              isAuthenticated: false,
+              activeUnit: null,
+              workspace: WorkspaceType.UNIT_MANAGEMENT,
+            };
           }
-          const activeUnit = state.activeUnit || (user.units.length > 0 ? user.units[0] : null);
-          const workspace = state.workspace || (user.role === UserRole.SYSTEM_ADMIN ? 'admin' : 'management');
-          
+
+          const isSystemAdmin = user.role === UserRole.SYSTEM_ADMIN;
+
+          // 1. Determine Workspace
+          let workspace = state.workspace;
+
+          // If it's a new session (default workspace) and user is System Admin, default to System Admin workspace
+          if (
+            state.workspace === WorkspaceType.UNIT_MANAGEMENT &&
+            !state.activeUnit &&
+            isSystemAdmin
+          ) {
+            workspace = WorkspaceType.SYSTEM_ADMIN;
+          }
+
+          // If user is NOT System Admin, they MUST be in Unit Management
+          if (!isSystemAdmin) {
+            workspace = WorkspaceType.UNIT_MANAGEMENT;
+          }
+
+          // 2. Determine Active Unit
+          let activeUnit = state.activeUnit;
+
+          // If in Unit Management and no unit is selected, pick the first one from user's units
+          if (
+            workspace === WorkspaceType.UNIT_MANAGEMENT &&
+            !activeUnit &&
+            user.units.length > 0
+          ) {
+            activeUnit = user.units[0];
+          }
+
+          // If in System Admin workspace, active unit should be null (Global)
+          if (workspace === WorkspaceType.SYSTEM_ADMIN) {
+            activeUnit = null;
+          }
+
           return {
             user,
             isAuthenticated: true,

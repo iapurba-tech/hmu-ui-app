@@ -21,7 +21,6 @@ import {
 } from "./Sidebar.styles";
 import { WorkspaceType } from "../../../features/auth/constants/workspace";
 import { adminMenu, managementMenu } from "./Sidebar.config";
-import { getRouteTitle } from "../../../app/router/routeUtils";
 
 const Sidebar: React.FC = () => {
   const location = useLocation();
@@ -51,10 +50,9 @@ const Sidebar: React.FC = () => {
           </Typography>
           <List disablePadding>
             {section.items.map((item) => {
-              const routeTitle = getRouteTitle(item.path);
               const isCurrentRoute = location.pathname === item.path;
               return (
-                <ListItem key={routeTitle} disablePadding sx={{ mb: 0.5 }}>
+                <ListItem key={item.label} disablePadding sx={{ mb: 0.5 }}>
                   <ListItemButton
                     component={Link}
                     to={item.path}
@@ -70,7 +68,7 @@ const Sidebar: React.FC = () => {
                       {item.icon}
                     </ListItemIcon>
                     <ListItemText
-                      primary={routeTitle}
+                      primary={item.label}
                       slotProps={{
                         primary: {
                           sx: {
