@@ -25,6 +25,10 @@ vi.mock('../../features/admin/users', () => ({
   UsersPage: () => <div>User Management (IAM)</div>
 }));
 
+vi.mock('../../features/unit-operations/mpcs', () => ({
+  MpcsPage: () => <div>MPCS Page</div>
+}));
+
 vi.mock('../../layouts/MainLayout/MainLayout', () => ({
   default: () => (
     <div>
@@ -87,6 +91,6 @@ describe('AppRouter protection', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/MPCS Master/i)).toBeInTheDocument();
+    expect(screen.getByText(/MPCS Page/i)).toBeInTheDocument();
   });
 });
