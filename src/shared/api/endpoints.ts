@@ -32,6 +32,14 @@ export const API_ENDPOINTS = {
       DETAIL: (id: string) => `/api/v1/products/${id}`,
       DELETE: (id: string) => `/api/v1/products/${id}`,
     },
+    MPCS: {
+      LIST: "/api/v1/mpcs",
+      CREATE: "/api/v1/mpcs",
+      DETAIL: (id: string) => `/api/v1/mpcs/${id}`,
+      UPDATE_DETAILS: (id: string) => `/api/v1/mpcs/${id}/details`,
+      UPDATE_CONFIGURATION: (id: string) => `/api/v1/mpcs/${id}/configuration`,
+      DELETE: (id: string) => `/api/v1/mpcs/${id}`,
+    },
   },
   PRICING: {
     HEAD_LOAD_CATEGORY: {
