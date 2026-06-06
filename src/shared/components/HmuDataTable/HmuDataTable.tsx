@@ -257,6 +257,11 @@ const HmuDataTable = <T extends object>({
   const isServerSide = pagination?.isServerSide ?? false;
   const threshold = pagination?.rowsPerPageThreshold ?? 10;
 
+  // Calculate effective page to handle out-of-bounds cases (e.g. after deletion)
+  const totalPages = Math.ceil(totalRows / rowsPerPage);
+  const maxPage = Math.max(0, totalPages - 1);
+  const effectivePage = Math.min(page, maxPage);
+
   const handlePageChange = (_: unknown, newPage: number) => {
     const zeroBasedPage = newPage - 1;
     if (isControlledPage) {
@@ -275,14 +280,16 @@ const HmuDataTable = <T extends object>({
     }
   };
 
-  const totalPages = Math.ceil(totalRows / rowsPerPage);
-  const startRow = totalRows === 0 ? 0 : page * rowsPerPage + 1;
-  const endRow = Math.min((page + 1) * rowsPerPage, totalRows);
+  const startRow = totalRows === 0 ? 0 : effectivePage * rowsPerPage + 1;
+  const endRow = Math.min((effectivePage + 1) * rowsPerPage, totalRows);
 
   // Slice data only if it's client-side pagination
   const displayData = isServerSide
     ? processedData
-    : processedData.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+    : processedData.slice(
+        effectivePage * rowsPerPage,
+        (effectivePage + 1) * rowsPerPage,
+      );
 
   const showPagination = totalRows > threshold;
   const hasFilters = !!(search?.enabled || (filters && filters.length > 0));
@@ -467,7 +474,7 @@ const HmuDataTable = <T extends object>({
 
             <Pagination
               count={totalPages}
-              page={page + 1}
+              page={effectivePage + 1}
               onChange={handlePageChange}
               shape="rounded"
               size="small"

@@ -20,6 +20,7 @@ import {
   PricingSummary,
 } from "../../features/pricing/rules";
 import { UnitDashboard } from "../../features/dashboard";
+import { MpcsPage } from "../../features/unit-operations/mpcs";
 import DashboardRedirect from "./DashboardRedirect";
 
 export interface RouteConfig {
@@ -163,7 +164,7 @@ export const routes: RouteConfig[] = [
           },
           {
             path: "mpcs",
-            element: <div>MPCS Master</div>,
+            element: <MpcsPage />,
             meta: { title: "MPCS" },
           },
           {
