@@ -22,6 +22,7 @@ import {
 import { UnitDashboard } from "../../features/dashboard";
 import { MpcsPage } from "../../features/unit-operations/mpcs";
 import { MilkCollectionsPage } from "../../features/unit-operations/milk-collections";
+import { ProductSalesPage } from "../../features/unit-operations/sales";
 import DashboardRedirect from "./DashboardRedirect";
 
 export interface RouteConfig {
@@ -187,7 +188,7 @@ export const routes: RouteConfig[] = [
             children: [
               {
                 path: "transactions",
-                element: <div>Feed & Product Sales</div>,
+                element: <ProductSalesPage />,
                 meta: { title: "Sales" },
               },
             ],

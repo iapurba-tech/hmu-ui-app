@@ -46,6 +46,12 @@ export const API_ENDPOINTS = {
       UPDATE: (id: string) => `/api/v1/milk-collections/${id}`,
       DELETE: (id: string) => `/api/v1/milk-collections/${id}`,
     },
+    PRODUCT_SALE: {
+      LIST: "/api/v1/product-sales",
+      CREATE: "/api/v1/product-sales",
+      UPDATE: (id: string) => `/api/v1/product-sales/${id}`,
+      DELETE: (id: string) => `/api/v1/product-sales/${id}`,
+    },
   },
   PRICING: {
     HEAD_LOAD_CATEGORY: {
