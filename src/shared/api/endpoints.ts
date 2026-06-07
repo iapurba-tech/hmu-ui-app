@@ -40,6 +40,12 @@ export const API_ENDPOINTS = {
       UPDATE_CONFIGURATION: (id: string) => `/api/v1/mpcs/${id}/configuration`,
       DELETE: (id: string) => `/api/v1/mpcs/${id}`,
     },
+    MILK_COLLECTION: {
+      LIST: "/api/v1/milk-collections",
+      CREATE: "/api/v1/milk-collections",
+      UPDATE: (id: string) => `/api/v1/milk-collections/${id}`,
+      DELETE: (id: string) => `/api/v1/milk-collections/${id}`,
+    },
   },
   PRICING: {
     HEAD_LOAD_CATEGORY: {

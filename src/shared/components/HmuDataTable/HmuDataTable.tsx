@@ -155,12 +155,12 @@ const HmuDataTable = <T extends object>({
   // Logic for filtering and sorting
   const processedData = useMemo(() => {
     // If it's server-side, we assume data is already processed
-    if (pagination?.isServerSide) return data;
+    if (pagination?.isServerSide) return Array.isArray(data) ? data : [];
 
-    let result = [...data];
+    let result = Array.isArray(data) ? [...data] : [];
 
     // 1. Search
-    if (search?.enabled && searchTerm) {
+    if (search?.enabled && searchTerm && result.length > 0) {
       const lowerSearch = searchTerm.toLowerCase();
       const searchFields =
         search.fields ||
