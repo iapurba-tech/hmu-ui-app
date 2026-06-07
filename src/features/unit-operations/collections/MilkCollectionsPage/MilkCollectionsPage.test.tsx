@@ -8,7 +8,7 @@ import * as milkHooks from "../../../../shared/api/unit/collections/milk-collect
 import * as mpcsHooks from "../../../../shared/api/unit/mpcs/mpcs.hooks";
 
 // Mock the hooks
-vi.mock("../../../../shared/api/unit/milk-collections/milk-collections.hooks", () => ({
+vi.mock("../../../../shared/api/unit/collections/milk-collections.hooks", () => ({
   useGetMilkCollections: vi.fn(),
   useCreateMilkCollection: vi.fn(),
   useCreateMilkCollectionsBulk: vi.fn(),
