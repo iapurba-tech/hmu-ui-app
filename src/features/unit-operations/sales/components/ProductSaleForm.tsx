@@ -45,7 +45,7 @@ import type { Product } from "../../../admin/products/types/product.types";
 import {
   formContainerStyles,
   stagingAreaStyles,
-} from "../../milk-collections/MilkCollectionsPage/MilkCollectionsPage.styles";
+} from "../../collections/MilkCollectionsPage/MilkCollectionsPage.styles";
 
 const productSaleSchema = z.object({
   mpcsId: z.string().min(1, "MPCS is required"),

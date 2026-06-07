@@ -8,7 +8,7 @@ import {
   pageHeaderStyles,
   pageTitleStyles,
   tableContainerStyles,
-} from "../../milk-collections/MilkCollectionsPage/MilkCollectionsPage.styles";
+} from "../../collections/MilkCollectionsPage/MilkCollectionsPage.styles";
 import {
   useGetProductSales,
   useCreateProductSale,

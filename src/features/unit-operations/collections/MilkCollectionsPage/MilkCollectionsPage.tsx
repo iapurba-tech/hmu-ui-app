@@ -15,7 +15,7 @@ import {
   useCreateMilkCollectionsBulk,
   useUpdateMilkCollection,
   useDeleteMilkCollection,
-} from "../../../../shared/api/unit/milk-collections/milk-collections.hooks";
+} from "../../../../shared/api/unit/collections/milk-collections.hooks";
 import { useGetMpcsList } from "../../../../shared/api/unit/mpcs/mpcs.hooks";
 import type {
   MilkCollection,

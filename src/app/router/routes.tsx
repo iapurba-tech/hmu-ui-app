@@ -21,7 +21,7 @@ import {
 } from "../../features/pricing/rules";
 import { UnitDashboard } from "../../features/dashboard";
 import { MpcsPage } from "../../features/unit-operations/mpcs";
-import { MilkCollectionsPage } from "../../features/unit-operations/milk-collections";
+import { MilkCollectionsPage } from "../../features/unit-operations/collections";
 import { ProductSalesPage } from "../../features/unit-operations/sales";
 import DashboardRedirect from "./DashboardRedirect";
 

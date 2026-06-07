@@ -5,7 +5,7 @@ import type {
   MilkCollectionCreateRequest,
   MilkCollectionUpdateRequest,
   PaginatedResponse,
-} from "../../../../features/unit-operations/milk-collections/types/milk-collection.types";
+} from "../../../../features/unit-operations/collections/types/milk-collection.types";
 
 export const milkCollectionsApi = {
   list: async (page = 0, size = 10, sort?: string) => {

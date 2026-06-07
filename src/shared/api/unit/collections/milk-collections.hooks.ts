@@ -5,7 +5,7 @@ import { useAuthStore } from "../../../store/useAuthStore";
 import type {
   MilkCollectionCreateRequest,
   MilkCollectionUpdateRequest,
-} from "../../../../features/unit-operations/milk-collections/types/milk-collection.types";
+} from "../../../../features/unit-operations/collections/types/milk-collection.types";
 
 const MILK_COLLECTION_KEYS = {
   all: ["milk-collections"] as const,

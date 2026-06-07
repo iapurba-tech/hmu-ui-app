@@ -4,7 +4,7 @@ import MilkCollectionsPage from "./MilkCollectionsPage";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../../../shared/theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as milkHooks from "../../../../shared/api/unit/milk-collections/milk-collections.hooks";
+import * as milkHooks from "../../../../shared/api/unit/collections/milk-collections.hooks";
 import * as mpcsHooks from "../../../../shared/api/unit/mpcs/mpcs.hooks";
 
 // Mock the hooks
