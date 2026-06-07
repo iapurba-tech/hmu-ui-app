@@ -21,6 +21,7 @@ import {
 } from "../../features/pricing/rules";
 import { UnitDashboard } from "../../features/dashboard";
 import { MpcsPage } from "../../features/unit-operations/mpcs";
+import { MilkCollectionsPage } from "../../features/unit-operations/milk-collections";
 import DashboardRedirect from "./DashboardRedirect";
 
 export interface RouteConfig {
@@ -174,7 +175,7 @@ export const routes: RouteConfig[] = [
             children: [
               {
                 path: "milk-collections",
-                element: <div>Milk Collections Entry</div>,
+                element: <MilkCollectionsPage />,
                 meta: { title: "Milk Collections" },
               },
             ],
