@@ -221,9 +221,9 @@ export const routes: RouteConfig[] = [
                 meta: { title: "Generate Bills" },
               },
               {
-                path: "invoices",
-                element: <div>Invoice Management</div>,
-                meta: { title: "Invoices" },
+                path: "billing",
+                element: <div>Billing Management</div>,
+                meta: { title: "Billing" },
               },
               {
                 path: "bank-advice",
