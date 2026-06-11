@@ -52,6 +52,14 @@ export const API_ENDPOINTS = {
       UPDATE: (id: string) => `/api/v1/product-sales/${id}`,
       DELETE: (id: string) => `/api/v1/product-sales/${id}`,
     },
+    BILLING: {
+      RUNS: "/api/v1/billing/runs",
+      CREATE_RUN: "/api/v1/billing/run",
+      DETAIL: (id: string) => `/api/v1/billing/run/${id}`,
+      INVOICES: (id: string) => `/api/v1/billing/run/${id}/invoices`,
+      INVOICE_DETAIL: (id: string) => `/api/v1/billing/invoice/${id}/detail`,
+      DELETE: (id: string) => `/api/v1/billing/run/${id}`,
+    },
   },
   PRICING: {
     HEAD_LOAD_CATEGORY: {
