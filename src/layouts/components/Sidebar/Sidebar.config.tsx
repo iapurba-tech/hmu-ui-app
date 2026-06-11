@@ -92,7 +92,7 @@ export const managementMenu: MenuSection[] = [
       {
         label: "Billing",
         icon: <InvoiceIcon />,
-        path: "/unit/billing/billing",
+        path: "/unit/billing/runs",
       },
       {
         label: "Bank Advice",

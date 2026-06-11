@@ -23,6 +23,7 @@ import { UnitDashboard } from "../../features/dashboard";
 import { MpcsPage } from "../../features/unit-operations/mpcs";
 import { MilkCollectionsPage } from "../../features/unit-operations/collections";
 import { ProductSalesPage } from "../../features/unit-operations/sales";
+import { BillingPage, BillingDetailPage } from "../../features/unit-operations/billing";
 import DashboardRedirect from "./DashboardRedirect";
 
 export interface RouteConfig {
@@ -216,14 +217,17 @@ export const routes: RouteConfig[] = [
             meta: { title: "Billing & Finance" },
             children: [
               {
-                path: "generate",
-                element: <div>Bill Generation Process</div>,
-                meta: { title: "Generate Bills" },
-              },
-              {
-                path: "billing",
-                element: <div>Billing Management</div>,
+                path: "runs",
+                element: <Outlet />,
                 meta: { title: "Billing" },
+                children: [
+                  { index: true, element: <BillingPage /> },
+                  {
+                    path: ":runId",
+                    element: <BillingDetailPage />,
+                    meta: { title: "Invoice Details", hideInSidebar: true },
+                  },
+                ],
               },
               {
                 path: "bank-advice",
