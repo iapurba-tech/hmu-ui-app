@@ -24,6 +24,7 @@ export {
 
   // Rounded Icons
   VerifiedUserRounded as ShieldIcon,
+  ArrowBackRounded as ArrowBackIcon,
   ArrowForwardRounded as ArrowForwardIcon,
   LanguageRounded as GlobalIcon,
   SettingsRounded as SettingsIcon,
@@ -43,7 +44,10 @@ export {
   // Action & Table Icons (Rounded)
   AddRounded as AddIcon,
   EditRounded as EditIcon,
+  PlayArrowRounded as PlayArrowIcon,
   ContentCopyRounded as CopyIcon,
+  DownloadRounded as DownloadIcon,
+  PrintRounded as PrintIcon,
   VisibilityRounded as VisibilityIcon,
   VisibilityOffRounded as VisibilityOffIcon,
   NavigateNextRounded as NavigateNextIcon,

@@ -20,6 +20,10 @@ import {
   PricingSummary,
 } from "../../features/pricing/rules";
 import { UnitDashboard } from "../../features/dashboard";
+import { MpcsPage } from "../../features/unit-operations/mpcs";
+import { MilkCollectionsPage } from "../../features/unit-operations/collections";
+import { ProductSalesPage } from "../../features/unit-operations/sales";
+import { BillingPage, BillingDetailPage } from "../../features/unit-operations/billing";
 import DashboardRedirect from "./DashboardRedirect";
 
 export interface RouteConfig {
@@ -163,7 +167,7 @@ export const routes: RouteConfig[] = [
           },
           {
             path: "mpcs",
-            element: <div>MPCS Master</div>,
+            element: <MpcsPage />,
             meta: { title: "MPCS" },
           },
           {
@@ -173,7 +177,7 @@ export const routes: RouteConfig[] = [
             children: [
               {
                 path: "milk-collections",
-                element: <div>Milk Collections Entry</div>,
+                element: <MilkCollectionsPage />,
                 meta: { title: "Milk Collections" },
               },
             ],
@@ -185,7 +189,7 @@ export const routes: RouteConfig[] = [
             children: [
               {
                 path: "transactions",
-                element: <div>Feed & Product Sales</div>,
+                element: <ProductSalesPage />,
                 meta: { title: "Sales" },
               },
             ],
@@ -213,14 +217,17 @@ export const routes: RouteConfig[] = [
             meta: { title: "Billing & Finance" },
             children: [
               {
-                path: "generate",
-                element: <div>Bill Generation Process</div>,
-                meta: { title: "Generate Bills" },
-              },
-              {
-                path: "invoices",
-                element: <div>Invoice Management</div>,
-                meta: { title: "Invoices" },
+                path: "runs",
+                element: <Outlet />,
+                meta: { title: "Billing" },
+                children: [
+                  { index: true, element: <BillingPage /> },
+                  {
+                    path: ":runId",
+                    element: <BillingDetailPage />,
+                    meta: { title: "Invoice Details", hideInSidebar: true },
+                  },
+                ],
               },
               {
                 path: "bank-advice",
