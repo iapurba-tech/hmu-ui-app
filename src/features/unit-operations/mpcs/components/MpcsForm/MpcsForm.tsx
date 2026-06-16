@@ -58,7 +58,7 @@ const MpcsForm: React.FC<MpcsFormProps> = ({
 
   const { activeUnit } = useAuthStore();
   const { data: units = [] } = useGetUnits();
-  const { data: payoutBanks = [] } = useGetBankAccounts();
+  const { data: payoutBanks = [] } = useGetBankAccounts(activeUnit?.id);
   const { data: headLoadCategories = [] } = useGetHeadLoadCategories();
 
   const unitOptions = useMemo(

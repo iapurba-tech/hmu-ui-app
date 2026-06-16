@@ -19,7 +19,7 @@ describe("BillingForm", () => {
     expect(screen.getByText("Billing Cycle")).toBeInTheDocument();
     
     // In our Custom cycle case, the date pickers should NOT be disabled.
-    const inputs = document.querySelectorAll("input");
+    // const inputs = document.querySelectorAll("input");
     // Depending on DOM, inputs[1] and inputs[2] might be the date pickers,
     // but better to just ensure no inputs with disabled attribute exist for the dates.
     expect(screen.getByText("Start Date")).toBeInTheDocument();

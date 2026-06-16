@@ -23,7 +23,11 @@ import { UnitDashboard } from "../../features/dashboard";
 import { MpcsPage } from "../../features/unit-operations/mpcs";
 import { MilkCollectionsPage } from "../../features/unit-operations/collections";
 import { ProductSalesPage } from "../../features/unit-operations/sales";
-import { BillingPage, BillingDetailPage } from "../../features/unit-operations/billing";
+import {
+  BillingPage,
+  BillingDetailPage,
+  BankAdvicePage,
+} from "../../features/unit-operations/billing";
 import DashboardRedirect from "./DashboardRedirect";
 
 export interface RouteConfig {
@@ -231,7 +235,7 @@ export const routes: RouteConfig[] = [
               },
               {
                 path: "bank-advice",
-                element: <div>Bank Advice Processing</div>,
+                element: <BankAdvicePage />,
                 meta: { title: "Bank Advice" },
               },
             ],

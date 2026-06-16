@@ -56,6 +56,7 @@ export {
   CalendarTodayRounded as CalendarTodayIcon,
   ArrowUpward as ArrowUpIcon,
   ArrowDownward as ArrowDownIcon,
+  TrendingUpRounded as TrendingUpIcon,
 } from "@mui/icons-material";
 
 export * from "./MilkCanIcon";
