@@ -15,6 +15,7 @@ export const palette = {
     default: "#f5f7f8",
     paper: "#ffffff",
   },
+  divider: "rgba(0, 0, 0, 0.12)",
   text: {
     primary: "#0f1c23",
     secondary: "#757681",

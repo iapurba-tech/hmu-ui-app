@@ -9,17 +9,19 @@ import { bankApi } from "./bank.api";
 
 export const bankKeys = {
   all: ["bankAccounts"] as const,
+  list: (unitId?: string) => [...bankKeys.all, { unitId }] as const,
 };
 
 export const useGetBankAccounts = (
+  unitId?: string,
   options?: Omit<
-    UseQueryOptions<Bank[], Error, Bank[], readonly string[]>,
+    UseQueryOptions<Bank[], Error, Bank[], readonly any[]>,
     "queryKey" | "queryFn"
   >,
 ) => {
   return useQuery({
-    queryKey: bankKeys.all,
-    queryFn: bankApi.getAllBankAccounts,
+    queryKey: bankKeys.list(unitId),
+    queryFn: () => bankApi.getAllBankAccounts({ unitId }),
     staleTime: 1000 * 60 * 30,
     ...options,
   });

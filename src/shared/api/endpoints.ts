@@ -32,6 +32,42 @@ export const API_ENDPOINTS = {
       DETAIL: (id: string) => `/api/v1/products/${id}`,
       DELETE: (id: string) => `/api/v1/products/${id}`,
     },
+    MPCS: {
+      LIST: "/api/v1/mpcs",
+      CREATE: "/api/v1/mpcs",
+      DETAIL: (id: string) => `/api/v1/mpcs/${id}`,
+      UPDATE_DETAILS: (id: string) => `/api/v1/mpcs/${id}/details`,
+      UPDATE_CONFIGURATION: (id: string) => `/api/v1/mpcs/${id}/configuration`,
+      DELETE: (id: string) => `/api/v1/mpcs/${id}`,
+    },
+    MILK_COLLECTION: {
+      LIST: "/api/v1/milk-collections",
+      CREATE: "/api/v1/milk-collections",
+      UPDATE: (id: string) => `/api/v1/milk-collections/${id}`,
+      DELETE: (id: string) => `/api/v1/milk-collections/${id}`,
+    },
+    PRODUCT_SALE: {
+      LIST: "/api/v1/product-sales",
+      CREATE: "/api/v1/product-sales",
+      UPDATE: (id: string) => `/api/v1/product-sales/${id}`,
+      DELETE: (id: string) => `/api/v1/product-sales/${id}`,
+    },
+    BILLING: {
+      RUNS: "/api/v1/billing/runs",
+      CREATE_RUN: "/api/v1/billing/run",
+      DETAIL: (id: string) => `/api/v1/billing/run/${id}`,
+      INVOICES: (id: string) => `/api/v1/billing/run/${id}/invoices`,
+      INVOICE_DETAIL: (id: string) => `/api/v1/billing/invoice/${id}/detail`,
+      DELETE: (id: string) => `/api/v1/billing/run/${id}`,
+      ADVICE: {
+        LIST: "/api/v1/billing/advice",
+        CREATE: "/api/v1/billing/advice",
+        DETAIL: (id: string) => `/api/v1/billing/advice/${id}`,
+        SUBMIT: (id: string) => `/api/v1/billing/advice/${id}/submit`,
+        PROCESS: (id: string) => `/api/v1/billing/advice/${id}/process`,
+        DELETE: (id: string) => `/api/v1/billing/advice/${id}`,
+      },
+    },
   },
   PRICING: {
     HEAD_LOAD_CATEGORY: {

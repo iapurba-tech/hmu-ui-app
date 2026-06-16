@@ -90,9 +90,9 @@ export const managementMenu: MenuSection[] = [
     title: "Finance",
     items: [
       {
-        label: "Invoices",
+        label: "Billing",
         icon: <InvoiceIcon />,
-        path: "/unit/billing/invoices",
+        path: "/unit/billing/runs",
       },
       {
         label: "Bank Advice",

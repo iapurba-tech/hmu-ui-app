@@ -7,9 +7,10 @@ import { apiClient } from "../../apiClient";
 import { API_ENDPOINTS } from "../../endpoints";
 
 export const bankApi = {
-  getAllBankAccounts: async (): Promise<Bank[]> => {
+  getAllBankAccounts: async (params?: { unitId?: string }): Promise<Bank[]> => {
     const response = await apiClient.get<Bank[]>(
       API_ENDPOINTS.ADMIN.BANK_ACCOUNT.LIST,
+      { params }
     );
     return response.data;
   },
